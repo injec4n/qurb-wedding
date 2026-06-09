@@ -714,7 +714,7 @@ function DashboardContent() {
             <div className="diamond" style={{ background: 'var(--wedding-gold)' }} />
           </div>
           <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
-            زفاتي © {new Date().getFullYear()} — منصة دعوات الزفاف
+            قُرب © {new Date().getFullYear()} — منصة دعوات الزفاف
           </p>
         </motion.div>
       </div>

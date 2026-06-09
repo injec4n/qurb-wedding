@@ -81,7 +81,7 @@ export default function ClientLoginPage() {
           >
             <Heart className="h-10 w-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gold-gradient mb-1">زفاتي</h1>
+          <h1 className="text-3xl font-bold text-gold-gradient mb-1">قُرب</h1>
           <p
             className="text-sm tracking-wider"
             style={{ color: 'var(--admin-text-secondary)' }}
@@ -196,7 +196,7 @@ export default function ClientLoginPage() {
           className="text-center text-xs"
           style={{ color: 'var(--admin-text-muted)' }}
         >
-          زفاتي © {new Date().getFullYear()} — منصة دعوات الزفاف
+          قُرب © {new Date().getFullYear()} — منصة دعوات الزفاف
         </motion.p>
       </motion.div>
     </div>

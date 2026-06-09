@@ -9,9 +9,10 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "زفاتي - منصة دعوات الزفاف",
+  title: "قُرب - منصة دعوات الزفاف",
   description: "أنشئ موقع دعوة زفافك في دقائق - منصة احترافية لدعوات الزفاف بتصميم أنيق ومشاركة سهلة",
-  keywords: ["زفاتي", "دعوة زفاف", "زفاف", "دعوات", "RSVP", "موقع زفاف"],
+  keywords: ["قُرب", "دعوة زفاف", "زفاف", "دعوات", "RSVP", "موقع زفاف"],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
 };
 
 export default function RootLayout({

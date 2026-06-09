@@ -94,7 +94,7 @@ export default function AdminPage() {
               <Heart className="h-5 w-5" style={{ color: 'var(--admin-surface)' }} fill="currentColor" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gold-gradient">زفاتي</h1>
+              <h1 className="text-xl font-bold text-gold-gradient">قُرب</h1>
               <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>إدارة دعوات الزفاف</p>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function AdminPage() {
                   </button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-72" style={{ background: 'var(--admin-surface-raised)', borderLeft: '1px solid var(--admin-border)' }}>
-                  <SheetTitle className="text-gold-gradient text-xl mb-8">زفاتي</SheetTitle>
+                  <SheetTitle className="text-gold-gradient text-xl mb-8">قُرب</SheetTitle>
                   <div className="space-y-1">
                     {navItems.map((item) => (
                       <button
@@ -247,7 +247,7 @@ export default function AdminPage() {
                       <Heart className="h-6 w-6" style={{ color: 'var(--admin-surface)' }} fill="currentColor" />
                     </div>
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-bold text-gold-gradient">مرحباً بك في زفاتي</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gold-gradient">مرحباً بك في قُرب</h2>
                       <p className="text-sm mt-0.5" style={{ color: 'var(--admin-text-secondary)' }}>إدارة دعوات الزفاف بكل أناقة</p>
                     </div>
                   </div>

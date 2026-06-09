@@ -13,8 +13,6 @@ interface HeroProps {
   patternType?: 'geometric' | 'floral' | 'arabesque' | 'dots' | 'lines';
   fontScale?: number;
   couplePhoto?: string;
-  groomPhoto?: string;
-  bridePhoto?: string;
 }
 
 // Circular photo with ornamental gold border
@@ -323,7 +321,7 @@ function ScrollIndicator({ color }: { color: string }) {
 // ==============================
 
 /** Centered hero: large names centered with decorative elements */
-function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
+function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-6xl sm:text-7xl md:text-9xl' : 'text-5xl sm:text-6xl md:text-8xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -369,8 +367,8 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
           </h1>
         </motion.div>
 
-        {/* Couple Photo or Individual Photos */}
-        {couplePhoto ? (
+        {/* Couple Photo */}
+        {couplePhoto && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -379,17 +377,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
           >
             <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
           </motion.div>
-        ) : groomPhoto && bridePhoto ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="flex items-center justify-center gap-6 mt-6"
-          >
-            <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
-            <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
-          </motion.div>
-        ) : null}
+        )}
 
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
           <OrnamentalLine color={colors.primary} className="mt-5 mb-5" />
@@ -427,7 +415,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
 }
 
 /** Split hero: names on one side, decorative pattern on the other */
-function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
+function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-4xl sm:text-5xl md:text-6xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -528,7 +516,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
           </motion.div>
 
           {/* Photo in split hero */}
-          {couplePhoto ? (
+          {couplePhoto && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -537,17 +525,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             >
               <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
             </motion.div>
-          ) : groomPhoto && bridePhoto ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.2 }}
-              className="flex items-center justify-center gap-4 mt-6"
-            >
-              <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
-              <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
-            </motion.div>
-          ) : null}
+          )}
 
           {/* Decorative line bottom */}
           <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
@@ -597,7 +575,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
 }
 
 /** Cinematic hero: full-width dramatic overlay with larger text */
-function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
+function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-7xl sm:text-8xl md:text-9xl' : 'text-6xl sm:text-7xl md:text-8xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -663,7 +641,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         </motion.div>
 
         {/* Photo in cinematic hero */}
-        {couplePhoto ? (
+        {couplePhoto && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -672,17 +650,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
           >
             <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
           </motion.div>
-        ) : groomPhoto && bridePhoto ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="flex items-center justify-center gap-6 mt-6"
-          >
-            <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
-            <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
-          </motion.div>
-        ) : null}
+        )}
 
         {/* Dramatic lower ornament */}
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 1.4 }}>
@@ -727,7 +695,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 }
 
 /** Frame hero: names inside an ornate decorative frame/border */
-function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
+function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-8xl' : 'text-4xl sm:text-5xl md:text-7xl';
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
@@ -849,7 +817,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
             </motion.div>
 
             {/* Photo in frame hero */}
-            {couplePhoto ? (
+            {couplePhoto && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -858,17 +826,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
               >
                 <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
               </motion.div>
-            ) : groomPhoto && bridePhoto ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 1.2 }}
-                className="flex items-center justify-center gap-4 mt-6"
-              >
-                <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
-                <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
-              </motion.div>
-            ) : null}
+            )}
 
             {/* Ornamental line */}
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
@@ -949,8 +907,6 @@ export default function Hero({
   patternType = 'geometric',
   fontScale = 1,
   couplePhoto,
-  groomPhoto,
-  bridePhoto,
 }: HeroProps) {
   const commonProps = {
     wedding,
@@ -962,8 +918,6 @@ export default function Hero({
     patternType,
     fontScale,
     couplePhoto,
-    groomPhoto,
-    bridePhoto,
   };
 
   switch (heroStyle) {

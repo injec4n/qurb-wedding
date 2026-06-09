@@ -26,8 +26,6 @@ model Wedding {
   coverCategory String   @default("")
   galleryImages String   @default("[]")
   backgroundMusicUrl String @default("")
-  groomPhoto    String   @default("")
-  bridePhoto    String   @default("")
   couplePhoto   String   @default("")
   clientPassword String  @default("")
   theme         String   @default("classic-gold")

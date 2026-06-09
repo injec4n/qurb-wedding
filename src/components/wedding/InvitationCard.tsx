@@ -1,10 +1,12 @@
 'use client';
 
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Facebook, Send, Link2 } from 'lucide-react';
+import { MessageCircle, Facebook, Send, Link2, Download, Loader2 } from 'lucide-react';
 import { Wedding, ThemeColors } from '@/types/wedding';
 import { formatDateArabic, formatTimeArabic } from '@/lib/wedding-utils';
 import { toast } from 'sonner';
+import { toPng } from 'html-to-image';
 
 interface InvitationCardProps {
   wedding: Wedding;
@@ -14,6 +16,8 @@ interface InvitationCardProps {
 }
 
 export default function InvitationCard({ wedding, colors, slug, couplePhoto }: InvitationCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/w/${slug}` : '';
   const shareText = `يدعوكم ${wedding.groomName} و ${wedding.brideName} لحضور حفل زفافهما - ${formatDateArabic(wedding.weddingDate)} - ${wedding.venueName}`;
 
@@ -38,6 +42,27 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
     }
   };
 
+  const handleDownloadCard = async () => {
+    if (!cardRef.current) return;
+    setIsDownloading(true);
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        quality: 1,
+        pixelRatio: 3,
+        cacheBust: true,
+      });
+      const link = document.createElement('a');
+      link.download = `دعوة-${wedding.groomName}-${wedding.brideName}.png`;
+      link.href = dataUrl;
+      link.click();
+      toast.success('تم تحميل البطاقة بنجاح ✨');
+    } catch {
+      toast.error('فشل في تحميل البطاقة');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <div className="py-12 px-4" dir="rtl">
       <motion.div
@@ -58,10 +83,11 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
           بطاقة الدعوة
         </motion.h2>
 
-        {/* The card preview */}
-        <div className="flex justify-center mb-8">
+        {/* The card preview - wrapped in a ref for download */}
+        <div className="flex justify-center mb-6">
           <div
-            className="w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] relative overflow-hidden flex flex-col items-center justify-center"
+            ref={cardRef}
+            className="w-[360px] h-[480px] sm:w-[440px] sm:h-[560px] relative overflow-hidden flex flex-col items-center justify-center"
             style={{
               backgroundColor: colors.background,
               direction: 'rtl',
@@ -88,7 +114,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               </svg>
             </div>
 
-            {/* Decorative borders - more ornamental */}
+            {/* Decorative borders */}
             <div
               className="absolute inset-4 sm:inset-5 rounded-2xl"
               style={{ border: `2px solid ${colors.primary}28` }}
@@ -97,12 +123,8 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               className="absolute inset-6 sm:inset-7 rounded-xl"
               style={{ border: `1px solid ${colors.primary}15` }}
             />
-            <div
-              className="absolute inset-8 sm:inset-9 rounded-lg"
-              style={{ border: `1px solid ${colors.primary}08` }}
-            />
 
-            {/* Larger corner decorations */}
+            {/* Corner decorations */}
             <div className="absolute top-5 right-5 sm:top-7 sm:right-7 w-6 h-6" style={{ color: colors.primary }}>
               <svg viewBox="0 0 24 24" className="w-full h-full">
                 <path d="M0 0 Q24 0 24 24 Q0 24 0 0Z" fill="none" stroke="currentColor" strokeWidth="1.2" />
@@ -144,14 +166,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
                 {wedding.groomName}
               </h3>
 
-              {/* Couple photo or ornamental divider between names */}
+              {/* Couple photo or ornamental divider */}
               {couplePhoto ? (
                 <div className="flex justify-center my-3">
                   <div
-                    className="w-16 h-16 rounded-full overflow-hidden"
-                    style={{ border: `2px solid ${colors.primary}60`, padding: '2px' }}
+                    className="w-24 h-24 rounded-full overflow-hidden"
+                    style={{ border: `3px solid ${colors.primary}60`, padding: '3px', boxShadow: `0 0 20px ${colors.primary}20` }}
                   >
-                    <img src={couplePhoto} alt="الزوجين" className="w-full h-full rounded-full object-cover" />
+                    <img src={couplePhoto} alt="الزوجين" className="w-full h-full rounded-full object-cover" crossOrigin="anonymous" />
                   </div>
                 </div>
               ) : (
@@ -196,22 +218,49 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
                 </p>
               )}
             </div>
+
+            {/* Brand watermark at bottom */}
+            <div className="absolute bottom-3 left-0 right-0 text-center">
+              <p className="text-[9px] tracking-wider" style={{ color: colors.primary + '30' }}>قُرب</p>
+            </div>
           </div>
         </div>
 
-        {/* Share buttons row */}
+        {/* Action buttons row */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center justify-center gap-3"
+          className="flex items-center justify-center gap-3 flex-wrap"
         >
+          {/* Download card button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleDownloadCard}
+            disabled={isDownloading}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300"
+            style={{
+              background: `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
+              color: colors.primary,
+              border: `1px solid ${colors.primary}30`,
+            }}
+          >
+            {isDownloading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            تحميل البطاقة
+          </motion.button>
+
+          {/* Share buttons */}
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleWhatsAppShare}
-            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
             style={{
               backgroundColor: '#25D36620',
               color: '#25D366',
@@ -226,7 +275,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleFacebookShare}
-            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
             style={{
               backgroundColor: '#1877F220',
               color: '#1877F2',
@@ -241,7 +290,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleTelegramShare}
-            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
             style={{
               backgroundColor: '#0088cc20',
               color: '#0088cc',
@@ -256,7 +305,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleCopyLink}
-            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
             style={{
               backgroundColor: colors.accent + '20',
               color: colors.accent,

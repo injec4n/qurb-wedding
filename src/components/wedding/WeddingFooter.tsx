@@ -40,7 +40,7 @@ export default function WeddingFooter({ groomName, brideName, colors }: WeddingF
         className="text-sm font-bold tracking-wider"
         style={{ color: colors.primary + '80' }}
       >
-        زفاتي
+        قُرب
       </p>
 
       {/* Bottom decorative line */}

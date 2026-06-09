@@ -14,8 +14,6 @@ export interface Wedding {
   coverCategory: string;
   galleryImages: string[]; // JSON array stored as string in DB
   backgroundMusicUrl: string;
-  groomPhoto: string;
-  bridePhoto: string;
   couplePhoto: string;
   clientPassword: string;
   theme: ThemeName;
@@ -105,8 +103,6 @@ export interface WeddingFormData {
   coverCategory: string;
   galleryImages: string[];
   backgroundMusicUrl: string;
-  groomPhoto: string;
-  bridePhoto: string;
   couplePhoto: string;
   clientPassword: string;
   theme: ThemeName;

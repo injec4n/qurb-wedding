@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
               <Heart className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl text-zinc-100">لوحة التحكم</CardTitle>
-            <p className="text-sm text-zinc-400 mt-1">زفاتي - منصة دعوات الزفاف</p>
+            <p className="text-sm text-zinc-400 mt-1">قُرب - منصة دعوات الزفاف</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">

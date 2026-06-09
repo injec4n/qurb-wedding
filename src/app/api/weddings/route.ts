@@ -66,8 +66,6 @@ export async function POST(request: NextRequest) {
         coverCategory: rest.coverCategory || '',
         galleryImages: JSON.stringify(rest.galleryImages || []),
         backgroundMusicUrl: rest.backgroundMusicUrl || '',
-        groomPhoto: rest.groomPhoto || '',
-        bridePhoto: rest.bridePhoto || '',
         couplePhoto: rest.couplePhoto || '',
         clientPassword: rest.clientPassword || '',
         theme: themeName,

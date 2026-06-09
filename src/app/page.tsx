@@ -17,6 +17,10 @@ import {
   ChevronLeft,
   ArrowLeft,
   Sparkles,
+  Star,
+  MessageCircle,
+  Facebook,
+  Eye,
 } from 'lucide-react';
 
 /* ─── Animation helpers ─── */
@@ -136,6 +140,25 @@ const steps = [
   },
 ];
 
+/* ─── Testimonials data ─── */
+const testimonials = [
+  {
+    name: 'أحمد و نورة',
+    text: 'تجربة مذهلة! الدعوات كانت أنيقة جداً وأعجب جميع ضيوفنا. التخصيص كان سهلاً والنتيجة فاقت توقعاتنا. شكراً قُرب!',
+    rating: 5,
+  },
+  {
+    name: 'خالد و سارة',
+    text: 'من أفضل القرارات التي اتخذناها لتخطيط الزفاف. الدعوات الرقمية وفرت علينا الكثير من الوقت والجهد بتصميم احترافي.',
+    rating: 5,
+  },
+  {
+    name: 'عمر و لينا',
+    text: 'أحببنا كيف استطاع كل ضيف أن يشعر بالخصوصية من خلال دعوته الشخصية. تصميم راقٍ وتجربة لا تُنسى!',
+    rating: 5,
+  },
+];
+
 /* ─── Floating decoration component ─── */
 function FloatingOrb({
   className,
@@ -188,8 +211,8 @@ function OrnamentSeparator({ className }: { className?: string }) {
   );
 }
 
-/* ─── Luxury Invitation Preview Card ─── */
-function InvitationPreviewCard({
+/* ─── Cinematic Invitation Preview Card ─── */
+function CinematicPreviewCard({
   theme,
   index,
 }: {
@@ -207,151 +230,150 @@ function InvitationPreviewCard({
       className="card-glow group"
     >
       <Link href="/admin/create" className="block">
+        {/* 3:4 portrait card */}
         <div
           className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-[var(--wedding-gold)]/40 transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[var(--wedding-gold)]/10"
-          style={{ backgroundColor: colors.background }}
+          style={{ backgroundColor: colors.background, aspectRatio: '3/4' }}
         >
-          {/* Miniature invitation content */}
-          <div className="relative p-6 pb-8 min-h-[320px] flex flex-col items-center justify-between">
+          {/* Inner content */}
+          <div className="relative h-full flex flex-col items-center justify-between p-5 sm:p-6">
             {/* Corner ornaments */}
-            <div className="absolute top-3 right-3 w-8 h-8">
-              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-30">
+            <div className="absolute top-3 right-3 w-7 h-7">
+              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
                 <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
               </svg>
             </div>
-            <div className="absolute top-3 left-3 w-8 h-8 rotate-90">
-              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-30">
+            <div className="absolute top-3 left-3 w-7 h-7 rotate-90">
+              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
                 <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
               </svg>
             </div>
-            <div className="absolute bottom-3 right-3 w-8 h-8 -rotate-90">
-              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-30">
+            <div className="absolute bottom-3 right-3 w-7 h-7 -rotate-90">
+              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
                 <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
               </svg>
             </div>
-            <div className="absolute bottom-3 left-3 w-8 h-8 rotate-180">
-              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-30">
+            <div className="absolute bottom-3 left-3 w-7 h-7 rotate-180">
+              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
                 <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
               </svg>
             </div>
 
             {/* Elegant border frame */}
             <div
-              className="absolute inset-4 rounded-lg border"
-              style={{ borderColor: `${colors.primary}25` }}
+              className="absolute inset-3 sm:inset-4 rounded-lg border"
+              style={{ borderColor: `${colors.primary}20` }}
             />
 
-            {/* Bismallah */}
-            <p
-              className="text-xs font-medium tracking-wider opacity-60 mb-2"
-              style={{ color: colors.primary }}
-            >
-              بسم الله الرحمن الرحيم
-            </p>
-
-            {/* Decorative line */}
-            <div className="flex items-center gap-3 w-full max-w-[140px] mb-3">
-              <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}40, transparent)` }} />
-              <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.5 }} />
-              <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}40, transparent)` }} />
+            {/* Top: Bismallah */}
+            <div className="flex flex-col items-center gap-2 pt-2">
+              <p
+                className="text-xs sm:text-sm font-medium tracking-wider opacity-60"
+                style={{ color: colors.primary }}
+              >
+                بسم الله الرحمن الرحيم
+              </p>
+              <div className="flex items-center gap-2 w-full max-w-[100px]">
+                <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}40, transparent)` }} />
+                <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.5 }} />
+                <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}40, transparent)` }} />
+              </div>
             </div>
 
-            {/* Invitation title */}
-            <p
-              className="text-[10px] font-light tracking-[0.2em] uppercase opacity-50 mb-4"
-              style={{ color: colors.text }}
-            >
-              دعوة زفاف
-            </p>
-
-            {/* Names */}
-            <div className="text-center mb-4">
+            {/* Center: Couple names with decorative divider */}
+            <div className="flex flex-col items-center gap-3">
               <p
-                className="text-2xl font-bold leading-relaxed"
+                className="text-xl sm:text-2xl font-bold leading-relaxed"
                 style={{ color: colors.text }}
               >
                 محمد
               </p>
-              <div className="flex items-center justify-center gap-2 my-1">
-                <div className="w-6 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
                 <Heart
-                  className="h-3.5 w-3.5"
+                  className="h-4 w-4"
                   style={{ color: colors.primary, fill: colors.primary, opacity: 0.7 }}
                 />
-                <div className="w-6 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
               </div>
               <p
-                className="text-2xl font-bold leading-relaxed"
+                className="text-xl sm:text-2xl font-bold leading-relaxed"
                 style={{ color: colors.text }}
               >
                 فاطمة
               </p>
             </div>
 
-            {/* Date & Venue */}
-            <div className="text-center space-y-1">
+            {/* Bottom: Date and venue */}
+            <div className="flex flex-col items-center gap-1 pb-2">
+              <div className="flex items-center gap-2 w-full max-w-[80px] mb-2">
+                <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}30, transparent)` }} />
+                <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.3 }} />
+                <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}30, transparent)` }} />
+              </div>
               <p
-                className="text-[10px] font-light tracking-wider opacity-60"
+                className="text-[10px] sm:text-xs font-light tracking-wider opacity-60"
                 style={{ color: colors.text }}
               >
                 الجمعة ١٥ شعبان ١٤٤٧
               </p>
               <p
-                className="text-[10px] font-light tracking-wider opacity-50"
+                className="text-[10px] sm:text-xs font-light tracking-wider opacity-50"
                 style={{ color: colors.text }}
               >
                 فندق الريتز كارلتون — جدة
               </p>
             </div>
 
-            {/* Decorative bottom line */}
-            <div className="flex items-center gap-3 w-full max-w-[100px] mt-4">
-              <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}30, transparent)` }} />
-              <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.3 }} />
-              <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}30, transparent)` }} />
-            </div>
-          </div>
-
-          {/* Theme info strip at bottom */}
-          <div
-            className="px-5 py-3 border-t"
-            style={{
-              borderColor: isLightBg ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)',
-              backgroundColor: isLightBg ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.03)',
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3
-                  className="font-bold text-sm"
-                  style={{ color: isLightBg ? '#2C2C2C' : '#FFFFFF' }}
-                >
-                  {theme.name}
-                </h3>
-                <p
-                  className="text-[11px] opacity-50"
-                  style={{ color: isLightBg ? '#2C2C2C' : '#FFFFFF' }}
-                >
-                  {theme.description}
-                </p>
-              </div>
-              <div className="flex gap-1.5">
-                {[colors.primary, colors.secondary, colors.accent].map((color, ci) => (
-                  <div
-                    key={ci}
-                    className="w-5 h-5 rounded-full border"
-                    style={{
-                      backgroundColor: color,
-                      borderColor: isLightBg ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
-                    }}
-                  />
-                ))}
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
+                <Eye className="h-4 w-4 text-white" />
+                <span className="text-white text-sm font-medium">عرض القالب</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Theme info below the card */}
+        <div className="mt-4 flex items-center justify-between px-1">
+          <div>
+            <h3 className="font-bold text-sm sm:text-base text-white">
+              {theme.name}
+            </h3>
+            <p className="text-xs text-white/50">
+              {theme.description}
+            </p>
+          </div>
+          <div className="flex gap-1.5">
+            {[colors.primary, colors.secondary, colors.accent].map((color, ci) => (
+              <div
+                key={ci}
+                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border"
+                style={{
+                  backgroundColor: color,
+                  borderColor: isLightBg ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </Link>
     </motion.div>
+  );
+}
+
+/* ─── Star Rating Component ─── */
+function StarRating({ count }: { count: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: count }).map((_, i) => (
+        <Star
+          key={i}
+          className="h-3.5 w-3.5 fill-[var(--wedding-gold)] text-[var(--wedding-gold)]"
+        />
+      ))}
+    </div>
   );
 }
 
@@ -360,19 +382,19 @@ function InvitationPreviewCard({
    ═══════════════════════════════════════════════════════════════ */
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[var(--wedding-deep)] text-white overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen flex flex-col bg-[var(--wedding-deep)] text-white overflow-x-hidden" dir="rtl">
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--wedding-deep)]/70 backdrop-blur-xl border-b border-[var(--wedding-gold)]/8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 group">
             <Heart className="h-5 w-5 text-[var(--wedding-gold)] fill-[var(--wedding-gold)] group-hover:scale-110 transition-transform duration-300" />
-            <span className="text-xl font-bold text-gold-gradient">زفاتي</span>
+            <span className="text-xl font-bold text-gold-gradient">قُرب</span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link href="/client/login">
               <Button
                 variant="ghost"
-                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 font-light"
+                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 text-xs sm:text-sm font-light"
               >
                 دخول العملاء
               </Button>
@@ -380,13 +402,13 @@ export default function LandingPage() {
             <Link href="/w/mohamed-fatma">
               <Button
                 variant="ghost"
-                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 font-light"
+                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 text-xs sm:text-sm font-light"
               >
                 شاهد مثال
               </Button>
             </Link>
             <Link href="/admin/create">
-              <Button className="btn-wedding text-sm px-5 py-2.5">
+              <Button className="btn-wedding text-xs sm:text-sm px-4 sm:px-5 py-2">
                 ابدأ الآن
               </Button>
             </Link>
@@ -423,9 +445,9 @@ export default function LandingPage() {
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="flex flex-col items-center gap-8"
+            className="flex flex-col items-center gap-6"
           >
-            {/* Bismallah with decorative styling */}
+            {/* Bismallah */}
             <motion.div variants={fadeUp} custom={0} className="flex flex-col items-center gap-3">
               <p className="text-[var(--wedding-gold)]/70 text-sm sm:text-base font-light tracking-[0.15em]">
                 بسم الله الرحمن الرحيم
@@ -439,7 +461,7 @@ export default function LandingPage() {
             <motion.h1
               variants={fadeUp}
               custom={1}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.15] tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.15] tracking-tight"
             >
               <span className="text-white">أنشئ دعوة</span>
               <br />
@@ -452,7 +474,7 @@ export default function LandingPage() {
             <motion.p
               variants={fadeUp}
               custom={2}
-              className="text-lg sm:text-xl md:text-2xl text-white/50 font-light max-w-2xl leading-relaxed"
+              className="text-sm sm:text-base md:text-lg text-white/50 font-light max-w-2xl leading-relaxed"
             >
               كل قصة حب تستحق دعوة استثنائية
             </motion.p>
@@ -461,7 +483,7 @@ export default function LandingPage() {
             <motion.p
               variants={fadeUp}
               custom={3}
-              className="text-base sm:text-lg text-white/40 font-light max-w-xl leading-relaxed"
+              className="text-xs sm:text-sm text-white/40 font-light max-w-xl leading-relaxed"
             >
               منصة فاخرة لدعوات الزفاف الرقمية — تصميم يليق بليلة العمر،
               ومشاركة تصل للقلب
@@ -471,25 +493,25 @@ export default function LandingPage() {
             <motion.div
               variants={fadeUp}
               custom={4}
-              className="flex flex-col sm:flex-row items-center gap-4 mt-6"
+              className="flex flex-col sm:flex-row items-center gap-4 mt-4"
             >
               <Link href="/admin/create">
                 <Button
                   size="lg"
-                  className="btn-wedding text-lg px-10 py-7 rounded-xl"
+                  className="btn-wedding text-base px-8 py-6 rounded-xl"
                 >
                   ابدأ رحلتكم
-                  <ChevronLeft className="mr-2 h-5 w-5" />
+                  <ChevronLeft className="mr-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/w/mohamed-fatma">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-[var(--wedding-gold)]/30 text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 hover:border-[var(--wedding-gold)]/50 font-light text-lg px-10 py-7 rounded-xl transition-all duration-400"
+                  className="border-[var(--wedding-gold)]/30 text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 hover:border-[var(--wedding-gold)]/50 font-light text-base px-8 py-6 rounded-xl transition-all duration-400"
                 >
                   شاهد مثال حي
-                  <ArrowLeft className="mr-2 h-5 w-5" />
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                 </Button>
               </Link>
             </motion.div>
@@ -516,22 +538,22 @@ export default function LandingPage() {
       </section>
 
       {/* ─── FEATURES SECTION ─── */}
-      <section id="features" className="relative py-28 sm:py-36">
+      <section id="features" className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[#0F0F20] to-[var(--wedding-deep)]" />
         <GeometricPattern className="absolute inset-0 w-full h-full text-[var(--wedding-gold)] opacity-[0.015]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="text-center mb-20"
+            className="text-center mb-10"
           >
             <motion.h2
               variants={fadeUp}
               custom={0}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
             >
               كل ما تحلمون به{' '}
               <span className="text-gold-gradient">لليلة العمر</span>
@@ -542,7 +564,7 @@ export default function LandingPage() {
             <motion.p
               variants={fadeUp}
               custom={2}
-              className="text-white/40 font-light text-lg mt-6 max-w-lg mx-auto"
+              className="text-white/40 font-light text-sm sm:text-base mt-4 max-w-lg mx-auto"
             >
               أدوات صُممت لتجعل دعوتكم ذكرى تُحفظ
             </motion.p>
@@ -553,7 +575,7 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
           >
             {features.map((f, i) => (
               <motion.div
@@ -566,13 +588,13 @@ export default function LandingPage() {
                 {/* Gold accent line at top */}
                 <div className="h-[2px] w-full bg-gradient-to-l from-[var(--wedding-gold)]/0 via-[var(--wedding-gold)]/60 to-[var(--wedding-gold)]/0 group-hover:via-[var(--wedding-gold)]/90 transition-all duration-500" />
 
-                <div className="relative z-10 p-6">
+                <div className="relative z-10 p-4 sm:p-6">
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-[var(--wedding-gold)]/10 border border-[var(--wedding-gold)]/15 flex items-center justify-center mb-5 group-hover:bg-[var(--wedding-gold)]/15 group-hover:border-[var(--wedding-gold)]/25 transition-all duration-400">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[var(--wedding-gold)]/10 border border-[var(--wedding-gold)]/15 flex items-center justify-center mb-4 group-hover:bg-[var(--wedding-gold)]/15 group-hover:border-[var(--wedding-gold)]/25 transition-all duration-400">
                     <f.icon className="h-5 w-5 text-[var(--wedding-gold)]" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-3">{f.title}</h3>
-                  <p className="text-white/50 font-light leading-relaxed text-[15px]">{f.desc}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{f.title}</h3>
+                  <p className="text-white/50 font-light leading-relaxed text-sm sm:text-base">{f.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -581,22 +603,22 @@ export default function LandingPage() {
       </section>
 
       {/* ─── THEMES PREVIEW SECTION ─── */}
-      <section id="themes" className="relative py-28 sm:py-36">
+      <section id="themes" className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[#0A0A18] to-[var(--wedding-deep)]" />
 
         {/* Ambient glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[var(--wedding-gold)]/5 blur-[150px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[var(--wedding-gold)]/5 blur-[150px] rounded-full" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="text-center mb-20"
+            className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0}>
-              <div className="inline-flex items-center gap-2 bg-[var(--wedding-gold)]/8 border border-[var(--wedding-gold)]/15 rounded-full px-4 py-1.5 mb-6">
+              <div className="inline-flex items-center gap-2 bg-[var(--wedding-gold)]/8 border border-[var(--wedding-gold)]/15 rounded-full px-4 py-1.5 mb-4">
                 <Sparkles className="h-3.5 w-3.5 text-[var(--wedding-gold)]" />
                 <span className="text-[var(--wedding-gold)] text-xs font-medium tracking-wider">تصاميم فاخرة</span>
               </div>
@@ -604,7 +626,7 @@ export default function LandingPage() {
             <motion.h2
               variants={fadeUp}
               custom={1}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
             >
               قوالب تليق{' '}
               <span className="text-gold-gradient">بليلة العمر</span>
@@ -615,7 +637,7 @@ export default function LandingPage() {
             <motion.p
               variants={fadeUp}
               custom={3}
-              className="text-white/40 font-light text-lg mt-6 max-w-lg mx-auto"
+              className="text-white/40 font-light text-sm sm:text-base mt-4 max-w-lg mx-auto"
             >
               كل قالب حُبك بعناية ليكون إطاراً يليق بأجمل لحظاتكم
             </motion.p>
@@ -627,10 +649,10 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
             variants={staggerContainer}
-            className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+            className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
           >
             {themeCards.map((theme, i) => (
-              <InvitationPreviewCard key={theme.slug} theme={theme} index={i} />
+              <CinematicPreviewCard key={theme.slug} theme={theme} index={i} />
             ))}
           </motion.div>
 
@@ -641,12 +663,12 @@ export default function LandingPage() {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="text-center mt-14"
+            className="text-center mt-10"
           >
             <Link href="/admin/create">
               <Button
                 size="lg"
-                className="btn-wedding text-base px-8 py-6 rounded-xl"
+                className="btn-wedding text-sm sm:text-base px-8 py-5 rounded-xl"
               >
                 ابدأ بتصميم دعوتكم الآن
                 <ChevronLeft className="mr-2 h-4 w-4" />
@@ -657,21 +679,21 @@ export default function LandingPage() {
       </section>
 
       {/* ─── HOW IT WORKS SECTION ─── */}
-      <section id="how-it-works" className="relative py-28 sm:py-36">
+      <section id="how-it-works" className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[#0F0F20] to-[var(--wedding-deep)]" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="text-center mb-20"
+            className="text-center mb-10"
           >
             <motion.h2
               variants={fadeUp}
               custom={0}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
             >
               ثلاث خطوات نحو{' '}
               <span className="text-gold-gradient">دعوة أحلامكم</span>
@@ -686,16 +708,13 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
             variants={staggerContainer}
-            className="relative grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6"
+            className="relative grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6"
           >
             {/* Connecting line with diamond ornaments - desktop only */}
-            <div className="hidden md:block absolute top-[52px] left-[16.67%] right-[16.67%] h-[2px]">
+            <div className="hidden md:block absolute top-[44px] left-[16.67%] right-[16.67%] h-[2px]">
               <div className="w-full h-full bg-gradient-to-l from-[var(--wedding-gold)]/20 via-[var(--wedding-gold)]/10 to-[var(--wedding-gold)]/20" />
-              {/* Diamond at center */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rotate-45 bg-[var(--wedding-gold)]/30 border border-[var(--wedding-gold)]/50" />
-              {/* Diamond at 1/4 */}
               <div className="absolute top-1/2 left-[25%] -translate-x-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[var(--wedding-gold)]/20" />
-              {/* Diamond at 3/4 */}
               <div className="absolute top-1/2 left-[75%] -translate-x-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[var(--wedding-gold)]/20" />
             </div>
 
@@ -707,17 +726,82 @@ export default function LandingPage() {
                 className="relative flex flex-col items-center text-center"
               >
                 {/* Step number badge */}
-                <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[var(--wedding-gold)] text-[var(--wedding-deep)] font-bold flex items-center justify-center text-xs z-10 shadow-lg shadow-[var(--wedding-gold)]/20">
+                <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--wedding-gold)] text-[var(--wedding-deep)] font-bold flex items-center justify-center text-xs z-10 shadow-lg shadow-[var(--wedding-gold)]/20">
                   {i + 1}
                 </div>
 
                 {/* Icon circle with gold border */}
-                <div className="w-[88px] h-[88px] rounded-full bg-[var(--wedding-charcoal)]/80 border-2 border-[var(--wedding-gold)]/25 flex items-center justify-center mb-7 group-hover:border-[var(--wedding-gold)]/50 transition-all duration-400">
-                  <step.icon className="h-8 w-8 text-[var(--wedding-gold)]" />
+                <div className="w-[72px] h-[72px] sm:w-[80px] sm:h-[80px] rounded-full bg-[var(--wedding-charcoal)]/80 border-2 border-[var(--wedding-gold)]/25 flex items-center justify-center mb-5 group-hover:border-[var(--wedding-gold)]/50 transition-all duration-400">
+                  <step.icon className="h-7 w-7 sm:h-8 sm:w-8 text-[var(--wedding-gold)]" />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                <p className="text-white/50 font-light leading-relaxed max-w-[280px]">{step.desc}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{step.title}</h3>
+                <p className="text-white/50 font-light leading-relaxed text-sm sm:text-base max-w-[280px]">{step.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── TESTIMONIALS SECTION ─── */}
+      <section id="testimonials" className="relative py-16 sm:py-20">
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[#0A0A18] to-[var(--wedding-deep)]" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-10"
+          >
+            <motion.h2
+              variants={fadeUp}
+              custom={0}
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
+            >
+              ماذا قال{' '}
+              <span className="text-gold-gradient">عملاؤنا</span>
+            </motion.h2>
+            <motion.div variants={fadeUp} custom={1}>
+              <OrnamentSeparator className="max-w-xs mx-auto" />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
+          >
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                variants={scaleIn}
+                custom={i}
+                className="relative rounded-2xl overflow-hidden border border-[var(--wedding-gold)]/15 bg-[var(--wedding-charcoal)]/80 backdrop-blur-sm p-5 sm:p-6"
+              >
+                {/* Gold accent at top */}
+                <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-l from-[var(--wedding-gold)]/0 via-[var(--wedding-gold)]/50 to-[var(--wedding-gold)]/0" />
+
+                {/* Stars */}
+                <div className="mb-4">
+                  <StarRating count={t.rating} />
+                </div>
+
+                {/* Review text */}
+                <p className="text-white/70 font-light leading-relaxed text-sm sm:text-base mb-5">
+                  &ldquo;{t.text}&rdquo;
+                </p>
+
+                {/* Couple name */}
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[var(--wedding-gold)]/15 border border-[var(--wedding-gold)]/25 flex items-center justify-center">
+                    <Heart className="h-3.5 w-3.5 text-[var(--wedding-gold)] fill-[var(--wedding-gold)]" />
+                  </div>
+                  <span className="text-sm font-bold text-[var(--wedding-gold)]">{t.name}</span>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -725,12 +809,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── CTA SECTION ─── */}
-      <section id="cta" className="relative py-28 sm:py-36">
+      <section id="cta" className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[var(--wedding-charcoal)]/30 to-[var(--wedding-deep)]" />
         <GeometricPattern className="absolute inset-0 w-full h-full text-[var(--wedding-gold)] opacity-[0.02]" />
 
         {/* Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[var(--wedding-gold)]/8 blur-[130px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-[var(--wedding-gold)]/8 blur-[130px] rounded-full" />
 
         <motion.div
           initial="hidden"
@@ -740,14 +824,14 @@ export default function LandingPage() {
           className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center"
         >
           {/* Decorative top ornament */}
-          <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
+          <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-6">
             <OrnamentSeparator className="max-w-xs" />
           </motion.div>
 
           <motion.h2
             variants={fadeUp}
             custom={1}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.2]"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-[1.2]"
           >
             ليلة عمركم{' '}
             <span className="text-gold-gradient">تستحق الأجمل</span>
@@ -756,53 +840,153 @@ export default function LandingPage() {
           <motion.p
             variants={fadeUp}
             custom={2}
-            className="text-xl sm:text-2xl text-white/40 font-light mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/40 font-light mb-8 max-w-2xl mx-auto leading-relaxed"
           >
             دعونا نساعدكم في صنع لحظةٍ تبقى في الذاكرة
           </motion.p>
 
-          <motion.div variants={fadeUp} custom={3} className="flex flex-col items-center gap-5">
+          <motion.div variants={fadeUp} custom={3} className="flex flex-col items-center gap-4">
             <Link href="/admin/create">
               <Button
                 size="lg"
-                className="btn-wedding text-xl px-14 py-8 rounded-2xl"
+                className="btn-wedding text-lg px-10 py-6 rounded-xl"
               >
                 ابدأوا رحلتكم الآن
-                <ChevronLeft className="mr-2 h-6 w-6" />
+                <ChevronLeft className="mr-2 h-5 w-5" />
               </Button>
             </Link>
-            <p className="text-white/25 text-sm font-light">ابدأوا في لحظات — بدون تعقيدات</p>
+            <p className="text-white/25 text-xs font-light">ابدأوا في لحظات — بدون تعقيدات</p>
           </motion.div>
 
           {/* Decorative bottom ornament */}
-          <motion.div variants={fadeUp} custom={4} className="flex justify-center mt-10">
+          <motion.div variants={fadeUp} custom={4} className="flex justify-center mt-8">
             <OrnamentSeparator className="max-w-xs" />
           </motion.div>
         </motion.div>
       </section>
 
+      {/* ─── SOCIAL MEDIA / CONTACT SECTION ─── */}
+      <section id="contact" className="relative py-16 sm:py-20">
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--wedding-deep)] via-[#0F0F20] to-[var(--wedding-deep)]" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-10"
+          >
+            <motion.h2
+              variants={fadeUp}
+              custom={0}
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
+            >
+              <span className="text-gold-gradient">تواصل معنا</span>
+            </motion.h2>
+            <motion.div variants={fadeUp} custom={1}>
+              <OrnamentSeparator className="max-w-xs mx-auto" />
+            </motion.div>
+            <motion.p
+              variants={fadeUp}
+              custom={2}
+              className="text-white/40 font-light text-sm sm:text-base mt-4 max-w-md mx-auto"
+            >
+              نحن هنا لمساعدتكم في كل خطوة
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"
+          >
+            {/* WhatsApp */}
+            <motion.a
+              href="https://wa.me/201000000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={scaleIn}
+              custom={0}
+              whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
+              className="card-glow group relative rounded-2xl overflow-hidden border border-[#25D366]/20 hover:border-[#25D366]/40 transition-all duration-500 bg-[#25D366]/5 backdrop-blur-sm p-6 flex flex-col items-center gap-4"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-[#25D366]/15 border border-[#25D366]/25 flex items-center justify-center group-hover:bg-[#25D366]/25 transition-all duration-400">
+                <MessageCircle className="h-6 w-6 text-[#25D366]" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">واتساب</h3>
+                <p className="text-white/50 font-light text-xs sm:text-sm">تحدثوا معنا مباشرة</p>
+              </div>
+            </motion.a>
+
+            {/* Instagram */}
+            <motion.a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={scaleIn}
+              custom={1}
+              whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
+              className="card-glow group relative rounded-2xl overflow-hidden border border-[#E1306C]/20 hover:border-[#E1306C]/40 transition-all duration-500 bg-gradient-to-br from-[#E1306C]/5 via-[#833AB4]/5 to-[#F77737]/5 backdrop-blur-sm p-6 flex flex-col items-center gap-4"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E1306C]/15 via-[#833AB4]/15 to-[#F77737]/15 border border-[#E1306C]/25 flex items-center justify-center group-hover:from-[#E1306C]/25 group-hover:via-[#833AB4]/25 group-hover:to-[#F77737]/25 transition-all duration-400">
+                <Camera className="h-6 w-6 text-[#E1306C]" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">إنستاجرام</h3>
+                <p className="text-white/50 font-light text-xs sm:text-sm">تابعوا أحدث تصاميمنا</p>
+              </div>
+            </motion.a>
+
+            {/* Facebook */}
+            <motion.a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={scaleIn}
+              custom={2}
+              whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
+              className="card-glow group relative rounded-2xl overflow-hidden border border-[#1877F2]/20 hover:border-[#1877F2]/40 transition-all duration-500 bg-[#1877F2]/5 backdrop-blur-sm p-6 flex flex-col items-center gap-4"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-[#1877F2]/15 border border-[#1877F2]/25 flex items-center justify-center group-hover:bg-[#1877F2]/25 transition-all duration-400">
+                <Facebook className="h-6 w-6 text-[#1877F2]" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">فيسبوك</h3>
+                <p className="text-white/50 font-light text-xs sm:text-sm">انضموا لمجتمعنا</p>
+              </div>
+            </motion.a>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── FOOTER ─── */}
-      <footer className="relative">
+      <footer className="relative mt-auto">
         {/* Ornamental top border */}
         <div className="h-[2px] bg-gradient-to-l from-transparent via-[var(--wedding-gold)]/25 to-transparent" />
         <div className="flex justify-center -mt-[5px]">
           <div className="w-2.5 h-2.5 rotate-45 bg-[var(--wedding-gold)]/25 border border-[var(--wedding-gold)]/40" />
         </div>
 
-        <div className="bg-[var(--wedding-deep)] pt-10 pb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-2.5">
-                <Heart className="h-4 w-4 text-[var(--wedding-gold)] fill-[var(--wedding-gold)]" />
-                <span className="font-bold text-gold-gradient">زفاتي</span>
-                <span className="text-white/25 text-sm font-light">© 2025</span>
+        <div className="bg-[var(--wedding-deep)] pt-8 pb-6">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col items-center gap-6">
+              {/* Brand */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Heart className="h-4 w-4 text-[var(--wedding-gold)] fill-[var(--wedding-gold)]" />
+                  <span className="font-bold text-gold-gradient text-lg">قُرب</span>
+                </div>
+                <p className="text-white/30 text-xs font-light">
+                  منصة دعوات الزفاف الفاخرة
+                </p>
               </div>
 
-              <p className="text-white/30 text-sm font-light">
-                منصة دعوات الزفاف الفاخرة
-              </p>
-
-              <div className="flex items-center gap-6 text-sm">
+              {/* Links */}
+              <div className="flex items-center gap-6 text-xs sm:text-sm">
                 <Link
                   href="/client/login"
                   className="text-white/35 hover:text-[var(--wedding-gold)] transition-colors duration-300 font-light"
@@ -821,6 +1005,39 @@ export default function LandingPage() {
                 >
                   شاهد مثال
                 </Link>
+              </div>
+
+              {/* Social icons */}
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://wa.me/201000000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#25D366]/15 hover:border-[#25D366]/30 transition-all duration-300"
+                >
+                  <MessageCircle className="h-4 w-4 text-[#25D366]" />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#E1306C]/15 hover:border-[#E1306C]/30 transition-all duration-300"
+                >
+                  <Camera className="h-4 w-4 text-[#E1306C]" />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#1877F2]/15 hover:border-[#1877F2]/30 transition-all duration-300"
+                >
+                  <Facebook className="h-4 w-4 text-[#1877F2]" />
+                </a>
+              </div>
+
+              {/* Copyright */}
+              <div className="flex items-center gap-2 text-white/20 text-xs font-light">
+                <span>قُرب © 2025</span>
               </div>
             </div>
           </div>

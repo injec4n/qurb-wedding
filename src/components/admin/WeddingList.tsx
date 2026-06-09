@@ -217,7 +217,7 @@ export default function WeddingList() {
           <div className="flex h-24 w-24 items-center justify-center rounded-full mb-6" style={{ background: 'rgba(212,168,83,0.08)' }}>
             <Sparkles className="h-12 w-12" style={{ color: 'var(--wedding-gold)' }} />
           </div>
-          <p className="text-xl font-bold mb-2 text-gold-gradient">ابدأ رحلتك مع زفاتي ✨</p>
+          <p className="text-xl font-bold mb-2 text-gold-gradient">ابدأ رحلتك مع قُرب ✨</p>
           <p className="text-sm mb-6" style={{ color: 'var(--admin-text-muted)' }}>
             أنشئ أول دعوة زفاف وأضف لمسة من الأناقة والتميز
           </p>

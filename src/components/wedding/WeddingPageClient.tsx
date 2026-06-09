@@ -145,6 +145,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             groomName={wedding.groomName}
             brideName={wedding.brideName}
             colors={colors}
+            couplePhoto={wedding.couplePhoto}
             onOpen={() => setShowWelcome(false)}
           />
         )}
@@ -178,8 +179,6 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           patternType={themeConfig.patternType}
           fontScale={themeConfig.fontScale}
           couplePhoto={wedding.couplePhoto}
-          groomPhoto={wedding.groomPhoto}
-          bridePhoto={wedding.bridePhoto}
         />
       </section>
 
