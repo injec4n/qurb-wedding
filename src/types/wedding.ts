@@ -12,9 +12,11 @@ export interface Wedding {
   contactPhone: string;
   coverImage: string;
   coverCategory: string;
+  groomPhoto: string;
+  bridePhoto: string;
+  couplePhoto: string;
   galleryImages: string[]; // JSON array stored as string in DB
   backgroundMusicUrl: string;
-  couplePhoto: string;
   clientPassword: string;
   theme: ThemeName;
   colorPreset: string;
@@ -35,6 +37,11 @@ export interface Wedding {
 }
 
 export type ThemeName =
+  | 'royal-gold'
+  | 'luxury-dark'
+  | 'floral-romance'
+  | 'arabic-heritage'
+  | 'minimal-modern'
   | 'classic-gold'
   | 'modern-dark'
   | 'elegant-white'
@@ -101,9 +108,11 @@ export interface WeddingFormData {
   contactPhone: string;
   coverImage: string;
   coverCategory: string;
+  groomPhoto: string;
+  bridePhoto: string;
+  couplePhoto: string;
   galleryImages: string[];
   backgroundMusicUrl: string;
-  couplePhoto: string;
   clientPassword: string;
   theme: ThemeName;
   colorPreset: string;

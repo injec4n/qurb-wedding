@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Facebook, Send, Link2, Download, Loader2 } from 'lucide-react';
+import { Download, Loader2 } from 'lucide-react';
 import { Wedding, ThemeColors } from '@/types/wedding';
 import { formatDateArabic, formatTimeArabic } from '@/lib/wedding-utils';
 import { toast } from 'sonner';
@@ -18,29 +18,6 @@ interface InvitationCardProps {
 export default function InvitationCard({ wedding, colors, slug, couplePhoto }: InvitationCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/w/${slug}` : '';
-  const shareText = `بيتشرفوا بدعوتكم لحضور حفل زفافهم - ${wedding.groomName} و ${wedding.brideName} - ${formatDateArabic(wedding.weddingDate)} - ${wedding.venueName}`;
-
-  const handleWhatsAppShare = () => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + '\n' + invitationUrl)}`, '_blank');
-  };
-
-  const handleFacebookShare = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(invitationUrl)}`, '_blank');
-  };
-
-  const handleTelegramShare = () => {
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(invitationUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(invitationUrl);
-      toast.success('تم نسخ الرابط بنجاح');
-    } catch {
-      toast.error('فشل في نسخ الرابط');
-    }
-  };
 
   const handleDownloadCard = async () => {
     if (!cardRef.current) return;
@@ -83,7 +60,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
           بطاقة الدعوة
         </motion.h2>
 
-        {/* The card preview - wrapped in a ref for download */}
+        {/* The card preview */}
         <div className="flex justify-center mb-6">
           <div
             ref={cardRef}
@@ -226,21 +203,19 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
           </div>
         </div>
 
-        {/* Action buttons row */}
+        {/* Download button only */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center justify-center gap-3 flex-wrap"
         >
-          {/* Download card button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleDownloadCard}
             disabled={isDownloading}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300"
             style={{
               background: `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
               color: colors.primary,
@@ -253,67 +228,6 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               <Download className="w-4 h-4" />
             )}
             تحميل البطاقة
-          </motion.button>
-
-          {/* Share buttons */}
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleWhatsAppShare}
-            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
-            style={{
-              backgroundColor: '#25D36620',
-              color: '#25D366',
-              border: '1px solid #25D36630',
-            }}
-            title="مشاركة عبر واتساب"
-          >
-            <MessageCircle className="w-5 h-5" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleFacebookShare}
-            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
-            style={{
-              backgroundColor: '#1877F220',
-              color: '#1877F2',
-              border: '1px solid #1877F230',
-            }}
-            title="مشاركة عبر فيسبوك"
-          >
-            <Facebook className="w-5 h-5" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleTelegramShare}
-            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
-            style={{
-              backgroundColor: '#0088cc20',
-              color: '#0088cc',
-              border: '1px solid #0088cc30',
-            }}
-            title="مشاركة عبر تيليغرام"
-          >
-            <Send className="w-5 h-5" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleCopyLink}
-            className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
-            style={{
-              backgroundColor: colors.accent + '20',
-              color: colors.accent,
-              border: `1px solid ${colors.accent}30`,
-            }}
-            title="نسخ الرابط"
-          >
-            <Link2 className="w-5 h-5" />
           </motion.button>
         </motion.div>
       </motion.div>

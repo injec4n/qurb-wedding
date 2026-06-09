@@ -11,6 +11,7 @@ import type { Wedding, ThemeColors, ThemeConfig } from '@/types/wedding';
 import { getWeddingColors } from '@/lib/wedding-utils';
 import { getTheme } from '@/lib/themes';
 
+import dynamic from 'next/dynamic';
 import Hero from '@/components/wedding/Hero';
 import GuestWelcome from '@/components/wedding/GuestWelcome';
 import Countdown from '@/components/wedding/Countdown';
@@ -21,8 +22,10 @@ import RsvpSection from '@/components/wedding/RsvpSection';
 import MusicPlayer, { MusicPlayerHandle } from '@/components/wedding/MusicPlayer';
 import WeddingFooter from '@/components/wedding/WeddingFooter';
 import InvitationCard from '@/components/wedding/InvitationCard';
-import WelcomeScreen from '@/components/wedding/WelcomeScreen';
 import AddToCalendar from '@/components/wedding/AddToCalendar';
+
+// Dynamic import WelcomeScreen to avoid SSR hydration mismatch with animated particles
+const WelcomeScreen = dynamic(() => import('@/components/wedding/WelcomeScreen'), { ssr: false });
 
 interface WeddingPageClientProps {
   wedding: Wedding;
