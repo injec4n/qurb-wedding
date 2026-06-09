@@ -14,6 +14,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#E8C874',
     },
     fontClass: 'font-serif',
+    description: 'أناقة ذهبية كلاسيكية',
+    previewGradient: 'linear-gradient(135deg, #0D0D1A 0%, #1A1A2E 40%, #0D0D1A 100%)',
   },
   'modern-dark': {
     name: 'modern-dark',
@@ -28,6 +30,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#FFFFFF',
     },
     fontClass: 'font-sans',
+    description: 'عصرية وفخامة',
+    previewGradient: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 40%, #0A0A0A 100%)',
   },
   'elegant-white': {
     name: 'elegant-white',
@@ -42,6 +46,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#A0926B',
     },
     fontClass: 'font-serif',
+    description: 'نقاء وأناقة',
+    previewGradient: 'linear-gradient(135deg, #FFFFFF 0%, #F5F0EB 40%, #FFFFFF 100%)',
   },
   'royal-blue': {
     name: 'royal-blue',
@@ -56,6 +62,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#E0C878',
     },
     fontClass: 'font-serif',
+    description: 'فخامة ملكية',
+    previewGradient: 'linear-gradient(135deg, #0F1B33 0%, #1B2A4A 40%, #0F1B33 100%)',
   },
   'rose-gold': {
     name: 'rose-gold',
@@ -70,6 +78,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#D4A0A7',
     },
     fontClass: 'font-sans',
+    description: 'رمانسية ودافئة',
+    previewGradient: 'linear-gradient(135deg, #1A1215 0%, #2D1F22 40%, #1A1215 100%)',
   },
   'traditional-arabic': {
     name: 'traditional-arabic',
@@ -84,6 +94,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
       accent: '#4CAF50',
     },
     fontClass: 'font-serif',
+    description: 'تراث وأصالة',
+    previewGradient: 'linear-gradient(135deg, #0D3B0F 0%, #1B5E20 40%, #0D3B0F 100%)',
   },
 };
 
@@ -100,4 +112,7 @@ export const themeOptions = Object.values(themes).map(t => ({
   value: t.name,
   label: t.label,
   labelAr: t.labelAr,
+  description: t.description,
+  colors: t.colors,
+  previewGradient: t.previewGradient,
 }));

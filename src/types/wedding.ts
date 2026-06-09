@@ -74,6 +74,8 @@ export interface ThemeConfig {
   fontClass: string;
   backgroundImage?: string;
   patternStyle?: string;
+  description?: string;
+  previewGradient?: string;
 }
 
 export interface WeddingFormData {

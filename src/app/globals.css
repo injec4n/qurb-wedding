@@ -44,7 +44,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --color-primary: #D4A853;
   --color-secondary: #1A1A2E;
   --color-landing-bg: #0D0D1A;
@@ -82,6 +82,24 @@
   --sidebar-accent-foreground: #0D0D1A;
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: #D4A853;
+
+  /* Premium Wedding Brand Tokens */
+  --wedding-gold: #D4A853;
+  --wedding-gold-light: #E8C874;
+  --wedding-gold-dark: #B8912E;
+  --wedding-cream: #F5E6D3;
+  --wedding-charcoal: #1A1A2E;
+  --wedding-deep: #0D0D1A;
+  --wedding-rose: #B76E79;
+  --wedding-emerald: #2E7D32;
+  --admin-surface: #111118;
+  --admin-surface-raised: #1A1A24;
+  --admin-surface-overlay: #222230;
+  --admin-border: rgba(212, 168, 83, 0.12);
+  --admin-border-strong: rgba(212, 168, 83, 0.25);
+  --admin-text-primary: #F5F0EB;
+  --admin-text-secondary: #9A95A8;
+  --admin-text-muted: #5E5972;
 }
 
 html {
@@ -92,9 +110,9 @@ body {
   font-family: var(--font-cairo), sans-serif;
 }
 
-/* Custom scrollbar */
+/* Premium scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -102,12 +120,148 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 3px;
+  background: var(--wedding-gold);
+  border-radius: 10px;
+  opacity: 0.6;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
+  background: var(--wedding-gold-light);
+}
+
+/* Ornamental separator component */
+.ornament-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.ornament-separator::before,
+.ornament-separator::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  max-width: 80px;
+  background: linear-gradient(
+    to var(--sep-direction, left),
+    var(--sep-color, #D4A853),
+    transparent
+  );
+}
+
+[dir="rtl"] .ornament-separator::before {
+  --sep-direction: left;
+  background: linear-gradient(to left, var(--sep-color, #D4A853), transparent);
+}
+
+[dir="rtl"] .ornament-separator::after {
+  --sep-direction: right;
+  background: linear-gradient(to right, var(--sep-color, #D4A853), transparent);
+}
+
+.ornament-separator .diamond {
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+  background: var(--sep-color, #D4A853);
+}
+
+/* Premium card glow effect */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 168, 83, 0.15),
+    transparent 50%,
+    rgba(212, 168, 83, 0.08)
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+/* Elegant text gradient for headings */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4A853 0%, #E8C874 40%, #D4A853 70%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Premium admin surface styles */
+.admin-card {
+  background: var(--admin-surface-raised);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.admin-card:hover {
+  border-color: var(--admin-border-strong);
+  box-shadow: 0 8px 32px rgba(212, 168, 83, 0.06);
+}
+
+.admin-input {
+  background: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  color: var(--admin-text-primary) !important;
+  border-radius: 12px !important;
+  transition: all 0.25s ease !important;
+}
+
+.admin-input:focus {
+  border-color: var(--wedding-gold) !important;
+  box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.12) !important;
+  outline: none !important;
+}
+
+.admin-input::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Premium button base */
+.btn-wedding {
+  background: linear-gradient(135deg, #D4A853 0%, #C9A84C 100%);
+  color: #0D0D1A;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(212, 168, 83, 0.2);
+}
+
+.btn-wedding:hover {
+  background: linear-gradient(135deg, #E8C874 0%, #D4A853 100%);
+  box-shadow: 0 6px 24px rgba(212, 168, 83, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-wedding:active {
+  transform: translateY(0);
+}
+
+/* Smooth scroll for invitation pages */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Elegant focus ring */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--wedding-gold);
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
 @layer base {
