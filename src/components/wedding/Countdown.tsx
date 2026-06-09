@@ -102,7 +102,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
 
   if (hasPassed) {
     return (
-      <div className="py-20 px-4" dir="rtl">
+      <div className="py-16 sm:py-24 px-4" dir="rtl">
         {/* Ornamental divider above */}
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
@@ -173,7 +173,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
   if (!timeLeft) return null;
 
   return (
-    <div className="py-20 px-4" dir="rtl">
+    <div className="py-16 sm:py-24 px-4" dir="rtl">
       {/* Ornamental divider above */}
       <div className="flex items-center justify-center gap-4 mb-10">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
@@ -187,10 +187,10 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-12 font-serif"
+        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-14 sm:mb-16 font-serif"
         style={{ color: colors.text }}
       >
-        يتبقى على ليلة العمر
+        العد التنازلي لأجمل ليلة
       </motion.h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 max-w-2xl mx-auto">

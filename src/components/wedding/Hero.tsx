@@ -165,51 +165,35 @@ function OrnamentalLine({ color, className = '' }: { color: string; className?: 
   );
 }
 
-// Bismallah component
+// Bismallah component - elegant standalone design with decorative lines
 function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: string }) {
-  const borderColor = ornamentStyle === 'bold' || ornamentStyle === 'gold'
-    ? color + '45'
-    : ornamentStyle === 'subtle'
-      ? color + '20'
-      : color + '30';
-
-  const bgOpacity = ornamentStyle === 'bold' || ornamentStyle === 'gold' ? '12' : '08';
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: -30 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.2, delay: 0.3 }}
-      className="mb-8"
+      className="mb-12 flex flex-col items-center gap-4"
     >
-      <div className="inline-block px-8 py-4 relative">
-        <div
-          className="absolute inset-0 rounded-lg"
-          style={{ border: `1px solid ${borderColor}`, backgroundColor: color + bgOpacity }}
-        />
-        <div
-          className="absolute inset-1 rounded-md"
-          style={{ border: `1px solid ${color}15` }}
-        />
-        {/* Small corner ornaments on frame */}
-        <div className="absolute top-1.5 right-1.5 w-2 h-2" style={{ color: color + '60' }}>
-          <svg viewBox="0 0 10 10"><path d="M0 0 Q10 0 10 10" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
-        </div>
-        <div className="absolute top-1.5 left-1.5 w-2 h-2" style={{ color: color + '60' }}>
-          <svg viewBox="0 0 10 10"><path d="M10 0 Q0 0 0 10" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
-        </div>
-        <div className="absolute bottom-1.5 right-1.5 w-2 h-2" style={{ color: color + '60' }}>
-          <svg viewBox="0 0 10 10"><path d="M0 10 Q10 10 10 0" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
-        </div>
-        <div className="absolute bottom-1.5 left-1.5 w-2 h-2" style={{ color: color + '60' }}>
-          <svg viewBox="0 0 10 10"><path d="M10 10 Q0 10 0 0" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
-        </div>
-        <p
-          className="relative text-xl sm:text-2xl md:text-3xl font-serif tracking-widest"
-          style={{ color: color + 'CC' }}
-        >
-          بسم الله الرحمن الرحيم
-        </p>
+      {/* Top decorative line */}
+      <div className="flex items-center gap-3">
+        <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to left, ${color}50, transparent)` }} />
+        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: color + '60' }} />
+        <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to right, ${color}50, transparent)` }} />
+      </div>
+
+      {/* Bismallah text */}
+      <p
+        className="text-2xl sm:text-3xl font-serif tracking-[0.15em]"
+        style={{ color: color + 'CC' }}
+      >
+        بسم الله الرحمن الرحيم
+      </p>
+
+      {/* Bottom decorative line */}
+      <div className="flex items-center gap-3">
+        <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to left, ${color}35, transparent)` }} />
+        <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: color + '40' }} />
+        <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to right, ${color}35, transparent)` }} />
       </div>
     </motion.div>
   );
@@ -293,13 +277,14 @@ function ScrollIndicator({ color }: { color: string }) {
 function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-6xl sm:text-7xl md:text-9xl' : 'text-5xl sm:text-6xl md:text-8xl';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
       {/* Background */}
       {hasCoverImage ? (
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ backgroundColor: colors.background + 'CC' }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
@@ -312,7 +297,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
       {cornerOrnaments && <CornerOrnaments color={colors.primary} />}
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-8 sm:px-6 max-w-4xl mx-auto pb-8">
         <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
@@ -321,7 +306,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
 
         {/* Groom name */}
         <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={{ color: colors.primary }}>
+          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.groomName}
           </h1>
         </motion.div>
@@ -330,7 +315,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
 
         {/* Bride name */}
         <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={{ color: colors.primary }}>
+          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.brideName}
           </h1>
         </motion.div>
@@ -342,11 +327,11 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
         {/* Subtitle */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-xl sm:text-2xl md:text-3xl font-serif mb-3" style={{ color: colors.text + 'DD' }}>
-          يتشرفان بدعوتكم لحضور أجمل ليالي العمر
+          يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-base sm:text-lg font-serif" style={{ color: colors.text + 'AA' }}>
-          حفل زفافهما
+          ليلة العمر التي طالما حلمنا بها
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -374,13 +359,14 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
 function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-4xl sm:text-5xl md:text-6xl';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
 
   return (
     <div className="relative min-h-screen flex overflow-hidden" dir="rtl">
       {/* Background - full width */}
       {hasCoverImage ? (
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ backgroundColor: colors.background + 'CC' }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
         <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
@@ -426,14 +412,14 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
       </div>
 
       {/* Right side - content */}
-      <div className="w-full lg:w-1/2 relative z-10 flex items-center justify-center px-6 sm:px-10">
+      <div className="w-full lg:w-1/2 relative z-10 flex items-center justify-center px-8 sm:px-10">
         {/* Mobile Bismallah */}
         <div className="lg:hidden absolute top-8 left-0 right-0 text-center">
           <motion.p
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="text-xl sm:text-2xl font-serif tracking-widest"
+            className="text-2xl sm:text-3xl font-serif tracking-[0.15em]"
             style={{ color: colors.primary + 'CC' }}
           >
             بسم الله الرحمن الرحيم
@@ -452,7 +438,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, delay: 0.8 }}
           >
-            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={{ color: colors.primary }}>
+            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={nameStyle}>
               {wedding.groomName}
             </h1>
           </motion.div>
@@ -465,7 +451,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, delay: 1 }}
           >
-            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={{ color: colors.primary }}>
+            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={nameStyle}>
               {wedding.brideName}
             </h1>
           </motion.div>
@@ -483,7 +469,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-lg sm:text-xl md:text-2xl font-serif text-right mb-2"
             style={{ color: colors.text + 'DD' }}
           >
-            يتشرفان بدعوتكم لحضور أجمل ليالي العمر
+            يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -492,7 +478,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-sm sm:text-base font-serif text-right"
             style={{ color: colors.text + 'AA' }}
           >
-            حفل زفافهما
+            ليلة العمر التي طالما حلمنا بها
           </motion.p>
         </div>
 
@@ -521,13 +507,14 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
 function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-7xl sm:text-8xl md:text-9xl' : 'text-6xl sm:text-7xl md:text-8xl';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
       {/* Dramatic Background */}
       {hasCoverImage ? (
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}88 0%, ${colors.background}AA 40%, ${colors.secondary}CC 100%)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
         <div className="absolute inset-0" style={{
@@ -553,7 +540,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      <div className="relative z-10 text-center px-8 sm:px-6 max-w-5xl mx-auto pb-8">
         <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 0.6 }}>
@@ -568,7 +555,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 
         {/* Groom name - dramatic */}
         <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={{ color: colors.primary }}>
+          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.groomName}
           </h1>
         </motion.div>
@@ -577,7 +564,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 
         {/* Bride name - dramatic */}
         <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={{ color: colors.primary }}>
+          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.brideName}
           </h1>
         </motion.div>
@@ -596,11 +583,11 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         {/* Subtitle - larger and more dramatic */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-2xl sm:text-3xl md:text-4xl font-serif mb-4" style={{ color: colors.text + 'DD' }}>
-          يتشرفان بدعوتكم لحضور أجمل ليالي العمر
+          يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-lg sm:text-xl font-serif" style={{ color: colors.text + 'AA' }}>
-          حفل زفافهما
+          ليلة العمر التي طالما حلمنا بها
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -631,13 +618,14 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
   const borderWidth = isBold ? '2px' : '1px';
   const borderOuterWidth = isBold ? '1.5px' : '1px';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
       {/* Background */}
       {hasCoverImage ? (
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ backgroundColor: colors.background + 'CC' }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
@@ -650,7 +638,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
       {cornerOrnaments && <CornerOrnantsSimple color={colors.primary} />}
 
       {/* Main ornate frame */}
-      <div className="relative z-10 px-6 sm:px-10 max-w-4xl mx-auto w-full">
+      <div className="relative z-10 px-8 sm:px-10 max-w-4xl mx-auto w-full pb-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -731,7 +719,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
 
             {/* Groom name */}
             <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-              <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-center`} style={{ color: colors.primary }}>
+              <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-center`} style={nameStyle}>
                 {wedding.groomName}
               </h1>
             </motion.div>
@@ -740,7 +728,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
 
             {/* Bride name */}
             <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-              <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-center`} style={{ color: colors.primary }}>
+              <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-center`} style={nameStyle}>
                 {wedding.brideName}
               </h1>
             </motion.div>
@@ -753,11 +741,11 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
             {/* Subtitle */}
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
               className="text-xl sm:text-2xl md:text-3xl font-serif mb-3 text-center" style={{ color: colors.text + 'DD' }}>
-              يتشرفان بدعوتكم لحضور أجمل ليالي العمر
+              يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
             </motion.p>
             <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
               className="text-base sm:text-lg font-serif text-center" style={{ color: colors.text + 'AA' }}>
-              حفل زفافهما
+              ليلة العمر التي طالما حلمنا بها
             </motion.p>
           </div>
         </motion.div>

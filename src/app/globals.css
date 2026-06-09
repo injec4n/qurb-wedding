@@ -272,3 +272,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide Next.js dev indicator (the floating "N" button) */
+[next-dev-indicator] {
+  display: none !important;
+}
+[data-nextjs-toast] {
+  display: none !important;
+}

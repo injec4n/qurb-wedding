@@ -14,7 +14,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
   const isPersonalized = !!guestName;
 
   return (
-    <div className="py-20 px-4" dir="rtl">
+    <div className="py-16 sm:py-24 px-4" dir="rtl">
       {/* Ornamental divider above */}
       <div className="flex items-center justify-center gap-4 mb-10">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
@@ -78,7 +78,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <p className="text-4xl sm:text-5xl font-bold mb-6" style={{ color: colors.primary }}>
+                <p className="text-5xl sm:text-6xl font-bold mb-8" style={{ color: colors.primary }}>
                   أهلاً{' '}
                   <motion.span
                     initial={{ opacity: 0.5 }}
@@ -109,7 +109,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                   <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  وجودكم يكمل فرحتنا ويزيدها بهجة
+                  وجودكم يكمل فرحتنا ويجعل ليلتنا أجمل
                 </p>
                 <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
                   ويسعد قلوبنا حضورك معنا في هذه الليلة السعيدة
@@ -124,8 +124,8 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <p className="text-4xl sm:text-5xl font-bold mb-6" style={{ color: colors.primary }}>
-                  يسعدنا أن تشاركونا فرحتنا 🌹
+                <p className="text-5xl sm:text-6xl font-bold mb-8" style={{ color: colors.primary }}>
+                  يسعدنا حضوركم ومشاركتكم فرحتنا 🌹
                 </p>
               </motion.div>
 
@@ -145,7 +145,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                   <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  وجودكم يكمل فرحتنا ويزيدها بهجة
+                  وجودكم يكمل فرحتنا ويجعل ليلتنا أجمل
                 </p>
                 <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
                   حضوركم يزيد فرحتنا بهجة وسروراً

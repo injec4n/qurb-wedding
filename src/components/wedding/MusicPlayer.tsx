@@ -49,7 +49,7 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
   if (!musicUrl) return null;
 
   return (
-    <div className="fixed bottom-6 left-6 z-50" dir="rtl">
+    <div className="fixed bottom-6 left-6 z-40" dir="rtl">
       <motion.button
         onClick={togglePlay}
         onMouseEnter={() => setShowTooltip(true)}

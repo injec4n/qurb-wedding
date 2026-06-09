@@ -8,7 +8,7 @@ interface WeddingFooterProps {
 
 export default function WeddingFooter({ groomName, brideName, colors }: WeddingFooterProps) {
   return (
-    <footer className="py-14 px-4 text-center" dir="rtl">
+    <footer className="py-16 sm:py-20 px-4 text-center" dir="rtl">
       {/* Larger ornamental divider at top */}
       <div className="flex items-center justify-center gap-5 mb-10">
         <div className="h-px w-20 sm:w-32" style={{ backgroundColor: colors.primary + '25' }} />
@@ -19,11 +19,11 @@ export default function WeddingFooter({ groomName, brideName, colors }: WeddingF
       </div>
 
       {/* Dua message */}
-      <p className="text-base sm:text-lg mb-6 font-serif" style={{ color: colors.text + 'BB' }}>
-        نسأل الله أن يوفقكم ويسعدكم
+      <p className="text-lg sm:text-xl mb-6 font-serif" style={{ color: colors.text + 'BB' }}>
+        نسأل الله أن يوفقكم ويسعدكم ويجمعكم على خير
       </p>
 
-      <p className="text-lg sm:text-xl mb-3 font-serif" style={{ color: colors.text + 'CC' }}>
+      <p className="text-xl sm:text-2xl mb-3 font-serif" style={{ color: colors.text + 'CC' }}>
         صُنع بكل حب ❤️
       </p>
       <p className="text-base sm:text-lg font-semibold mb-4" style={{ color: colors.primary + 'CC' }}>

@@ -13,7 +13,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
   const hasMap = !!wedding.googleMapsLink;
 
   return (
-    <div className="py-20 px-4" dir="rtl">
+    <div className="py-16 sm:py-24 px-4" dir="rtl">
       {/* Ornamental divider above */}
       <div className="flex items-center justify-center gap-4 mb-10">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
@@ -35,7 +35,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-12 font-serif"
+          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-12 font-serif"
           style={{ color: colors.text }}
         >
           موقع الحفل

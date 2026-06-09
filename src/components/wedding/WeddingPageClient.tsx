@@ -1,9 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,6 +22,8 @@ import MusicPlayer from '@/components/wedding/MusicPlayer';
 import WeddingFooter from '@/components/wedding/WeddingFooter';
 import InvitationCard from '@/components/wedding/InvitationCard';
 import InstagramStory from '@/components/wedding/InstagramStory';
+import WelcomeScreen from '@/components/wedding/WelcomeScreen';
+import AddToCalendar from '@/components/wedding/AddToCalendar';
 
 interface WeddingPageClientProps {
   wedding: Wedding;
@@ -98,6 +100,19 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
 
   const sectionPadding = getSectionPadding(themeConfig.sectionSpacing);
 
+  // Welcome screen state - show when guest parameter is present
+  const [showWelcome, setShowWelcome] = useState(!!guestName);
+
+  // Prevent scrolling when welcome screen is visible
+  useEffect(() => {
+    if (showWelcome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showWelcome]);
+
   // GSAP parallax effect for the hero only
   useEffect(() => {
     if (!wrapperRef.current) return;
@@ -119,22 +134,36 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
   }, []);
 
   return (
-    <div
-      ref={wrapperRef}
-      dir="rtl"
-      className="min-h-screen smooth-scroll"
-      style={{
-        '--color-primary': colors.primary,
-        '--color-secondary': colors.secondary,
-        '--color-background': colors.background,
-        '--color-text': colors.text,
-        '--color-button': colors.button,
-        '--color-accent': colors.accent,
-        backgroundColor: colors.background,
-        color: colors.text,
-        fontSize: `${themeConfig.fontScale * 100}%`,
-      } as React.CSSProperties}
-    >
+    <>
+      {/* Welcome screen overlay for personalized guests */}
+      <AnimatePresence>
+        {showWelcome && guestName && (
+          <WelcomeScreen
+            guestName={guestName}
+            groomName={wedding.groomName}
+            brideName={wedding.brideName}
+            colors={colors}
+            onOpen={() => setShowWelcome(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <div
+        ref={wrapperRef}
+        dir="rtl"
+        className="min-h-screen smooth-scroll"
+        style={{
+          '--color-primary': colors.primary,
+          '--color-secondary': colors.secondary,
+          '--color-background': colors.background,
+          '--color-text': colors.text,
+          '--color-button': colors.button,
+          '--color-accent': colors.accent,
+          backgroundColor: colors.background,
+          color: colors.text,
+          fontSize: `${themeConfig.fontScale * 100}%`,
+        } as React.CSSProperties}
+      >
       {/* 1. Hero Section - Full viewport */}
       <section id="hero" className="parallax-hero">
         <Hero
@@ -200,6 +229,28 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         className={sectionPadding}
       >
         <WeddingDetails wedding={wedding} colors={colors} />
+      </motion.section>
+
+      <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
+
+      {/* 4b. Add To Calendar */}
+      <motion.section
+        id="calendar"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        variants={sectionVariants}
+        className={sectionPadding}
+      >
+        <AddToCalendar
+          groomName={wedding.groomName}
+          brideName={wedding.brideName}
+          weddingDate={wedding.weddingDate}
+          weddingTime={wedding.weddingTime}
+          venueName={wedding.venueName}
+          venueAddress={wedding.venueAddress}
+          colors={colors}
+        />
       </motion.section>
 
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
@@ -297,6 +348,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           colors={colors}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }

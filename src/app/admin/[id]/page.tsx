@@ -7,9 +7,10 @@ import { Wedding } from '@/types/wedding';
 import WeddingForm from '@/components/admin/WeddingForm';
 import GuestManager from '@/components/admin/GuestManager';
 import RsvpTable from '@/components/admin/RsvpTable';
+import WeddingDashboard from '@/components/admin/WeddingDashboard';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowRight, Heart, Users, Calendar, Pencil, ExternalLink } from 'lucide-react';
+import { ArrowRight, Heart, Users, Calendar, Pencil, ExternalLink, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
 
 type WeddingFormValues = {
@@ -195,7 +196,7 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mx-auto max-w-5xl px-4 py-8"
       >
-        <Tabs defaultValue="edit" className="space-y-6">
+        <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList
             className="border"
             style={{
@@ -203,6 +204,14 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
               borderColor: 'var(--admin-border)',
             }}
           >
+            <TabsTrigger
+              value="dashboard"
+              className="transition-all data-[state=active]:text-white"
+              style={{ color: 'var(--admin-text-secondary)' }}
+            >
+              <BarChart3 className="ml-2 h-4 w-4" />
+              لوحة التحكم
+            </TabsTrigger>
             <TabsTrigger
               value="edit"
               className="transition-all data-[state=active]:text-white"
@@ -228,6 +237,15 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
               الردود
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="dashboard">
+            <WeddingDashboard
+              weddingId={wedding.id}
+              weddingSlug={wedding.slug}
+              groomName={wedding.groomName}
+              brideName={wedding.brideName}
+            />
+          </TabsContent>
 
           <TabsContent value="edit">
             <WeddingForm

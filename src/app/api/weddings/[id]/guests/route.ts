@@ -7,6 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const guests = await db.guest.findMany({
       where: { weddingId: id },
       orderBy: { createdAt: 'desc' },
+      include: { rsvp: true },
     });
     return NextResponse.json({ success: true, data: guests });
   } catch (error) {
