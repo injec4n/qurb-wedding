@@ -19,10 +19,38 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, phone } = body;
 
+    // Handle bulk guest addition
+    if (body.bulk && Array.isArray(body.names)) {
+      const names: string[] = body.names
+        .map((n: string) => (typeof n === 'string' ? n.trim() : ''))
+        .filter((n: string) => n.length > 0);
+
+      if (names.length === 0) {
+        return NextResponse.json({ success: false, error: 'أسماء الضيوف مطلوبة' }, { status: 400 });
+      }
+
+      const createdGuests = [];
+      for (const name of names) {
+        const guestLink = encodeURIComponent(name);
+        const guest = await db.guest.create({
+          data: {
+            weddingId: id,
+            name,
+            phone: '',
+            guestLink,
+          },
+        });
+        createdGuests.push(guest);
+      }
+
+      return NextResponse.json({ success: true, data: createdGuests }, { status: 201 });
+    }
+
+    // Handle single guest addition
+    const { name, phone } = body;
     if (!name) {
-      return NextResponse.json({ success: false, error: 'Guest name is required' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'اسم الضيف مطلوب' }, { status: 400 });
     }
 
     const guestLink = encodeURIComponent(name.trim());

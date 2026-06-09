@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import WeddingList from '@/components/admin/WeddingList';
 import GuestManager from '@/components/admin/GuestManager';
 import RsvpTable from '@/components/admin/RsvpTable';
-import { Home, Users, Calendar, Menu, Heart, ArrowRight } from 'lucide-react';
+import { Users, Calendar, Menu, Heart, ArrowRight, LogOut } from 'lucide-react';
 
 interface SelectedWedding {
   id: string;
@@ -18,8 +18,47 @@ interface SelectedWedding {
 }
 
 export default function AdminPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('weddings');
   const [selectedWedding, setSelectedWedding] = useState<SelectedWedding | null>(null);
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/admin/auth');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthed(true);
+        } else {
+          router.replace('/admin/login');
+        }
+      } catch {
+        router.replace('/admin/login');
+      } finally {
+        setIsChecking(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  const handleLogout = async () => {
+    await fetch('/api/admin/auth', { method: 'DELETE' });
+    router.push('/admin/login');
+  };
+
+  if (isChecking) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <span className="h-10 w-10 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!isAuthed) {
+    return null;
+  }
 
   const handleSelectWedding = (wedding: SelectedWedding) => {
     setSelectedWedding(wedding);
@@ -52,57 +91,75 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-1 md:flex">
-            {navItems.map((item) => (
-              <Button
-                key={item.id}
-                variant={activeTab === item.id ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setActiveTab(item.id)}
-                className={
-                  activeTab === item.id
-                    ? 'bg-amber-600 text-white hover:bg-amber-700'
-                    : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
-                }
-              >
-                <item.icon className="ml-2 h-4 w-4" />
-                {item.label}
-              </Button>
-            ))}
-          </nav>
-
-          {/* Mobile Menu */}
-          <div className="md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-zinc-300">
-                  <Menu className="h-5 w-5" />
+          <div className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <nav className="hidden items-center gap-1 md:flex">
+              {navItems.map((item) => (
+                <Button
+                  key={item.id}
+                  variant={activeTab === item.id ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveTab(item.id)}
+                  className={
+                    activeTab === item.id
+                      ? 'bg-amber-600 text-white hover:bg-amber-700'
+                      : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
+                  }
+                >
+                  <item.icon className="ml-2 h-4 w-4" />
+                  {item.label}
                 </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="border-zinc-700 bg-zinc-900 w-64">
-                <SheetTitle className="text-zinc-100 mb-6">القائمة</SheetTitle>
-                <div className="space-y-2">
-                  {navItems.map((item) => (
+              ))}
+            </nav>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-zinc-400 hover:text-red-400"
+              title="تسجيل الخروج"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+
+            {/* Mobile Menu */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-zinc-300">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="border-zinc-700 bg-zinc-900 w-64">
+                  <SheetTitle className="text-zinc-100 mb-6">القائمة</SheetTitle>
+                  <div className="space-y-2">
+                    {navItems.map((item) => (
+                      <Button
+                        key={item.id}
+                        variant={activeTab === item.id ? 'default' : 'ghost'}
+                        className={`w-full justify-start ${
+                          activeTab === item.id
+                            ? 'bg-amber-600 text-white hover:bg-amber-700'
+                            : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
+                        }`}
+                        onClick={() => setActiveTab(item.id)}
+                      >
+                        <item.icon className="ml-2 h-4 w-4" />
+                        {item.label}
+                      </Button>
+                    ))}
                     <Button
-                      key={item.id}
-                      variant={activeTab === item.id ? 'default' : 'ghost'}
-                      className={`w-full justify-start ${
-                        activeTab === item.id
-                          ? 'bg-amber-600 text-white hover:bg-amber-700'
-                          : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
-                      }`}
-                      onClick={() => {
-                        setActiveTab(item.id);
-                      }}
+                      variant="ghost"
+                      className="w-full justify-start text-red-400 hover:bg-zinc-800 hover:text-red-300"
+                      onClick={handleLogout}
                     >
-                      <item.icon className="ml-2 h-4 w-4" />
-                      {item.label}
+                      <LogOut className="ml-2 h-4 w-4" />
+                      تسجيل الخروج
                     </Button>
-                  ))}
-                </div>
-              </SheetContent>
-            </Sheet>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>

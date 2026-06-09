@@ -44,43 +44,27 @@ export default function Venue({ wedding, colors }: VenueProps) {
             border: `1px solid ${colors.primary}20`,
           }}
         >
-          {/* Map embed or decorative header */}
-          {hasMap ? (
-            <div className="w-full h-48 sm:h-64 bg-gray-100 relative">
-              <iframe
-                src={wedding.googleMapsLink}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="موقع الحفل"
-                className="w-full h-full"
-              />
+          {/* Decorative header */}
+          <div
+            className="w-full h-32 sm:h-48 flex items-center justify-center relative overflow-hidden"
+            style={{
+              background: `linear-gradient(135deg, ${colors.secondary}40 0%, ${colors.primary}20 100%)`,
+            }}
+          >
+            {/* Decorative pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="venue-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <circle cx="20" cy="20" r="3" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                    <path d="M0 20L20 0L40 20L20 40Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#venue-pattern)" style={{ color: colors.primary }} />
+              </svg>
             </div>
-          ) : (
-            <div
-              className="w-full h-32 sm:h-48 flex items-center justify-center relative overflow-hidden"
-              style={{
-                background: `linear-gradient(135deg, ${colors.secondary}40 0%, ${colors.primary}20 100%)`,
-              }}
-            >
-              {/* Decorative pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <pattern id="venue-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <circle cx="20" cy="20" r="3" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                      <path d="M0 20L20 0L40 20L20 40Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#venue-pattern)" style={{ color: colors.primary }} />
-                </svg>
-              </div>
-              <MapPin className="w-12 h-12 relative" style={{ color: colors.primary + '80' }} />
-            </div>
-          )}
+            <MapPin className="w-12 h-12 relative" style={{ color: colors.primary + '80' }} />
+          </div>
 
           {/* Venue info */}
           <div className="p-6 sm:p-8 text-center">
@@ -90,9 +74,11 @@ export default function Venue({ wedding, colors }: VenueProps) {
                 {wedding.venueName}
               </h3>
             </div>
-            <p className="text-base sm:text-lg mb-4" style={{ color: colors.text + 'BB' }}>
-              {wedding.venueAddress}
-            </p>
+            {wedding.venueAddress && (
+              <p className="text-base sm:text-lg mb-4" style={{ color: colors.text + 'BB' }}>
+                {wedding.venueAddress}
+              </p>
+            )}
 
             {hasMap && (
               <a

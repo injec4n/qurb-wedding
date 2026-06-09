@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import WeddingForm from '@/components/admin/WeddingForm';
@@ -40,6 +40,27 @@ type WeddingFormValues = {
 export default function CreateWeddingPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/admin/auth');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthed(true);
+        } else {
+          router.replace('/admin/login');
+        }
+      } catch {
+        router.replace('/admin/login');
+      } finally {
+        setIsChecking(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   const handleSubmit = async (data: WeddingFormValues) => {
     try {
@@ -51,7 +72,7 @@ export default function CreateWeddingPage() {
       });
       const result = await res.json();
       if (result.success) {
-        toast.success('تم إنشاء الزفاف بنجاح');
+        toast.success('تم إنشاء الزفاف بنجاح! يمكنك الآن فتح الرابط: /w/' + data.slug);
         router.push('/admin');
       } else {
         toast.error(result.error || 'فشل في إنشاء الزفاف');
@@ -62,6 +83,16 @@ export default function CreateWeddingPage() {
       setIsLoading(false);
     }
   };
+
+  if (isChecking) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <span className="h-10 w-10 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!isAuthed) return null;
 
   return (
     <div dir="rtl" className="min-h-screen bg-zinc-950 text-zinc-100">

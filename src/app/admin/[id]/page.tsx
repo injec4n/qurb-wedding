@@ -10,7 +10,7 @@ import RsvpTable from '@/components/admin/RsvpTable';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Heart, Users, Calendar, Pencil } from 'lucide-react';
+import { ArrowRight, Heart, Users, Calendar, Pencil, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 type WeddingFormValues = {
@@ -48,8 +48,27 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
   const [wedding, setWedding] = useState<Wedding | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/admin/auth');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthed(true);
+        } else {
+          router.replace('/admin/login');
+        }
+      } catch {
+        router.replace('/admin/login');
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAuthed) return;
     const fetchWedding = async () => {
       try {
         setIsLoading(true);
@@ -70,7 +89,7 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
     };
 
     fetchWedding();
-  }, [id, router]);
+  }, [id, router, isAuthed]);
 
   const handleSubmit = async (data: WeddingFormValues) => {
     try {
@@ -94,7 +113,7 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !isAuthed) {
     return (
       <div dir="rtl" className="min-h-screen bg-zinc-950 text-zinc-100">
         <div className="flex items-center justify-center py-32">
@@ -124,14 +143,25 @@ export default function EditWeddingPage({ params }: { params: Promise<{ id: stri
               </p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/admin')}
-            className="text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
-          >
-            <ArrowRight className="ml-2 h-4 w-4" />
-            العودة
-          </Button>
+          <div className="flex items-center gap-3">
+            <a
+              href={`/w/${wedding.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300"
+            >
+              <ExternalLink className="h-4 w-4" />
+              عرض الدعوة
+            </a>
+            <Button
+              variant="ghost"
+              onClick={() => router.push('/admin')}
+              className="text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+            >
+              <ArrowRight className="ml-2 h-4 w-4" />
+              العودة
+            </Button>
+          </div>
         </div>
       </header>
 

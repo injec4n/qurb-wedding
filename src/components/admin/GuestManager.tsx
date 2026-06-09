@@ -126,7 +126,7 @@ export default function GuestManager({ weddingId, weddingSlug }: GuestManagerPro
   };
 
   const copyGuestLink = (guest: Guest) => {
-    const link = `${window.location.origin}/${weddingSlug}?guest=${guest.guestLink}`;
+    const link = `${window.location.origin}/w/${weddingSlug}?guest=${guest.guestLink}`;
     navigator.clipboard.writeText(link).then(() => {
       toast.success('تم نسخ رابط الضيف');
     }).catch(() => {

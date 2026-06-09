@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const weddingFormSchema = z.object({
   groomName: z.string().min(1, 'اسم العريس مطلوب'),
@@ -60,10 +61,26 @@ interface WeddingFormProps {
   isLoading?: boolean;
 }
 
+// Helper: parse galleryImages from either string (DB) or array (API)
+function parseGalleryImages(value: string | string[] | undefined | null): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 export default function WeddingForm({ initialData, onSubmit, isLoading }: WeddingFormProps) {
+  const router = useRouter();
   const [galleryInput, setGalleryInput] = useState('');
   const [galleryImages, setGalleryImages] = useState<string[]>(
-    initialData ? (Array.isArray(initialData.galleryImages) ? initialData.galleryImages : []) : []
+    parseGalleryImages(initialData?.galleryImages)
   );
 
   const form = useForm<WeddingFormValues>({
@@ -80,7 +97,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
       welcomeMessage: initialData?.welcomeMessage || '',
       contactPhone: initialData?.contactPhone || '',
       coverImage: initialData?.coverImage || '',
-      galleryImages: Array.isArray(initialData?.galleryImages) ? initialData.galleryImages : [],
+      galleryImages: parseGalleryImages(initialData?.galleryImages),
       backgroundMusicUrl: initialData?.backgroundMusicUrl || '',
       theme: initialData?.theme || 'classic-gold',
       colorPreset: initialData?.colorPreset || '',
@@ -112,20 +129,18 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
     }
   }, [groomName, brideName, initialData, setValue]);
 
-  // Apply theme colors when theme changes
+  // Apply theme colors when theme changes (works for both create and edit)
   useEffect(() => {
-    if (!initialData) {
-      const themeConfig = getTheme(selectedTheme as Wedding['theme']);
-      if (themeConfig) {
-        setValue('primaryColor', themeConfig.colors.primary);
-        setValue('secondaryColor', themeConfig.colors.secondary);
-        setValue('backgroundColor', themeConfig.colors.background);
-        setValue('textColor', themeConfig.colors.text);
-        setValue('buttonColor', themeConfig.colors.button);
-        setValue('accentColor', themeConfig.colors.accent);
-      }
+    const themeConfig = getTheme(selectedTheme as Wedding['theme']);
+    if (themeConfig) {
+      setValue('primaryColor', themeConfig.colors.primary);
+      setValue('secondaryColor', themeConfig.colors.secondary);
+      setValue('backgroundColor', themeConfig.colors.background);
+      setValue('textColor', themeConfig.colors.text);
+      setValue('buttonColor', themeConfig.colors.button);
+      setValue('accentColor', themeConfig.colors.accent);
     }
-  }, [selectedTheme, initialData, setValue]);
+  }, [selectedTheme, setValue]);
 
   const addGalleryImage = () => {
     if (galleryInput.trim()) {
@@ -464,7 +479,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
         <Button
           type="button"
           variant="outline"
-          onClick={() => window.history.back()}
+          onClick={() => router.push('/admin')}
           className="border-zinc-600 text-zinc-300 hover:bg-zinc-700"
           disabled={isLoading}
         >

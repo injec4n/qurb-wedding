@@ -198,7 +198,7 @@ export default function WeddingList() {
                       </TableCell>
                       <TableCell>
                         <a
-                          href={`/${wedding.slug}`}
+                          href={`/w/${wedding.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300"
