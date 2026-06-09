@@ -19,7 +19,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
   const cardRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/w/${slug}` : '';
-  const shareText = `يدعوكم ${wedding.groomName} و ${wedding.brideName} لحضور حفل زفافهما - ${formatDateArabic(wedding.weddingDate)} - ${wedding.venueName}`;
+  const shareText = `بيتشرفوا بدعوتكم لحضور حفل زفافهم - ${wedding.groomName} و ${wedding.brideName} - ${formatDateArabic(wedding.weddingDate)} - ${wedding.venueName}`;
 
   const handleWhatsAppShare = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(shareText + '\n' + invitationUrl)}`, '_blank');
@@ -202,7 +202,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               </div>
 
               <p className="text-xs sm:text-sm mb-3 font-serif" style={{ color: colors.text + 'BB' }}>
-                يتشرفان بدعوتكم لحضور حفل زفافهما
+                بيتشرفوا بدعوتكم لحضور حفل زفافهم
               </p>
 
               <p className="text-sm sm:text-base font-semibold mb-1" style={{ color: colors.primary + 'DD' }}>

@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,10 +18,9 @@ import WeddingDetails from '@/components/wedding/WeddingDetails';
 import Venue from '@/components/wedding/Venue';
 import Gallery from '@/components/wedding/Gallery';
 import RsvpSection from '@/components/wedding/RsvpSection';
-import MusicPlayer from '@/components/wedding/MusicPlayer';
+import MusicPlayer, { MusicPlayerHandle } from '@/components/wedding/MusicPlayer';
 import WeddingFooter from '@/components/wedding/WeddingFooter';
 import InvitationCard from '@/components/wedding/InvitationCard';
-import InstagramStory from '@/components/wedding/InstagramStory';
 import WelcomeScreen from '@/components/wedding/WelcomeScreen';
 import AddToCalendar from '@/components/wedding/AddToCalendar';
 
@@ -94,6 +93,7 @@ function getSectionPadding(spacing: ThemeConfig['sectionSpacing']): string {
 
 export default function WeddingPageClient({ wedding, guestName }: WeddingPageClientProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const musicPlayerRef = useRef<MusicPlayerHandle>(null);
   const colors: ThemeColors = getWeddingColors(wedding);
   const themeConfig: ThemeConfig = getTheme(wedding.theme);
   const galleryImages = Array.isArray(wedding.galleryImages)
@@ -104,6 +104,15 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
 
   // Welcome screen state - show when guest parameter is present
   const [showWelcome, setShowWelcome] = useState(!!guestName);
+
+  // Handle envelope open - start music
+  const handleWelcomeOpen = useCallback(() => {
+    setShowWelcome(false);
+    // Auto-play music after envelope opens (user interaction allows autoplay)
+    setTimeout(() => {
+      musicPlayerRef.current?.play();
+    }, 500);
+  }, []);
 
   // Prevent scrolling when welcome screen is visible
   useEffect(() => {
@@ -146,7 +155,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             brideName={wedding.brideName}
             colors={colors}
             couplePhoto={wedding.couplePhoto}
-            onOpen={() => setShowWelcome(false)}
+            onOpen={handleWelcomeOpen}
           />
         )}
       </AnimatePresence>
@@ -313,7 +322,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
 
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
 
-      {/* 8. Downloadable Invitation Card & Instagram Story */}
+      {/* 8. Invitation Card */}
       <motion.section
         id="downloads"
         initial="hidden"
@@ -322,10 +331,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         variants={sectionVariants}
         className={sectionPadding}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 max-w-5xl mx-auto">
-          <InvitationCard wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
-          <InstagramStory wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
-        </div>
+        <InvitationCard wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
       </motion.section>
 
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
@@ -349,6 +355,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
       {/* 10. Floating Music Player (if enabled and URL provided) */}
       {wedding.enableMusic && wedding.backgroundMusicUrl && (
         <MusicPlayer
+          ref={musicPlayerRef}
           musicUrl={wedding.backgroundMusicUrl}
           colors={colors}
         />

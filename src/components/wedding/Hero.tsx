@@ -386,11 +386,11 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
         {/* Subtitle */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-xl sm:text-2xl md:text-3xl font-serif mb-3" style={{ color: colors.text + 'DD' }}>
-          بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
+          بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-base sm:text-lg font-serif" style={{ color: colors.text + 'AA' }}>
-          ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
+          ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -540,7 +540,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-lg sm:text-xl md:text-2xl font-serif text-right mb-2"
             style={{ color: colors.text + 'DD' }}
           >
-            بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
+            بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -549,7 +549,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-sm sm:text-base font-serif text-right"
             style={{ color: colors.text + 'AA' }}
           >
-            ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
+            ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
           </motion.p>
         </div>
 
@@ -666,11 +666,11 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         {/* Subtitle - larger and more dramatic */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-2xl sm:text-3xl md:text-4xl font-serif mb-4" style={{ color: colors.text + 'DD' }}>
-          بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
+          بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-lg sm:text-xl font-serif" style={{ color: colors.text + 'AA' }}>
-          ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
+          ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -836,11 +836,11 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
             {/* Subtitle */}
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
               className="text-xl sm:text-2xl md:text-3xl font-serif mb-3 text-center" style={{ color: colors.text + 'DD' }}>
-              بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
+              بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
             </motion.p>
             <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
               className="text-base sm:text-lg font-serif text-center" style={{ color: colors.text + 'AA' }}>
-              ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
+              ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
             </motion.p>
           </div>
         </motion.div>

@@ -10,9 +10,6 @@ import {
   Camera,
   CheckCircle,
   Timer,
-  PenTool,
-  Palette,
-  Rocket,
   Heart,
   ChevronLeft,
   ArrowLeft,
@@ -91,70 +88,70 @@ const themeCards = [
 const features = [
   {
     icon: Globe,
-    title: 'موقع زفاف استثنائي',
-    desc: 'موقع ويب يحمل تفاصيل قصتكم، بتصميم يليق ببهجة المناسبة',
+    title: 'موقع زفاف فاخر',
+    desc: 'موقع ويب خاص بزفافكم بتصميم سينمائي يبهر الضيوف',
   },
   {
     icon: Mail,
     title: 'دعوة تحمل اسم كل ضيف',
-    desc: 'رسالة ترحيب شخصية تُشعر كل ضيف بأنه مميز في فرحتكم',
+    desc: 'رسالة ترحيب شخصية لكل ضيف بإسمه — تخلّيه يحس إنه مميز',
   },
   {
     icon: Smartphone,
     title: 'بطاقة واتساب فاخرة',
-    desc: 'بطاقة رقمية أنيقة تصل لضيوفكم بلمسة واحدة عبر واتساب',
+    desc: 'بطاقة رقمية أنيقة تبعت مباشرة على الواتساب لكل ضيوفكم',
   },
   {
     icon: Camera,
     title: 'ستوري إنستاجرام مخصصة',
-    desc: 'تصميم ستوري يعكس فرحتكم ويُشارك العالم لحظتكم السعيدة',
+    desc: 'تصميم ستوري يعكس فرحتكم ويخلّي الكل يحتفظ بلحظتكم',
   },
   {
     icon: CheckCircle,
     title: 'تأكيد حضور سلس',
-    desc: 'نظام RSVP متكامل يُسهّل عليكم متابعة حضور أحبتكم',
+    desc: 'نظام RSVP متكامل يخلّيكم تعرفوا مين هييجي بسهولة',
   },
   {
     icon: Timer,
     title: 'عداد تنازلي لليلة العمر',
-    desc: 'عداد حي يُضيف لمسة شوق وترقب لأيامكم المتبقية',
+    desc: 'عداد حي بيخلّي الضيوف مستنيين ليلة العمر بشوق',
   },
 ];
 
 /* ─── Steps data ─── */
 const steps = [
   {
-    icon: PenTool,
-    title: 'سجّلوا بياناتكم',
-    desc: 'أدخلوا تفاصيل ليلة العمر واختاروا القالب الذي يعكس ذوقكم',
+    icon: Eye,
+    title: 'شوفوا أمثلة أعمالنا',
+    desc: 'اكتشفوا تصاميمنا الفاخرة واختاروا اللي يعجبكم',
   },
   {
-    icon: Palette,
-    title: 'صمّموا دعوتكم',
-    desc: 'اختاروا الألوان والزخارف وأضيفوا صوركم لتبدو الدعوة كما تحلمون',
+    icon: MessageCircle,
+    title: 'تواصلوا معانا',
+    desc: 'كلمنا على الواتساب وهنرتب كل حاجة معاكم',
   },
   {
-    icon: Rocket,
-    title: 'شاركوا فرحتكم',
-    desc: 'أرسلوا الدعوات المخصصة لأحبتكم وانتظروهم في ليلة لا تُنسى',
+    icon: Sparkles,
+    title: 'استلموا دعوتكم',
+    desc: 'هنصمملكم دعوة مميزة بياناتكم وصوركم ونبعتلهكم الرابط',
   },
 ];
 
 /* ─── Testimonials data ─── */
 const testimonials = [
   {
-    name: 'أحمد و نورة',
-    text: 'تجربة مذهلة! الدعوات كانت أنيقة جداً وأعجب جميع ضيوفنا. التخصيص كان سهلاً والنتيجة فاقت توقعاتنا. شكراً قُرب!',
+    name: 'محمد و ياسمين',
+    text: 'الدعوات كانت رائعة! كل الضيوف مدحوا التصميم والأناقة. تجربة سهلة من الأول للآخر. شكراً قُرب!',
     rating: 5,
   },
   {
-    name: 'خالد و سارة',
-    text: 'من أفضل القرارات التي اتخذناها لتخطيط الزفاف. الدعوات الرقمية وفرت علينا الكثير من الوقت والجهد بتصميم احترافي.',
+    name: 'عمرو و هدير',
+    text: 'أحسن قرار أخذناه للزفاف. الدعوات الرقمية وفرت علينا وقت كتير وجهد بتصميم احترافي جداً.',
     rating: 5,
   },
   {
-    name: 'عمر و لينا',
-    text: 'أحببنا كيف استطاع كل ضيف أن يشعر بالخصوصية من خلال دعوته الشخصية. تصميم راقٍ وتجربة لا تُنسى!',
+    name: 'يوسف و مريم',
+    text: 'عجبتنا جداً فكرة إن كل ضيف بيشوف اسمه في الدعوة. تصميم راقي وتجربة مش هتتنسى!',
     rating: 5,
   },
 ];
@@ -229,7 +226,7 @@ function CinematicPreviewCard({
       whileHover={{ y: -8, transition: { duration: 0.3, ease: 'easeOut' } }}
       className="card-glow group"
     >
-      <Link href="/admin/create" className="block">
+      <Link href="/w/mohamed-fatma" className="block">
         {/* 3:4 portrait card */}
         <div
           className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-[var(--wedding-gold)]/40 transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[var(--wedding-gold)]/10"
@@ -329,7 +326,7 @@ function CinematicPreviewCard({
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
                 <Eye className="h-4 w-4 text-white" />
-                <span className="text-white text-sm font-medium">عرض القالب</span>
+                <span className="text-white text-sm font-medium">شاهد أعمالنا</span>
               </div>
             </div>
           </div>
@@ -391,14 +388,6 @@ export default function LandingPage() {
             <span className="text-xl font-bold text-gold-gradient">قُرب</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/client/login">
-              <Button
-                variant="ghost"
-                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 text-xs sm:text-sm font-light"
-              >
-                دخول العملاء
-              </Button>
-            </Link>
             <Link href="/w/mohamed-fatma">
               <Button
                 variant="ghost"
@@ -407,9 +396,9 @@ export default function LandingPage() {
                 شاهد مثال
               </Button>
             </Link>
-            <Link href="/admin/create">
+            <Link href="#contact">
               <Button className="btn-wedding text-xs sm:text-sm px-4 sm:px-5 py-2">
-                ابدأ الآن
+                اطلب دعوتك
               </Button>
             </Link>
           </div>
@@ -463,11 +452,11 @@ export default function LandingPage() {
               custom={1}
               className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.15] tracking-tight"
             >
-              <span className="text-white">أنشئ دعوة</span>
+              <span className="text-white">دعوة زفافك</span>
               <br />
-              <span className="text-gold-gradient">زفافك الأنيقة</span>
+              <span className="text-gold-gradient">الرقمية</span>
               <br />
-              <span className="text-white/90">في لحظات</span>
+              <span className="text-white/90">بأحسن شكل</span>
             </motion.h1>
 
             {/* Romantic tagline */}
@@ -476,7 +465,7 @@ export default function LandingPage() {
               custom={2}
               className="text-sm sm:text-base md:text-lg text-white/50 font-light max-w-2xl leading-relaxed"
             >
-              كل قصة حب تستحق دعوة استثنائية
+              دعوات زفاف رقمية بتصميم فاخر يليق بليلة العمر
             </motion.p>
 
             {/* Sub description */}
@@ -485,8 +474,7 @@ export default function LandingPage() {
               custom={3}
               className="text-xs sm:text-sm text-white/40 font-light max-w-xl leading-relaxed"
             >
-              منصة فاخرة لدعوات الزفاف الرقمية — تصميم يليق بليلة العمر،
-              ومشاركة تصل للقلب
+              صمّمنا لكم دعوات رقمية فاخرة بلمسة سينمائية — خلّوا فرحتكم توصل بأسلوب يبقى في الذاكرة
             </motion.p>
 
             {/* CTA buttons */}
@@ -495,12 +483,12 @@ export default function LandingPage() {
               custom={4}
               className="flex flex-col sm:flex-row items-center gap-4 mt-4"
             >
-              <Link href="/admin/create">
+              <Link href="#contact">
                 <Button
                   size="lg"
                   className="btn-wedding text-base px-8 py-6 rounded-xl"
                 >
-                  ابدأ رحلتكم
+                  تواصل معنا
                   <ChevronLeft className="mr-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -517,23 +505,7 @@ export default function LandingPage() {
             </motion.div>
           </motion.div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-[var(--wedding-gold)]/40 text-xs font-light tracking-wider">اكتشف المزيد</span>
-              <div className="w-5 h-8 border border-[var(--wedding-gold)]/30 rounded-full flex items-start justify-center p-1">
-                <motion.div
-                  className="w-1 h-1.5 bg-[var(--wedding-gold)]/60 rounded-full"
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                />
-              </div>
-            </div>
-          </motion.div>
+
         </div>
       </section>
 
@@ -665,12 +637,12 @@ export default function LandingPage() {
             custom={0}
             className="text-center mt-10"
           >
-            <Link href="/admin/create">
+            <Link href="#contact">
               <Button
                 size="lg"
                 className="btn-wedding text-sm sm:text-base px-8 py-5 rounded-xl"
               >
-                ابدأ بتصميم دعوتكم الآن
+                تواصل معنا الآن
                 <ChevronLeft className="mr-2 h-4 w-4" />
               </Button>
             </Link>
@@ -834,7 +806,7 @@ export default function LandingPage() {
             className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-[1.2]"
           >
             ليلة عمركم{' '}
-            <span className="text-gold-gradient">تستحق الأجمل</span>
+            <span className="text-gold-gradient">تستحق أحسن دعوة</span>
           </motion.h2>
 
           <motion.p
@@ -842,20 +814,20 @@ export default function LandingPage() {
             custom={2}
             className="text-base sm:text-lg text-white/40 font-light mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            دعونا نساعدكم في صنع لحظةٍ تبقى في الذاكرة
+            كلمنا وهنعمللكم دعوة تليق بليلة العمر
           </motion.p>
 
           <motion.div variants={fadeUp} custom={3} className="flex flex-col items-center gap-4">
-            <Link href="/admin/create">
+            <Link href="#contact">
               <Button
                 size="lg"
                 className="btn-wedding text-lg px-10 py-6 rounded-xl"
               >
-                ابدأوا رحلتكم الآن
+                تواصلوا معنا
                 <ChevronLeft className="mr-2 h-5 w-5" />
               </Button>
             </Link>
-            <p className="text-white/25 text-xs font-light">ابدأوا في لحظات — بدون تعقيدات</p>
+            <p className="text-white/25 text-xs font-light">هنرتب كل حاجة عنكم — فقط تواصلوا معانا</p>
           </motion.div>
 
           {/* Decorative bottom ornament */}

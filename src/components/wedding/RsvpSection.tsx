@@ -91,7 +91,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
           className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 font-serif"
           style={{ color: colors.text }}
         >
-          هل نتشرف بحضوركم ليلة العمر؟
+          هنيتشرفوا بحضوركم ليلة العمر؟
         </motion.h2>
 
         <div

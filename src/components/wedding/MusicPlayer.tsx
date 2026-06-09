@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, VolumeX } from 'lucide-react';
 import { ThemeColors } from '@/types/wedding';
@@ -10,7 +10,11 @@ interface MusicPlayerProps {
   colors: ThemeColors;
 }
 
-export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
+export interface MusicPlayerHandle {
+  play: () => void;
+}
+
+const MusicPlayer = forwardRef<MusicPlayerHandle, MusicPlayerProps>(({ musicUrl, colors }, ref) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -20,7 +24,7 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
 
     const audio = new Audio(musicUrl);
     audio.loop = true;
-    audio.preload = 'none';
+    audio.preload = 'auto';
     audioRef.current = audio;
 
     return () => {
@@ -28,6 +32,17 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
       audio.src = '';
     };
   }, [musicUrl]);
+
+  const startPlayback = useCallback(async () => {
+    if (!audioRef.current || isPlaying) return;
+    try {
+      await audioRef.current.play();
+      setIsPlaying(true);
+    } catch {
+      // Autoplay may be blocked
+      setIsPlaying(false);
+    }
+  }, [isPlaying]);
 
   const togglePlay = useCallback(async () => {
     if (!audioRef.current) return;
@@ -45,6 +60,11 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
       setIsPlaying(false);
     }
   }, [isPlaying]);
+
+  // Expose play method to parent via ref
+  useImperativeHandle(ref, () => ({
+    play: startPlayback,
+  }), [startPlayback]);
 
   if (!musicUrl) return null;
 
@@ -121,4 +141,8 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
       </AnimatePresence>
     </div>
   );
-}
+});
+
+MusicPlayer.displayName = 'MusicPlayer';
+
+export default MusicPlayer;

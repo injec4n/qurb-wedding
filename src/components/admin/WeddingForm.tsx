@@ -182,9 +182,16 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     }
   }, [selectedTheme, setValue]);
 
+  // Helper: check if file is an image (permissive for .jfif etc.)
+  const isImageFile = (file: File) => {
+    if (file.type.startsWith('image/')) return true;
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'jfif', 'bmp', 'svg'].includes(ext || '');
+  };
+
   // Cover image upload handler
   const handleCoverUpload = useCallback(async (file: File) => {
-    if (!file.type.startsWith('image/')) return;
+    if (!isImageFile(file)) return;
     try {
       setCoverUploading(true);
       const url = await uploadFile(file, 'image');
@@ -198,7 +205,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
 
   // Gallery image upload handler
   const handleGalleryUpload = useCallback(async (file: File) => {
-    if (!file.type.startsWith('image/')) return;
+    if (!isImageFile(file)) return;
     try {
       setGalleryUploading(true);
       const url = await uploadFile(file, 'image');
@@ -236,14 +243,14 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     e.preventDefault();
     setCoverDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && isImageFile(file)) {
       handleCoverUpload(file);
     }
   };
 
   // Photo upload handler
   const handleCouplePhotoUpload = useCallback(async (file: File) => {
-    if (!file.type.startsWith('image/')) return;
+    if (!isImageFile(file)) return;
     try {
       setCouplePhotoUploading(true);
       const url = await uploadFile(file, 'image');
@@ -276,7 +283,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const handleCouplePhotoDrop = (e: React.DragEvent) => {
     e.preventDefault(); setCouplePhotoDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) handleCouplePhotoUpload(file);
+    if (file && isImageFile(file)) handleCouplePhotoUpload(file);
   };
 
   const addGalleryImage = () => {
@@ -476,7 +483,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
               <input
                 ref={coverInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/jpg"
+                accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -567,7 +574,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
               <input
                 ref={galleryInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/jpg"
+                accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -964,7 +971,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
               <input
                 ref={couplePhotoInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/jpg"
+                accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];

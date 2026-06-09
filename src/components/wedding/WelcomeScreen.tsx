@@ -62,10 +62,10 @@ function FloatingParticles({ color, count = 25 }: { color: string; count?: numbe
 // Sparkle burst effect
 function SparkleBurst({ color, active }: { color: string; active: boolean }) {
   const sparkles = useMemo(() =>
-    Array.from({ length: 20 }, (_, i) => ({
+    Array.from({ length: 24 }, (_, i) => ({
       id: i,
-      angle: (i / 20) * 360,
-      distance: 60 + Math.random() * 80,
+      angle: (i / 24) * 360,
+      distance: 80 + Math.random() * 100,
       size: 3 + Math.random() * 5,
       delay: Math.random() * 0.3,
     })),
@@ -128,12 +128,12 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
     setTimeout(() => setInvitationRevealed(true), 600);
 
     // Phase 3: Start exit
-    setTimeout(() => setIsExiting(true), 3000);
+    setTimeout(() => setIsExiting(true), 3500);
 
     // Phase 4: Call onOpen
     setTimeout(() => {
       onOpen();
-    }, 3800);
+    }, 4300);
   }, [isOpen, onOpen]);
 
   return (
@@ -142,16 +142,16 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
       animate={isExiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#1a1a2e' }}
+      style={{ backgroundColor: '#0a0a1a' }}
       dir="rtl"
     >
       {/* Dark background with subtle gradient */}
       <div className="absolute inset-0" style={{
-        background: `radial-gradient(ellipse at 50% 30%, ${colors.primary}12 0%, #1a1a2e 70%)`,
+        background: `radial-gradient(ellipse at 50% 30%, ${colors.primary}15 0%, #0a0a1a 70%)`,
       }} />
 
       {/* Geometric pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.04]" style={{ color: colors.primary }}>
+      <div className="absolute inset-0 opacity-[0.03]" style={{ color: colors.primary }}>
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="ws-bg-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
@@ -202,14 +202,14 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
           transition={{ duration: isOpen ? 0.6 : 1, delay: isOpen ? 0 : 0.5, type: isOpen ? 'tween' : 'spring', stiffness: 120 }}
           className="relative w-full"
         >
-          {/* Envelope body - dark with gold borders */}
+          {/* Envelope body */}
           <div
             className="relative rounded-2xl overflow-hidden"
             style={{
-              background: `linear-gradient(145deg, #1e1e38 0%, #2a2a4a 50%, #1e1e38 100%)`,
-              border: `2px solid ${colors.primary}50`,
+              background: `linear-gradient(145deg, #141428 0%, #1e1e3a 50%, #141428 100%)`,
+              border: `2px solid ${colors.primary}40`,
               boxShadow: `
-                0 20px 60px rgba(0,0,0,0.4),
+                0 20px 60px rgba(0,0,0,0.5),
                 0 0 40px ${colors.primary}10,
                 inset 0 1px 0 ${colors.primary}20
               `,
@@ -218,11 +218,11 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
             {/* Inner gold border line */}
             <div
               className="absolute inset-3 sm:inset-4 rounded-xl pointer-events-none"
-              style={{ border: `1px solid ${colors.primary}25` }}
+              style={{ border: `1px solid ${colors.primary}20` }}
             />
 
             {/* Geometric pattern on envelope */}
-            <div className="absolute inset-0 opacity-[0.06]" style={{ color: colors.primary }}>
+            <div className="absolute inset-0 opacity-[0.04]" style={{ color: colors.primary }}>
               <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <pattern id="envelope-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -235,25 +235,25 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
             </div>
 
             {/* Corner ornaments */}
-            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '60' }}>
+            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '50' }}>
               <svg viewBox="0 0 60 60" className="w-full h-full">
                 <path d="M0 0 L60 0 L60 12 L12 12 L12 60 L0 60Z" fill="currentColor" opacity="0.6" />
                 <circle cx="18" cy="18" r="3" fill="currentColor" opacity="0.5" />
               </svg>
             </div>
-            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '60', transform: 'scaleX(-1)' }}>
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '50', transform: 'scaleX(-1)' }}>
               <svg viewBox="0 0 60 60" className="w-full h-full">
                 <path d="M0 0 L60 0 L60 12 L12 12 L12 60 L0 60Z" fill="currentColor" opacity="0.6" />
                 <circle cx="18" cy="18" r="3" fill="currentColor" opacity="0.5" />
               </svg>
             </div>
-            <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '60', transform: 'scaleY(-1)' }}>
+            <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '50', transform: 'scaleY(-1)' }}>
               <svg viewBox="0 0 60 60" className="w-full h-full">
                 <path d="M0 0 L60 0 L60 12 L12 12 L12 60 L0 60Z" fill="currentColor" opacity="0.6" />
                 <circle cx="18" cy="18" r="3" fill="currentColor" opacity="0.5" />
               </svg>
             </div>
-            <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '60', transform: 'scale(-1)' }}>
+            <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 w-8 h-8 sm:w-10 sm:h-10" style={{ color: colors.primary + '50', transform: 'scale(-1)' }}>
               <svg viewBox="0 0 60 60" className="w-full h-full">
                 <path d="M0 0 L60 0 L60 12 L12 12 L12 60 L0 60Z" fill="currentColor" opacity="0.6" />
                 <circle cx="18" cy="18" r="3" fill="currentColor" opacity="0.5" />
@@ -304,25 +304,50 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 className="text-base sm:text-lg font-serif"
                 style={{ color: '#ffffffAA' }}
               >
-                {groomName} & {brideName}
+                {groomName} و {brideName}
               </motion.p>
+
+              {/* Couple photo in envelope - small and elegant */}
+              {couplePhoto && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 1.6, type: 'spring' }}
+                  className="flex justify-center mt-4"
+                >
+                  <div
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden"
+                    style={{
+                      border: `2px solid ${colors.primary}60`,
+                      padding: '2px',
+                      boxShadow: `0 0 15px ${colors.primary}20`,
+                    }}
+                  >
+                    <img
+                      src={couplePhoto}
+                      alt="صورة الزوجين"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                </motion.div>
+              )}
 
               {/* Wax seal */}
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 0.8, delay: 1.7, type: 'spring', stiffness: 200 }}
-                className="mt-6 flex justify-center"
+                transition={{ duration: 0.8, delay: 1.8, type: 'spring', stiffness: 200 }}
+                className="mt-4 flex justify-center"
               >
                 <div
-                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center relative"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center relative"
                   style={{
-                    background: `radial-gradient(circle, ${colors.primary}35 0%, ${colors.primary}20 70%, transparent 100%)`,
-                    border: `2px solid ${colors.primary}50`,
-                    boxShadow: `0 0 20px ${colors.primary}20, inset 0 0 15px ${colors.primary}15`,
+                    background: `radial-gradient(circle, ${colors.primary}30 0%, ${colors.primary}15 70%, transparent 100%)`,
+                    border: `2px solid ${colors.primary}40`,
+                    boxShadow: `0 0 20px ${colors.primary}15, inset 0 0 15px ${colors.primary}10`,
                   }}
                 >
-                  <svg viewBox="0 0 50 50" className="w-8 h-8 sm:w-9 sm:h-9" style={{ color: colors.primary }}>
+                  <svg viewBox="0 0 50 50" className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: colors.primary }}>
                     <path d="M25 5 L30 18 L45 18 L33 27 L37 42 L25 33 L13 42 L17 27 L5 18 L20 18Z"
                       fill="none" stroke="currentColor" strokeWidth="1.2" />
                     <circle cx="25" cy="25" r="6" fill="none" stroke="currentColor" strokeWidth="0.8" />
@@ -349,7 +374,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
               className="inline-flex items-center gap-3 px-10 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-bold transition-all duration-500 cursor-pointer relative overflow-hidden"
               style={{
                 background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
-                color: '#1a1a2e',
+                color: '#0a0a1a',
                 boxShadow: `0 8px 32px ${colors.primary}30`,
               }}
             >
@@ -375,7 +400,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 animate={{ backgroundPosition: ['-200% 0', '200% 0'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
               />
-              <span className="relative z-10">فتح الدعوة</span>
+              <span className="relative z-10">افتح الدعوة</span>
               <motion.svg
                 viewBox="0 0 20 10"
                 className="w-5 h-3 rotate-180 relative z-10"
@@ -401,7 +426,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 style={{ backgroundColor: colors.primary + '60' }}
               />
               <p className="text-sm font-serif" style={{ color: '#ffffff88' }}>
-                يُفتح لك باب الفرحة...
+                بيتفتحلك باب الفرحة...
               </p>
             </motion.div>
           )}
@@ -420,29 +445,29 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
               <div
                 className="relative w-full max-w-md rounded-3xl p-6 sm:p-10 text-center"
                 style={{
-                  background: `linear-gradient(145deg, #1e1e38F0 0%, #2a2a4aF0 50%, #1e1e38F0 100%)`,
-                  border: `2px solid ${colors.primary}40`,
-                  boxShadow: `0 20px 60px rgba(0,0,0,0.5), 0 0 40px ${colors.primary}15`,
+                  background: `linear-gradient(145deg, #141428F0 0%, #1e1e3aF0 50%, #141428F0 100%)`,
+                  border: `2px solid ${colors.primary}35`,
+                  boxShadow: `0 20px 60px rgba(0,0,0,0.5), 0 0 40px ${colors.primary}12`,
                   backdropFilter: 'blur(20px)',
                 }}
               >
                 {/* Inner decorative border */}
                 <div
                   className="absolute inset-3 sm:inset-4 rounded-2xl pointer-events-none"
-                  style={{ border: `1px solid ${colors.primary}20` }}
+                  style={{ border: `1px solid ${colors.primary}18` }}
                 />
 
                 {/* Corner ornaments on invitation */}
-                <div className="absolute top-3 right-3 w-6 h-6" style={{ color: colors.primary + '50' }}>
+                <div className="absolute top-3 right-3 w-6 h-6" style={{ color: colors.primary + '40' }}>
                   <svg viewBox="0 0 30 30" className="w-full h-full"><path d="M0 0 L30 0 L30 6 L6 6 L6 30 L0 30Z" fill="currentColor" /></svg>
                 </div>
-                <div className="absolute top-3 left-3 w-6 h-6" style={{ color: colors.primary + '50' }}>
+                <div className="absolute top-3 left-3 w-6 h-6" style={{ color: colors.primary + '40' }}>
                   <svg viewBox="0 0 30 30" className="w-full h-full"><path d="M30 0 L0 0 L0 6 L24 6 L24 30 L30 30Z" fill="currentColor" /></svg>
                 </div>
-                <div className="absolute bottom-3 right-3 w-6 h-6" style={{ color: colors.primary + '50' }}>
+                <div className="absolute bottom-3 right-3 w-6 h-6" style={{ color: colors.primary + '40' }}>
                   <svg viewBox="0 0 30 30" className="w-full h-full"><path d="M0 30 L30 30 L30 24 L6 24 L6 0 L0 0Z" fill="currentColor" /></svg>
                 </div>
-                <div className="absolute bottom-3 left-3 w-6 h-6" style={{ color: colors.primary + '50' }}>
+                <div className="absolute bottom-3 left-3 w-6 h-6" style={{ color: colors.primary + '40' }}>
                   <svg viewBox="0 0 30 30" className="w-full h-full"><path d="M30 30 L0 30 L0 24 L24 24 L24 0 L30 0Z" fill="currentColor" /></svg>
                 </div>
 
@@ -481,7 +506,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                       <div
                         className="absolute inset-0 rounded-full"
                         style={{
-                          boxShadow: `0 0 40px ${colors.primary}30, 0 0 80px ${colors.primary}15`,
+                          boxShadow: `0 0 40px ${colors.primary}25, 0 0 80px ${colors.primary}10`,
                         }}
                       />
                       {/* Photo container */}
@@ -489,7 +514,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                         className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden relative"
                         style={{
                           border: `3px solid ${colors.primary}`,
-                          boxShadow: `0 0 20px ${colors.primary}25, inset 0 0 10px ${colors.primary}10`,
+                          boxShadow: `0 0 20px ${colors.primary}20, inset 0 0 10px ${colors.primary}08`,
                           padding: '3px',
                         }}
                       >
@@ -511,10 +536,10 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3"
                   style={{
                     color: colors.primary,
-                    textShadow: `0 0 20px ${colors.primary}30`,
+                    textShadow: `0 0 20px ${colors.primary}25`,
                   }}
                 >
-                  أهلاً وسهلاً {guestName}
+                  أهلاً بيك {guestName}
                 </motion.h2>
 
                 {/* Ornamental divider */}
@@ -540,7 +565,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   {groomName} و {brideName}
                 </motion.p>
 
-                {/* Welcome message */}
+                {/* Welcome message - Egyptian style */}
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -548,7 +573,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   className="text-base sm:text-lg font-serif"
                   style={{ color: '#ffffffAA' }}
                 >
-                  يتشرفان بدعوتكم لحضور حفل زفافهما
+                  بيتشرفوا بدعوتكم لحضور حفل زفافهم
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
@@ -557,7 +582,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   className="text-sm sm:text-base font-serif mt-2"
                   style={{ color: colors.accent + 'CC' }}
                 >
-                  بحضوركم تزدان ليلتنا وتكتمل فرحتنا
+                  بوجودكم تكتمل فرحتنا وتزدان ليلتنا
                 </motion.p>
               </div>
             </motion.div>
@@ -572,9 +597,9 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
         transition={{ duration: 1, delay: 1.5 }}
         className="absolute bottom-6 sm:bottom-10 left-0 right-0 flex items-center justify-center gap-3"
       >
-        <div className="h-px w-8" style={{ backgroundColor: colors.primary + '15' }} />
-        <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="h-px w-8" style={{ backgroundColor: colors.primary + '15' }} />
+        <div className="h-px w-8" style={{ backgroundColor: colors.primary + '12' }} />
+        <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary + '25' }} />
+        <div className="h-px w-8" style={{ backgroundColor: colors.primary + '12' }} />
       </motion.div>
     </motion.div>
   );
