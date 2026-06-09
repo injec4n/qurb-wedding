@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { Suspense, useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -52,7 +52,7 @@ interface Guest {
   };
 }
 
-export default function ClientDashboardPage() {
+function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
@@ -719,5 +719,31 @@ export default function ClientDashboardPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function ClientDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          dir="rtl"
+          className="min-h-screen flex items-center justify-center"
+          style={{ background: 'var(--wedding-deep)' }}
+        >
+          <div className="flex flex-col items-center gap-4">
+            <span
+              className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
+              style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }}
+            />
+            <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
+              جاري تحميل لوحة التحكم...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
