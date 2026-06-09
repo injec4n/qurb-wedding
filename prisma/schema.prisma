@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Wedding {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  groomName     String
+  brideName     String
+  weddingDate   String
+  weddingTime   String
+  venueName     String
+  venueAddress  String   @default("")
+  googleMapsLink String  @default("")
+  welcomeMessage String  @default("")
+  contactPhone  String   @default("")
+  coverImage    String   @default("")
+  galleryImages String   @default("[]")
+  backgroundMusicUrl String @default("")
+  theme         String   @default("classic-gold")
+  colorPreset   String   @default("")
+  primaryColor   String  @default("#D4A853")
+  secondaryColor String  @default("#1A1A2E")
+  backgroundColor String @default("#0D0D1A")
+  textColor      String  @default("#FFFFFF")
+  buttonColor    String  @default("#D4A853")
+  accentColor    String  @default("#E8C874")
+  enableRsvp     Boolean  @default(true)
+  enableGallery  Boolean  @default(true)
+  enableCountdown Boolean @default(true)
+  enableMusic    Boolean  @default(true)
+  enableGuestPersonalization Boolean @default(true)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  guests    Guest[]
+  rsvps     RsvpResponse[]
+}
+
+model Guest {
+  id        String   @id @default(cuid())
+  weddingId String
+  name      String
+  phone     String   @default("")
+  guestLink String   @default("")
+  createdAt DateTime @default(now())
+
+  wedding   Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  rsvp      RsvpResponse?
+}
+
+model RsvpResponse {
+  id        String   @id @default(cuid())
+  weddingId String
+  guestId   String   @unique
+  status    String   @default("pending")
+  message   String   @default("")
+  createdAt DateTime @default(now())
+
+  wedding   Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  guest     Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
