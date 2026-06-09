@@ -12,6 +12,7 @@ interface MusicPlayerProps {
 
 export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -51,25 +52,28 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
     <div className="fixed bottom-6 left-6 z-50" dir="rtl">
       <motion.button
         onClick={togglePlay}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-colors duration-300"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.93 }}
+        className="relative w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-colors duration-300"
         style={{
           backgroundColor: colors.button,
           color: colors.background,
+          boxShadow: `0 4px 24px ${colors.button}40`,
         }}
         aria-label={isPlaying ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى'}
       >
-        {/* Pulse animation when playing */}
+        {/* Elegant pulse animation when playing */}
         <AnimatePresence>
           {isPlaying && (
             <motion.div
-              initial={{ scale: 1, opacity: 0.5 }}
+              initial={{ scale: 1, opacity: 0.4 }}
               animate={{ scale: 1.8, opacity: 0 }}
               exit={{ scale: 1, opacity: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
               className="absolute inset-0 rounded-full"
-              style={{ backgroundColor: colors.button + '40' }}
+              style={{ backgroundColor: colors.button + '35' }}
             />
           )}
         </AnimatePresence>
@@ -78,34 +82,43 @@ export default function MusicPlayer({ musicUrl, colors }: MusicPlayerProps) {
         <AnimatePresence>
           {isPlaying && (
             <motion.div
-              initial={{ scale: 1, opacity: 0.3 }}
+              initial={{ scale: 1, opacity: 0.25 }}
               animate={{ scale: 2.2, opacity: 0 }}
               exit={{ scale: 1, opacity: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.6, ease: 'easeOut' }}
               className="absolute inset-0 rounded-full"
-              style={{ backgroundColor: colors.button + '30' }}
+              style={{ backgroundColor: colors.button + '25' }}
             />
           )}
         </AnimatePresence>
 
         {isPlaying ? (
-          <Volume2 className="w-6 h-6 relative z-10" />
+          <Volume2 className="w-7 h-7 relative z-10" />
         ) : (
-          <VolumeX className="w-6 h-6 relative z-10" />
+          <VolumeX className="w-7 h-7 relative z-10" />
         )}
       </motion.button>
 
-      {/* Tooltip */}
-      <div
-        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-        style={{
-          backgroundColor: colors.background,
-          color: colors.text,
-          border: `1px solid ${colors.primary}30`,
-        }}
-      >
-        {isPlaying ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى'}
-      </div>
+      {/* Tooltip - better hover behavior */}
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.2 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap pointer-events-none"
+            style={{
+              backgroundColor: colors.background,
+              color: colors.text,
+              border: `1px solid ${colors.primary}30`,
+              boxShadow: `0 4px 12px ${colors.primary}15`,
+            }}
+          >
+            {isPlaying ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى'}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

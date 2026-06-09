@@ -2,12 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Guest } from '@/types/wedding';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Plus, Trash2, Copy, Users, UserPlus, ListPlus } from 'lucide-react';
+import { Plus, Trash2, Copy, Users, UserPlus, ListPlus, Phone, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface GuestManagerProps {
@@ -135,21 +131,23 @@ export default function GuestManager({ weddingId, weddingSlug }: GuestManagerPro
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Add Single Guest */}
-      <Card className="border-zinc-700 bg-zinc-800/50">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg text-zinc-100">
-            <UserPlus className="h-5 w-5 text-amber-400" />
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <UserPlus className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
             إضافة ضيف
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+          </h2>
+        </div>
+        <div className="px-6 pb-6 space-y-4">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="border-zinc-600 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500"
+              className="admin-input"
               placeholder="اسم الضيف"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -161,7 +159,7 @@ export default function GuestManager({ weddingId, weddingSlug }: GuestManagerPro
             <Input
               value={newPhone}
               onChange={(e) => setNewPhone(e.target.value)}
-              className="border-zinc-600 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500"
+              className="admin-input"
               placeholder="رقم الهاتف (اختياري)"
               dir="ltr"
               onKeyDown={(e) => {
@@ -171,29 +169,35 @@ export default function GuestManager({ weddingId, weddingSlug }: GuestManagerPro
                 }
               }}
             />
-            <Button
+            <button
               onClick={addGuest}
-              className="bg-amber-600 text-white hover:bg-amber-700"
+              className="btn-wedding flex items-center justify-center gap-2 px-5 py-2.5 text-sm"
             >
-              <Plus className="ml-2 h-4 w-4" />
+              <Plus className="h-4 w-4" />
               إضافة
-            </Button>
+            </button>
           </div>
 
-          <Separator className="bg-zinc-700" />
+          {/* Ornamental separator */}
+          <div className="ornament-separator">
+            <div className="diamond" />
+          </div>
 
           {/* Bulk Add Toggle */}
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={() => setShowBulk(!showBulk)}
-              className="border-zinc-600 text-zinc-300 hover:bg-zinc-700"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+              style={{
+                color: showBulk ? 'var(--wedding-gold)' : 'var(--admin-text-secondary)',
+                background: showBulk ? 'rgba(212,168,83,0.08)' : 'var(--admin-surface-overlay)',
+                border: '1px solid ' + (showBulk ? 'rgba(212,168,83,0.2)' : 'var(--admin-border)'),
+              }}
             >
-              <ListPlus className="ml-2 h-4 w-4" />
+              <ListPlus className="h-4 w-4" />
               إضافة متعددة
-            </Button>
-            <span className="text-sm text-zinc-400">
+            </button>
+            <span className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
               {guests.length} ضيف
             </span>
           </div>
@@ -203,104 +207,137 @@ export default function GuestManager({ weddingId, weddingSlug }: GuestManagerPro
               <Textarea
                 value={bulkText}
                 onChange={(e) => setBulkText(e.target.value)}
-                className="border-zinc-600 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500"
+                className="admin-input"
                 placeholder="أدخل اسم ضيف في كل سطر"
                 rows={5}
               />
-              <Button
+              <button
                 onClick={bulkAddGuests}
-                className="bg-amber-600 text-white hover:bg-amber-700"
+                className="btn-wedding flex items-center gap-2 px-5 py-2.5 text-sm"
               >
-                <ListPlus className="ml-2 h-4 w-4" />
+                <ListPlus className="h-4 w-4" />
                 إضافة الكل
-              </Button>
+              </button>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Guest List */}
-      <Card className="border-zinc-700 bg-zinc-800/50">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg text-zinc-100">
-            <Users className="h-5 w-5 text-amber-400" />
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <Users className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
             قائمة الضيوف ({guests.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h2>
+        </div>
+        <div className="px-6 pb-6">
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <span className="h-6 w-6 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+            <div className="flex items-center justify-center py-12">
+              <span className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
             </div>
           ) : guests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-zinc-400">
-              <Users className="mb-3 h-10 w-10 text-zinc-600" />
-              <p>لا يوجد ضيوف بعد</p>
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full mb-5" style={{ background: 'rgba(212,168,83,0.08)' }}>
+                <Heart className="h-10 w-10" style={{ color: 'var(--wedding-gold)' }} />
+              </div>
+              <p className="text-lg font-bold mb-2 text-gold-gradient">أول ضيوفك هيفرحوا بالدعوة 💌</p>
+              <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>أضيفي أسماء الضيوف وهنوصلكم الدعوة</p>
             </div>
           ) : (
-            <ScrollArea className="max-h-96">
-              <div className="space-y-2">
-                {guests.map((guest) => (
-                  <div
-                    key={guest.id}
-                    className="flex items-center justify-between rounded-lg border border-zinc-700 bg-zinc-900/50 p-3"
-                  >
-                    <div className="flex-1">
-                      <p className="font-medium text-zinc-100">{guest.name}</p>
-                      {guest.phone && (
-                        <p className="text-sm text-zinc-400" dir="ltr">{guest.phone}</p>
-                      )}
-                    </div>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {guests.map((guest, index) => (
+                <div
+                  key={guest.id}
+                  className="flex items-center justify-between rounded-xl p-4 transition-all duration-300"
+                  style={{
+                    background: 'var(--admin-surface)',
+                    border: '1px solid var(--admin-border)',
+                    borderRight: '3px solid var(--wedding-gold)',
+                  }}
+                >
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyGuestLink(guest)}
-                        className="text-zinc-300 hover:bg-zinc-700 hover:text-amber-400"
-                        title="نسخ رابط الضيف"
+                      <div
+                        className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold shrink-0"
+                        style={{ background: 'rgba(212,168,83,0.1)', color: 'var(--wedding-gold)' }}
                       >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-zinc-300 hover:bg-zinc-700 hover:text-red-400"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className="border-zinc-700 bg-zinc-800">
-                          <AlertDialogHeader>
-                            <AlertDialogTitle className="text-zinc-100">
-                              تأكيد الحذف
-                            </AlertDialogTitle>
-                            <AlertDialogDescription className="text-zinc-400">
-                              هل أنت متأكد من حذف الضيف {guest.name}؟
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="border-zinc-600 bg-zinc-700 text-zinc-200 hover:bg-zinc-600">
-                              إلغاء
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => deleteGuest(guest.id)}
-                              className="bg-red-600 text-white hover:bg-red-700"
-                            >
-                              حذف
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                        {index + 1}
+                      </div>
+                      <p className="font-semibold truncate" style={{ color: 'var(--admin-text-primary)' }}>{guest.name}</p>
                     </div>
+                    {guest.phone && (
+                      <div className="flex items-center gap-1.5 mt-1 mr-9">
+                        <Phone className="h-3 w-3" style={{ color: 'var(--admin-text-muted)' }} />
+                        <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }} dir="ltr">{guest.phone}</p>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => copyGuestLink(guest)}
+                      className="flex items-center justify-center h-8 w-8 rounded-lg transition-all duration-300"
+                      style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(212,168,83,0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(212,168,83,0.08)';
+                      }}
+                      title="نسخ رابط الضيف"
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button
+                          className="flex items-center justify-center h-8 w-8 rounded-lg transition-all duration-300"
+                          style={{ color: 'var(--admin-text-muted)', background: 'var(--admin-surface-overlay)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#EF4444';
+                            e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--admin-text-muted)';
+                            e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent style={{ background: 'var(--admin-surface-raised)', border: '1px solid var(--admin-border-strong)' }}>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle style={{ color: 'var(--admin-text-primary)' }}>
+                            تأكيد الحذف
+                          </AlertDialogTitle>
+                          <AlertDialogDescription style={{ color: 'var(--admin-text-secondary)' }}>
+                            هل أنت متأكد من حذف الضيف {guest.name}؟
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel
+                            style={{ background: 'var(--admin-surface-overlay)', color: 'var(--admin-text-primary)', border: '1px solid var(--admin-border)' }}
+                          >
+                            إلغاء
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteGuest(guest.id)}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                          >
+                            حذف
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

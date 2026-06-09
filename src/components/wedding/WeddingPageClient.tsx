@@ -27,13 +27,28 @@ interface WeddingPageClientProps {
   guestName?: string;
 }
 
-// Section reveal animation variants
+// Decorative section divider component
+function SectionDivider({ colors }: { colors: ThemeColors }) {
+  return (
+    <div className="flex items-center justify-center py-6" dir="rtl">
+      <div className="flex items-center justify-center gap-4">
+        <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '20' }} />
+        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+        <div className="w-3 h-3 rotate-45" style={{ backgroundColor: colors.primary + '55' }} />
+        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+        <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '20' }} />
+      </div>
+    </div>
+  );
+}
+
+// Section reveal animation variants - slower, more graceful
 const sectionVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: 'easeOut' },
+    transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
@@ -44,20 +59,19 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
     ? wedding.galleryImages
     : [];
 
-  // GSAP parallax effect for the hero background
+  // GSAP parallax effect for the hero only
   useEffect(() => {
     if (!wrapperRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Subtle parallax on scroll for decorative elements
-      gsap.to('.parallax-slow', {
-        yPercent: -15,
+      gsap.to('.parallax-hero', {
+        yPercent: -10,
         ease: 'none',
         scrollTrigger: {
-          trigger: wrapperRef.current,
+          trigger: '.parallax-hero',
           start: 'top top',
           end: 'bottom top',
-          scrub: 1,
+          scrub: 1.5,
         },
       });
     }, wrapperRef);
@@ -82,9 +96,11 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
       } as React.CSSProperties}
     >
       {/* 1. Hero Section - Full viewport */}
-      <section id="hero" className="parallax-slow">
+      <section id="hero" className="parallax-hero">
         <Hero wedding={wedding} colors={colors} />
       </section>
+
+      <SectionDivider colors={colors} />
 
       {/* 2. Guest Welcome (if guest parameter exists or personalization enabled) */}
       {(guestName || wedding.enableGuestPersonalization) && (
@@ -94,6 +110,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
           variants={sectionVariants}
+          className="py-4"
         >
           <GuestWelcome
             guestName={guestName}
@@ -112,6 +129,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
           variants={sectionVariants}
+          className="py-4"
         >
           <Countdown
             targetDate={wedding.weddingDate}
@@ -121,6 +139,8 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         </motion.section>
       )}
 
+      <SectionDivider colors={colors} />
+
       {/* 4. Wedding Details */}
       <motion.section
         id="details"
@@ -128,9 +148,12 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
         variants={sectionVariants}
+        className="py-4"
       >
         <WeddingDetails wedding={wedding} colors={colors} />
       </motion.section>
+
+      <SectionDivider colors={colors} />
 
       {/* 5. Venue */}
       <motion.section
@@ -139,40 +162,51 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
         variants={sectionVariants}
+        className="py-4"
       >
         <Venue wedding={wedding} colors={colors} />
       </motion.section>
 
       {/* 6. Gallery (if enabled) */}
       {wedding.enableGallery && (
-        <motion.section
-          id="gallery"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          variants={sectionVariants}
-        >
-          <Gallery images={galleryImages} colors={colors} />
-        </motion.section>
+        <>
+          <SectionDivider colors={colors} />
+          <motion.section
+            id="gallery"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={sectionVariants}
+            className="py-4"
+          >
+            <Gallery images={galleryImages} colors={colors} />
+          </motion.section>
+        </>
       )}
 
       {/* 7. RSVP (if enabled) */}
       {wedding.enableRsvp && (
-        <motion.section
-          id="rsvp"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          variants={sectionVariants}
-        >
-          <RsvpSection
-            weddingId={wedding.id}
-            guestName={guestName}
-            colors={colors}
-            enabled={wedding.enableRsvp}
-          />
-        </motion.section>
+        <>
+          <SectionDivider colors={colors} />
+          <motion.section
+            id="rsvp"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={sectionVariants}
+            className="py-4"
+          >
+            <RsvpSection
+              weddingId={wedding.id}
+              guestName={guestName}
+              colors={colors}
+              enabled={wedding.enableRsvp}
+            />
+          </motion.section>
+        </>
       )}
+
+      <SectionDivider colors={colors} />
 
       {/* 8. Downloadable Invitation Card & Instagram Story */}
       <motion.section
@@ -181,28 +215,15 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
         variants={sectionVariants}
+        className="py-4"
       >
-        {/* Section divider */}
-        <div className="flex items-center justify-center gap-3 pt-8 px-4">
-          <div
-            className="h-px w-16 sm:w-24"
-            style={{ backgroundColor: colors.primary + '30' }}
-          />
-          <div
-            className="w-3 h-3 rotate-45"
-            style={{ backgroundColor: colors.primary + '60' }}
-          />
-          <div
-            className="h-px w-16 sm:w-24"
-            style={{ backgroundColor: colors.primary + '30' }}
-          />
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 max-w-5xl mx-auto">
           <InvitationCard wedding={wedding} colors={colors} />
           <InstagramStory wedding={wedding} colors={colors} />
         </div>
       </motion.section>
+
+      <SectionDivider colors={colors} />
 
       {/* 9. Footer */}
       <motion.section
@@ -211,6 +232,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         whileInView="visible"
         viewport={{ once: true, margin: '-20px' }}
         variants={sectionVariants}
+        className="py-4"
       >
         <WeddingFooter
           groomName={wedding.groomName}

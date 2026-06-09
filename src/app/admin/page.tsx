@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/s
 import WeddingList from '@/components/admin/WeddingList';
 import GuestManager from '@/components/admin/GuestManager';
 import RsvpTable from '@/components/admin/RsvpTable';
-import { Users, Calendar, Menu, Heart, ArrowRight, LogOut } from 'lucide-react';
+import { Users, Calendar, Menu, Heart, ArrowRight, LogOut, Sparkles } from 'lucide-react';
 
 interface SelectedWedding {
   id: string;
@@ -50,8 +50,13 @@ export default function AdminPage() {
 
   if (isChecking) {
     return (
-      <div dir="rtl" className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <span className="h-10 w-10 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+      <div dir="rtl" className="min-h-screen flex items-center justify-center" style={{ background: 'var(--admin-surface)' }}>
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <span className="h-12 w-12 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
+          </div>
+          <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>جاري التحميل...</p>
+        </div>
       </div>
     );
   }
@@ -77,85 +82,102 @@ export default function AdminPage() {
   ];
 
   return (
-    <div dir="rtl" className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div dir="rtl" className="min-h-screen flex flex-col" style={{ background: 'var(--admin-surface)', color: 'var(--admin-text-primary)' }}>
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-900/95 backdrop-blur">
+      <header className="sticky top-0 z-50 backdrop-blur-xl" style={{ background: 'rgba(17,17,24,0.95)', borderBottom: '1px solid var(--admin-border)' }}>
+        {/* Gold gradient bottom accent */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, var(--wedding-gold), transparent)' }} />
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+          {/* Logo Area */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-600">
-              <Heart className="h-5 w-5 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ background: 'linear-gradient(135deg, var(--wedding-gold), var(--wedding-gold-light))', boxShadow: '0 4px 16px rgba(212,168,83,0.25)' }}>
+              <Heart className="h-5 w-5" style={{ color: 'var(--admin-surface)' }} fill="currentColor" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-zinc-100">لوحة التحكم</h1>
-              <p className="text-xs text-zinc-400">إدارة دعوات الزفاف</p>
+              <h1 className="text-xl font-bold text-gold-gradient">زفاتي</h1>
+              <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>إدارة دعوات الزفاف</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation - Elegant underline style */}
             <nav className="hidden items-center gap-1 md:flex">
               {navItems.map((item) => (
-                <Button
+                <button
                   key={item.id}
-                  variant={activeTab === item.id ? 'default' : 'ghost'}
-                  size="sm"
                   onClick={() => setActiveTab(item.id)}
-                  className={
-                    activeTab === item.id
-                      ? 'bg-amber-600 text-white hover:bg-amber-700'
-                      : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
-                  }
+                  className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300"
+                  style={{
+                    color: activeTab === item.id ? 'var(--wedding-gold)' : 'var(--admin-text-secondary)',
+                    background: activeTab === item.id ? 'rgba(212,168,83,0.08)' : 'transparent',
+                  }}
                 >
-                  <item.icon className="ml-2 h-4 w-4" />
+                  <item.icon className="h-4 w-4" />
                   {item.label}
-                </Button>
+                  {activeTab === item.id && (
+                    <motion.div
+                      layoutId="navUnderline"
+                      className="absolute bottom-0 right-2 left-2 h-0.5 rounded-full"
+                      style={{ background: 'linear-gradient(90deg, var(--wedding-gold), var(--wedding-gold-light))' }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </button>
               ))}
             </nav>
 
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={handleLogout}
-              className="text-zinc-400 hover:text-red-400"
+              className="flex items-center justify-center h-8 w-8 rounded-lg transition-all duration-300"
+              style={{ color: 'var(--admin-text-muted)' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#EF4444';
+                e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--admin-text-muted)';
+                e.currentTarget.style.background = 'transparent';
+              }}
               title="تسجيل الخروج"
             >
               <LogOut className="h-4 w-4" />
-            </Button>
+            </button>
 
             {/* Mobile Menu */}
             <div className="md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-zinc-300">
+                  <button className="flex items-center justify-center h-9 w-9 rounded-lg transition-colors" style={{ color: 'var(--admin-text-secondary)' }}>
                     <Menu className="h-5 w-5" />
-                  </Button>
+                  </button>
                 </SheetTrigger>
-                <SheetContent side="right" className="border-zinc-700 bg-zinc-900 w-64">
-                  <SheetTitle className="text-zinc-100 mb-6">القائمة</SheetTitle>
-                  <div className="space-y-2">
+                <SheetContent side="right" className="w-72" style={{ background: 'var(--admin-surface-raised)', borderLeft: '1px solid var(--admin-border)' }}>
+                  <SheetTitle className="text-gold-gradient text-xl mb-8">زفاتي</SheetTitle>
+                  <div className="space-y-1">
                     {navItems.map((item) => (
-                      <Button
+                      <button
                         key={item.id}
-                        variant={activeTab === item.id ? 'default' : 'ghost'}
-                        className={`w-full justify-start ${
-                          activeTab === item.id
-                            ? 'bg-amber-600 text-white hover:bg-amber-700'
-                            : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100'
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                          activeTab === item.id ? 'btn-wedding' : ''
                         }`}
+                        style={activeTab !== item.id ? { color: 'var(--admin-text-secondary)' } : {}}
                         onClick={() => setActiveTab(item.id)}
                       >
-                        <item.icon className="ml-2 h-4 w-4" />
+                        <item.icon className="h-4 w-4" />
                         {item.label}
-                      </Button>
+                      </button>
                     ))}
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-red-400 hover:bg-zinc-800 hover:text-red-300"
+                    <div className="ornament-separator mt-4 mb-4">
+                      <div className="diamond" />
+                    </div>
+                    <button
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300"
+                      style={{ color: '#EF4444' }}
                       onClick={handleLogout}
                     >
-                      <LogOut className="ml-2 h-4 w-4" />
+                      <LogOut className="h-4 w-4" />
                       تسجيل الخروج
-                    </Button>
+                    </button>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -165,30 +187,49 @@ export default function AdminPage() {
       </header>
 
       {/* Selected Wedding Banner */}
-      {selectedWedding && (
-        <div className="border-b border-zinc-800 bg-zinc-900/50">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-2">
-              <Heart className="h-4 w-4 text-amber-400" />
-              <span className="text-sm text-zinc-300">
-                {selectedWedding.groomName} و {selectedWedding.brideName}
-              </span>
+      <AnimatePresence>
+        {selectedWedding && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ background: 'rgba(212,168,83,0.04)', borderBottom: '1px solid var(--admin-border)' }}
+          >
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: 'rgba(212,168,83,0.12)' }}>
+                  <Heart className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} fill="currentColor" />
+                </div>
+                <div>
+                  <span className="text-sm font-medium" style={{ color: 'var(--wedding-gold)' }}>
+                    {selectedWedding.groomName} و {selectedWedding.brideName}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={clearSelection}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300"
+                style={{ color: 'var(--admin-text-secondary)', background: 'var(--admin-surface-overlay)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'var(--wedding-gold)';
+                  e.currentTarget.style.background = 'rgba(212,168,83,0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--admin-text-secondary)';
+                  e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                }}
+              >
+                <ArrowRight className="h-3.5 w-3.5" />
+                العودة للقائمة
+              </button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearSelection}
-              className="text-zinc-400 hover:text-zinc-200"
-            >
-              <ArrowRight className="ml-1 h-4 w-4" />
-              العودة للقائمة
-            </Button>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="flex-1 mx-auto max-w-7xl w-full px-4 py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -209,16 +250,18 @@ export default function AdminPage() {
             )}
 
             {activeTab === 'guests' && !selectedWedding && (
-              <div className="flex flex-col items-center justify-center py-16 text-zinc-400">
-                <Users className="mb-4 h-16 w-16 text-zinc-600" />
-                <p className="text-lg">الرجاء اختيار زفاف من القائمة أولاً</p>
-                <Button
-                  variant="outline"
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full mb-6" style={{ background: 'rgba(212,168,83,0.08)' }}>
+                  <Users className="h-10 w-10" style={{ color: 'var(--wedding-gold)' }} />
+                </div>
+                <p className="text-lg font-medium mb-2" style={{ color: 'var(--admin-text-primary)' }}>اختار زفاف من القائمة الأول 🌹</p>
+                <p className="text-sm mb-6" style={{ color: 'var(--admin-text-muted)' }}>علشان تقدر تدير قائمة الضيوف</p>
+                <button
                   onClick={() => setActiveTab('weddings')}
-                  className="mt-4 border-zinc-600 text-zinc-300 hover:bg-zinc-700"
+                  className="btn-wedding px-6 py-2.5 text-sm"
                 >
                   عرض الزفات
-                </Button>
+                </button>
               </div>
             )}
 
@@ -227,16 +270,18 @@ export default function AdminPage() {
             )}
 
             {activeTab === 'rsvps' && !selectedWedding && (
-              <div className="flex flex-col items-center justify-center py-16 text-zinc-400">
-                <Calendar className="mb-4 h-16 w-16 text-zinc-600" />
-                <p className="text-lg">الرجاء اختيار زفاف من القائمة أولاً</p>
-                <Button
-                  variant="outline"
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full mb-6" style={{ background: 'rgba(212,168,83,0.08)' }}>
+                  <Calendar className="h-10 w-10" style={{ color: 'var(--wedding-gold)' }} />
+                </div>
+                <p className="text-lg font-medium mb-2" style={{ color: 'var(--admin-text-primary)' }}>اختار زفاف من القائمة الأول 🌙</p>
+                <p className="text-sm mb-6" style={{ color: 'var(--admin-text-muted)' }}>علشان تشوف ردود الضيوف</p>
+                <button
                   onClick={() => setActiveTab('weddings')}
-                  className="mt-4 border-zinc-600 text-zinc-300 hover:bg-zinc-700"
+                  className="btn-wedding px-6 py-2.5 text-sm"
                 >
                   عرض الزفات
-                </Button>
+                </button>
               </div>
             )}
           </motion.div>
@@ -244,20 +289,28 @@ export default function AdminPage() {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-800 bg-zinc-900/95 backdrop-blur md:hidden">
-        <div className="flex items-center justify-around py-2">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl md:hidden" style={{ background: 'rgba(17,17,24,0.95)', borderTop: '1px solid var(--admin-border)' }}>
+        <div className="flex items-center justify-around py-2 px-2">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center gap-1 px-4 py-1 ${
-                activeTab === item.id
-                  ? 'text-amber-400'
-                  : 'text-zinc-500'
-              }`}
+              className="relative flex flex-col items-center gap-1 px-5 py-2 rounded-xl transition-all duration-300"
+              style={{
+                color: activeTab === item.id ? 'var(--wedding-gold)' : 'var(--admin-text-muted)',
+                background: activeTab === item.id ? 'rgba(212,168,83,0.08)' : 'transparent',
+              }}
             >
               <item.icon className="h-5 w-5" />
-              <span className="text-xs">{item.label}</span>
+              <span className="text-[10px] font-medium">{item.label}</span>
+              {activeTab === item.id && (
+                <motion.div
+                  layoutId="mobileNavIndicator"
+                  className="absolute -top-0.5 right-3 left-3 h-0.5 rounded-full"
+                  style={{ background: 'linear-gradient(90deg, var(--wedding-gold), var(--wedding-gold-light))' }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                />
+              )}
             </button>
           ))}
         </div>

@@ -4,18 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Wedding } from '@/types/wedding';
 import { formatDateArabic } from '@/lib/wedding-utils';
-import { themeOptions } from '@/lib/themes';
+import { themeOptions, getTheme } from '@/lib/themes';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Pencil, Trash2, ExternalLink, Plus, Users, Calendar, Heart } from 'lucide-react';
+import { Pencil, Trash2, ExternalLink, Plus, Users, Calendar, Heart, MapPin, Eye, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface WeddingWithCounts extends Wedding {
@@ -93,173 +83,221 @@ export default function WeddingList() {
     return option?.labelAr || themeName;
   };
 
+  const getThemeColor = (themeName: string) => {
+    const theme = getTheme(themeName as Wedding['theme']);
+    return theme?.colors?.primary || '#D4A853';
+  };
+
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-600/20">
-              <Heart className="h-6 w-6 text-amber-400" />
-            </div>
-            <div>
-              <p className="text-sm text-zinc-400">إجمالي الزفات</p>
-              <p className="text-2xl font-bold text-zinc-100">{weddings.length}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-600/20">
-              <Users className="h-6 w-6 text-emerald-400" />
-            </div>
-            <div>
-              <p className="text-sm text-zinc-400">إجمالي الضيوف</p>
-              <p className="text-2xl font-bold text-zinc-100">{totalGuests}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-600/20">
-              <Calendar className="h-6 w-6 text-purple-400" />
-            </div>
-            <div>
-              <p className="text-sm text-zinc-400">إجمالي الردود</p>
-              <p className="text-2xl font-bold text-zinc-100">{totalRsvps}</p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="admin-card card-glow p-5 flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(212,168,83,0.2), rgba(212,168,83,0.05))' }}>
+            <Heart className="h-7 w-7" style={{ color: 'var(--wedding-gold)' }} fill="currentColor" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>إجمالي الزفات</p>
+            <p className="text-3xl font-bold text-gold-gradient">{weddings.length}</p>
+          </div>
+        </div>
+        <div className="admin-card card-glow p-5 flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05))' }}>
+            <Users className="h-7 w-7 text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>إجمالي الضيوف</p>
+            <p className="text-3xl font-bold text-emerald-400">{totalGuests}</p>
+          </div>
+        </div>
+        <div className="admin-card card-glow p-5 flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(183,110,121,0.2), rgba(183,110,121,0.05))' }}>
+            <Calendar className="h-7 w-7" style={{ color: 'var(--wedding-rose)' }} />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>إجمالي الردود</p>
+            <p className="text-3xl font-bold" style={{ color: 'var(--wedding-rose)' }}>{totalRsvps}</p>
+          </div>
+        </div>
       </div>
 
       {/* Create Button */}
       <div className="flex justify-start">
-        <Button
+        <button
           onClick={() => router.push('/admin/create')}
-          className="bg-amber-600 text-white hover:bg-amber-700"
+          className="btn-wedding flex items-center gap-2 px-6 py-2.5 text-sm"
         >
-          <Plus className="ml-2 h-4 w-4" />
+          <Plus className="h-4 w-4" />
           إنشاء زفاف جديد
-        </Button>
+        </button>
       </div>
 
-      {/* Weddings Table */}
-      <Card className="border-zinc-700 bg-zinc-800/50">
-        <CardContent className="p-0">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <span className="h-8 w-8 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
-            </div>
-          ) : weddings.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-zinc-400">
-              <Heart className="mb-4 h-12 w-12 text-zinc-600" />
-              <p className="text-lg">لا توجد زفات بعد</p>
-              <p className="text-sm">ابدأ بإنشاء زفاف جديد</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-zinc-700 hover:bg-transparent">
-                    <TableHead className="text-zinc-300">العريس</TableHead>
-                    <TableHead className="text-zinc-300">العريسة</TableHead>
-                    <TableHead className="text-zinc-300">التاريخ</TableHead>
-                    <TableHead className="text-zinc-300">القاعة</TableHead>
-                    <TableHead className="text-zinc-300">القالب</TableHead>
-                    <TableHead className="text-zinc-300">الرابط</TableHead>
-                    <TableHead className="text-zinc-300">الإجراءات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {weddings.map((wedding) => (
-                    <TableRow
-                      key={wedding.id}
-                      className="border-zinc-700 hover:bg-zinc-700/30"
+      {/* Wedding List */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-16">
+          <span className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
+        </div>
+      ) : weddings.length === 0 ? (
+        <div className="admin-card p-12 flex flex-col items-center justify-center">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full mb-6" style={{ background: 'rgba(212,168,83,0.08)' }}>
+            <Sparkles className="h-12 w-12" style={{ color: 'var(--wedding-gold)' }} />
+          </div>
+          <p className="text-xl font-bold mb-2 text-gold-gradient">ابدأ رحلتك مع زفاتي ✨</p>
+          <p className="text-sm mb-6" style={{ color: 'var(--admin-text-muted)' }}>أول زفافك معانا قريب 🌹</p>
+          <button
+            onClick={() => router.push('/admin/create')}
+            className="btn-wedding flex items-center gap-2 px-6 py-2.5 text-sm"
+          >
+            <Plus className="h-4 w-4" />
+            إنشاء زفاف جديد
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {weddings.map((wedding) => {
+            const themeColor = getThemeColor(wedding.theme);
+            return (
+              <div
+                key={wedding.id}
+                className="admin-card card-glow flex flex-col sm:flex-row sm:items-center gap-4 p-5"
+                style={{ borderRight: `3px solid ${themeColor}` }}
+              >
+                {/* Wedding Info */}
+                <div className="flex-1 min-w-0">
+                  {/* Names */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-bold" style={{ color: 'var(--wedding-gold)' }}>
+                      {wedding.groomName} و {wedding.brideName}
+                    </h3>
+                    <span
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                      style={{ background: `${themeColor}18`, color: themeColor, border: `1px solid ${themeColor}30` }}
                     >
-                      <TableCell className="font-medium text-zinc-100">
-                        {wedding.groomName}
-                      </TableCell>
-                      <TableCell className="text-zinc-200">
-                        {wedding.brideName}
-                      </TableCell>
-                      <TableCell className="text-zinc-300">
-                        {formatDateArabic(wedding.weddingDate)}
-                      </TableCell>
-                      <TableCell className="text-zinc-300">
+                      {getThemeLabel(wedding.theme)}
+                    </span>
+                  </div>
+
+                  {/* Date & Venue */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5" style={{ color: 'var(--admin-text-muted)' }} />
+                      {formatDateArabic(wedding.weddingDate)}
+                    </span>
+                    {wedding.venueName && (
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5" style={{ color: 'var(--admin-text-muted)' }} />
                         {wedding.venueName}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className="border-amber-600/30 text-amber-400"
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Guest/RSVP counts */}
+                  <div className="flex items-center gap-4 mt-2 text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3 w-3" />
+                      {wedding._count?.guests || 0} ضيف
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Heart className="h-3 w-3" />
+                      {wedding._count?.rsvps || 0} رد
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                  {/* View Invitation Link - More prominent */}
+                  <a
+                    href={`/w/${wedding.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300"
+                    style={{
+                      background: 'rgba(212,168,83,0.08)',
+                      color: 'var(--wedding-gold)',
+                      border: '1px solid rgba(212,168,83,0.15)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(212,168,83,0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(212,168,83,0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(212,168,83,0.08)';
+                      e.currentTarget.style.borderColor = 'rgba(212,168,83,0.15)';
+                    }}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                    <span>عرض الدعوة</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+
+                  {/* Edit */}
+                  <button
+                    onClick={() => router.push(`/admin/${wedding.id}`)}
+                    className="flex items-center justify-center h-9 w-9 rounded-xl transition-all duration-300"
+                    style={{ color: 'var(--admin-text-secondary)', background: 'var(--admin-surface-overlay)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--wedding-gold)';
+                      e.currentTarget.style.background = 'rgba(212,168,83,0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--admin-text-secondary)';
+                      e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                    }}
+                    title="تعديل"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </button>
+
+                  {/* Delete */}
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button
+                        className="flex items-center justify-center h-9 w-9 rounded-xl transition-all duration-300"
+                        style={{ color: 'var(--admin-text-secondary)', background: 'var(--admin-surface-overlay)' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#EF4444';
+                          e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--admin-text-secondary)';
+                          e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                        }}
+                        title="حذف"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent style={{ background: 'var(--admin-surface-raised)', border: '1px solid var(--admin-border-strong)' }}>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle style={{ color: 'var(--admin-text-primary)' }}>
+                          تأكيد الحذف
+                        </AlertDialogTitle>
+                        <AlertDialogDescription style={{ color: 'var(--admin-text-secondary)' }}>
+                          هل أنت متأكد من حذف زفاف {wedding.groomName} و {wedding.brideName}؟ لا يمكن التراجع عن هذا الإجراء.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel
+                          style={{ background: 'var(--admin-surface-overlay)', color: 'var(--admin-text-primary)', border: '1px solid var(--admin-border)' }}
                         >
-                          {getThemeLabel(wedding.theme)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <a
-                          href={`/w/${wedding.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300"
-                          dir="ltr"
+                          إلغاء
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(wedding.id)}
+                          className="bg-red-600 text-white hover:bg-red-700"
                         >
-                          {wedding.slug}
-                          <ExternalLink className="h-3.5 w-3.5" />
-                        </a>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => router.push(`/admin/${wedding.id}`)}
-                            className="text-zinc-300 hover:bg-zinc-700 hover:text-amber-400"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-zinc-300 hover:bg-zinc-700 hover:text-red-400"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent className="border-zinc-700 bg-zinc-800">
-                              <AlertDialogHeader>
-                                <AlertDialogTitle className="text-zinc-100">
-                                  تأكيد الحذف
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-zinc-400">
-                                  هل أنت متأكد من حذف زفاف {wedding.groomName} و {wedding.brideName}؟ لا يمكن التراجع عن هذا الإجراء.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel className="border-zinc-600 bg-zinc-700 text-zinc-200 hover:bg-zinc-600">
-                                  إلغاء
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(wedding.id)}
-                                  className="bg-red-600 text-white hover:bg-red-700"
-                                >
-                                  حذف
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                          حذف
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

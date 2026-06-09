@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import WeddingForm from '@/components/admin/WeddingForm';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Heart } from 'lucide-react';
+import { ArrowRight, Heart, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 type WeddingFormValues = {
@@ -72,7 +72,7 @@ export default function CreateWeddingPage() {
       });
       const result = await res.json();
       if (result.success) {
-        toast.success('تم إنشاء الزفاف بنجاح! يمكنك الآن فتح الرابط: /w/' + data.slug);
+        toast.success('تم إنشاء الزفاف بنجاح! 🎉');
         router.push('/admin');
       } else {
         toast.error(result.error || 'فشل في إنشاء الزفاف');
@@ -86,8 +86,13 @@ export default function CreateWeddingPage() {
 
   if (isChecking) {
     return (
-      <div dir="rtl" className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <span className="h-10 w-10 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+      <div dir="rtl" className="min-h-screen flex items-center justify-center" style={{ background: 'var(--admin-surface)' }}>
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <span className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
+          </div>
+          <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>جاري التحميل...</p>
+        </div>
       </div>
     );
   }
@@ -95,20 +100,46 @@ export default function CreateWeddingPage() {
   if (!isAuthed) return null;
 
   return (
-    <div dir="rtl" className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div dir="rtl" className="min-h-screen" style={{ background: 'var(--admin-surface)', color: 'var(--admin-text-primary)' }}>
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-900/95 backdrop-blur">
+      <header
+        className="sticky top-0 z-50 backdrop-blur-xl"
+        style={{
+          background: 'var(--admin-surface-raised)',
+          borderBottom: '1px solid var(--admin-border)',
+        }}
+      >
         <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-600">
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{ background: 'linear-gradient(135deg, var(--wedding-gold), var(--wedding-gold-dark))' }}
+            >
               <Heart className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-xl font-bold text-zinc-100">إنشاء زفاف جديد</h1>
+            <div>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+                إنشاء زفاف جديد
+              </h1>
+              <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                <Sparkles className="inline h-3 w-3 ml-1" style={{ color: 'var(--wedding-gold)' }} />
+                ابدأ رحلة دعوة استثنائية
+              </p>
+            </div>
           </div>
           <Button
             variant="ghost"
             onClick={() => router.push('/admin')}
-            className="text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
+            className="transition-colors"
+            style={{ color: 'var(--admin-text-secondary)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+              e.currentTarget.style.color = 'var(--wedding-gold)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = 'var(--admin-text-secondary)';
+            }}
           >
             <ArrowRight className="ml-2 h-4 w-4" />
             العودة
@@ -120,7 +151,7 @@ export default function CreateWeddingPage() {
       <motion.main
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mx-auto max-w-4xl px-4 py-8"
       >
         <WeddingForm onSubmit={handleSubmit} isLoading={isLoading} />

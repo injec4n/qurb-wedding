@@ -2,19 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { RsvpResponse } from '@/types/wedding';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { CheckCircle, XCircle, Clock, Filter } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Filter, Heart, MessageCircle, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface RsvpWithGuest extends RsvpResponse {
@@ -32,17 +20,23 @@ const statusConfig = {
   attending: {
     label: 'سيحضر',
     icon: CheckCircle,
-    badgeClass: 'bg-emerald-600/20 text-emerald-400 border-emerald-600/30',
+    color: '#10B981',
+    bgClass: 'rgba(16,185,129,0.08)',
+    borderClass: 'rgba(16,185,129,0.2)',
   },
   'not-attending': {
     label: 'لن يحضر',
     icon: XCircle,
-    badgeClass: 'bg-red-600/20 text-red-400 border-red-600/30',
+    color: '#EF4444',
+    bgClass: 'rgba(239,68,68,0.08)',
+    borderClass: 'rgba(239,68,68,0.2)',
   },
   pending: {
     label: 'قيد الانتظار',
     icon: Clock,
-    badgeClass: 'bg-yellow-600/20 text-yellow-400 border-yellow-600/30',
+    color: '#F59E0B',
+    bgClass: 'rgba(245,158,11,0.08)',
+    borderClass: 'rgba(245,158,11,0.2)',
   },
 };
 
@@ -97,127 +91,147 @@ export default function RsvpTable({ weddingId }: RsvpTableProps) {
     }
   };
 
+  const filters: { value: StatusFilter; label: string }[] = [
+    { value: 'all', label: 'الكل' },
+    { value: 'attending', label: 'سيحضر' },
+    { value: 'not-attending', label: 'لن يحضر' },
+    { value: 'pending', label: 'قيد الانتظار' },
+  ];
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Summary Cards */}
       <div className="grid grid-cols-3 gap-3">
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-3 p-3">
+        <div className="admin-card card-glow p-4 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05))' }}>
             <CheckCircle className="h-5 w-5 text-emerald-400" />
-            <div>
-              <p className="text-xs text-zinc-400">سيحضر</p>
-              <p className="text-lg font-bold text-emerald-400">{counts.attending}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-3 p-3">
+          </div>
+          <div>
+            <p className="text-[11px]" style={{ color: 'var(--admin-text-muted)' }}>سيحضر</p>
+            <p className="text-2xl font-bold text-emerald-400">{counts.attending}</p>
+          </div>
+        </div>
+        <div className="admin-card card-glow p-4 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.05))' }}>
             <XCircle className="h-5 w-5 text-red-400" />
-            <div>
-              <p className="text-xs text-zinc-400">لن يحضر</p>
-              <p className="text-lg font-bold text-red-400">{counts['not-attending']}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-zinc-700 bg-zinc-800/50">
-          <CardContent className="flex items-center gap-3 p-3">
-            <Clock className="h-5 w-5 text-yellow-400" />
-            <div>
-              <p className="text-xs text-zinc-400">قيد الانتظار</p>
-              <p className="text-lg font-bold text-yellow-400">{counts.pending}</p>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div>
+            <p className="text-[11px]" style={{ color: 'var(--admin-text-muted)' }}>لن يحضر</p>
+            <p className="text-2xl font-bold text-red-400">{counts['not-attending']}</p>
+          </div>
+        </div>
+        <div className="admin-card card-glow p-4 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05))' }}>
+            <Clock className="h-5 w-5 text-amber-400" />
+          </div>
+          <div>
+            <p className="text-[11px]" style={{ color: 'var(--admin-text-muted)' }}>قيد الانتظار</p>
+            <p className="text-2xl font-bold text-amber-400">{counts.pending}</p>
+          </div>
+        </div>
       </div>
 
-      {/* Filter Buttons */}
-      <div className="flex items-center gap-2">
-        <Filter className="h-4 w-4 text-zinc-400" />
-        {(
-          [
-            { value: 'all', label: 'الكل' },
-            { value: 'attending', label: 'سيحضر' },
-            { value: 'not-attending', label: 'لن يحضر' },
-            { value: 'pending', label: 'قيد الانتظار' },
-          ] as { value: StatusFilter; label: string }[]
-        ).map((filter) => (
-          <Button
+      {/* Filter Buttons - Pill style */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <Filter className="h-4 w-4 shrink-0" style={{ color: 'var(--admin-text-muted)' }} />
+        {filters.map((filter) => (
+          <button
             key={filter.value}
-            variant={statusFilter === filter.value ? 'default' : 'outline'}
-            size="sm"
             onClick={() => setStatusFilter(filter.value)}
-            className={
-              statusFilter === filter.value
-                ? 'bg-amber-600 text-white hover:bg-amber-700'
-                : 'border-zinc-600 text-zinc-300 hover:bg-zinc-700'
-            }
+            className="px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300"
+            style={{
+              color: statusFilter === filter.value ? 'var(--wedding-gold)' : 'var(--admin-text-muted)',
+              background: statusFilter === filter.value ? 'rgba(212,168,83,0.1)' : 'var(--admin-surface-overlay)',
+              border: '1px solid ' + (statusFilter === filter.value ? 'rgba(212,168,83,0.25)' : 'var(--admin-border)'),
+            }}
           >
             {filter.label}
-          </Button>
+          </button>
         ))}
       </div>
 
-      {/* RSVP Table */}
-      <Card className="border-zinc-700 bg-zinc-800/50">
-        <CardContent className="p-0">
+      {/* RSVP List - Elegant card rows */}
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <Heart className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
+            ردود الضيوف
+          </h2>
+        </div>
+        <div className="px-6 pb-6">
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <span className="h-6 w-6 animate-spin rounded-full border-2 border-amber-400 border-t-transparent" />
+            <div className="flex items-center justify-center py-12">
+              <span className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
             </div>
           ) : filteredRsvps.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-zinc-400">
-              <Clock className="mb-3 h-10 w-10 text-zinc-600" />
-              <p>لا توجد ردود بعد</p>
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full mb-5" style={{ background: 'rgba(212,168,83,0.08)' }}>
+                <Clock className="h-10 w-10" style={{ color: 'var(--wedding-gold)' }} />
+              </div>
+              <p className="text-lg font-bold mb-2 text-gold-gradient">لسه مستنيين رد الضيوف 🌙</p>
+              <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>الردود هتظهر هنا أول ما الضيوف يردوا</p>
             </div>
           ) : (
-            <ScrollArea className="max-h-96">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-zinc-700 hover:bg-transparent">
-                    <TableHead className="text-zinc-300">اسم الضيف</TableHead>
-                    <TableHead className="text-zinc-300">الحالة</TableHead>
-                    <TableHead className="text-zinc-300">الرسالة</TableHead>
-                    <TableHead className="text-zinc-300">التاريخ</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredRsvps.map((rsvp) => {
-                    const config = statusConfig[rsvp.status as keyof typeof statusConfig] || statusConfig.pending;
-                    const Icon = config.icon;
-                    return (
-                      <TableRow
-                        key={rsvp.id}
-                        className="border-zinc-700 hover:bg-zinc-700/30"
-                      >
-                        <TableCell className="font-medium text-zinc-100">
-                          {(rsvp as Record<string, unknown>).guest
-                            ? ((rsvp as Record<string, unknown>).guest as { name: string }).name
-                            : 'ضيف'}
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant="outline"
-                            className={`gap-1 ${config.badgeClass}`}
-                          >
-                            <Icon className="h-3.5 w-3.5" />
-                            {config.label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="max-w-48 truncate text-zinc-300">
-                          {rsvp.message || '—'}
-                        </TableCell>
-                        <TableCell className="text-zinc-400 text-sm">
-                          {formatDate(rsvp.createdAt)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </ScrollArea>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {filteredRsvps.map((rsvp) => {
+                const config = statusConfig[rsvp.status as keyof typeof statusConfig] || statusConfig.pending;
+                const Icon = config.icon;
+                const guestName = (rsvp as Record<string, unknown>).guest
+                  ? ((rsvp as Record<string, unknown>).guest as { name: string }).name
+                  : 'ضيف';
+                return (
+                  <div
+                    key={rsvp.id}
+                    className="flex items-start gap-4 rounded-xl p-4 transition-all duration-300"
+                    style={{
+                      background: 'var(--admin-surface)',
+                      border: '1px solid var(--admin-border)',
+                      borderRight: `3px solid ${config.color}`,
+                    }}
+                  >
+                    {/* Status icon */}
+                    <div
+                      className="flex h-9 w-9 items-center justify-center rounded-lg shrink-0 mt-0.5"
+                      style={{ background: config.bgClass }}
+                    >
+                      <Icon className="h-4.5 w-4.5" style={{ color: config.color }} />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="font-semibold text-sm" style={{ color: 'var(--admin-text-primary)' }}>
+                          {guestName}
+                        </p>
+                        <span
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                          style={{ background: config.bgClass, color: config.color, border: `1px solid ${config.borderClass}` }}
+                        >
+                          {config.label}
+                        </span>
+                      </div>
+
+                      {rsvp.message && (
+                        <div className="flex items-start gap-1.5 mt-1.5">
+                          <MessageCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: 'var(--admin-text-muted)' }} />
+                          <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>{rsvp.message}</p>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <Calendar className="h-3 w-3" style={{ color: 'var(--admin-text-muted)' }} />
+                        <p className="text-[11px]" style={{ color: 'var(--admin-text-muted)' }}>{formatDate(rsvp.createdAt)}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
