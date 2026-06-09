@@ -101,7 +101,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                 className="space-y-4"
               >
                 <p className="text-xl sm:text-2xl" style={{ color: colors.text + 'CC' }}>
-                  تم تجهيز هذه الدعوة خصيصاً لك
+                  شرفتونا بحضوركم
                 </p>
                 <div className="flex items-center justify-center gap-4 my-6">
                   <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
@@ -109,7 +109,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                   <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  وجودك هيكمل فرحتنا
+                  وجودكم يكمل فرحتنا ويزيدها بهجة
                 </p>
                 <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
                   ويسعد قلوبنا حضورك معنا في هذه الليلة السعيدة
@@ -125,7 +125,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <p className="text-4xl sm:text-5xl font-bold mb-6" style={{ color: colors.primary }}>
-                  يسعدنا دعوتكم 🌹
+                  يسعدنا أن تشاركونا فرحتنا 🌹
                 </p>
               </motion.div>
 
@@ -145,7 +145,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors }
                   <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  نتشرف بحضوركم ومشاركتكم فرحتنا
+                  وجودكم يكمل فرحتنا ويزيدها بهجة
                 </p>
                 <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
                   حضوركم يزيد فرحتنا بهجة وسروراً

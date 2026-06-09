@@ -102,3 +102,43 @@ export async function submitRsvp(weddingId: string, guestId: string, status: str
     create: { weddingId, guestId, status, message },
   });
 }
+
+export async function incrementVisitCount(id: string) {
+  const wedding = await db.wedding.findUnique({ where: { id } });
+  if (!wedding) {
+    throw new Error('Wedding not found');
+  }
+  return db.wedding.update({
+    where: { id },
+    data: { visitCount: { increment: 1 } },
+  });
+}
+
+export async function getWeddingStats(id: string) {
+  const wedding = await db.wedding.findUnique({
+    where: { id },
+    select: { visitCount: true },
+  });
+
+  if (!wedding) {
+    throw new Error('Wedding not found');
+  }
+
+  const guests = await db.guest.findMany({
+    where: { weddingId: id },
+    include: { rsvp: true },
+  });
+
+  const totalGuests = guests.length;
+  const attending = guests.filter((g) => g.rsvp?.status === 'attending').length;
+  const notAttending = guests.filter((g) => g.rsvp?.status === 'not-attending').length;
+  const pending = guests.filter((g) => !g.rsvp || g.rsvp?.status === 'pending').length;
+
+  return {
+    visitCount: wedding.visitCount,
+    totalGuests,
+    attending,
+    notAttending,
+    pending,
+  };
+}

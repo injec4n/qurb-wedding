@@ -6,6 +6,14 @@ export async function GET() {
   try {
     const weddings = await db.wedding.findMany({
       orderBy: { createdAt: 'desc' },
+      include: {
+        _count: {
+          select: {
+            guests: true,
+            rsvps: true,
+          },
+        },
+      },
     });
     return NextResponse.json({ success: true, data: weddings });
   } catch (error) {

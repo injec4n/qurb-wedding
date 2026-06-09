@@ -39,6 +39,7 @@ model Wedding {
   enableMusic    Boolean  @default(true)
   enableGuestPersonalization Boolean @default(true)
   isActive       Boolean  @default(true)
+  visitCount     Int      @default(0)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

@@ -763,7 +763,7 @@ export default function LandingPage() {
                 <ChevronLeft className="mr-2 h-6 w-6" />
               </Button>
             </Link>
-            <p className="text-white/25 text-sm font-light">مجاني بالكامل — لا حاجة لبطاقة ائتمان</p>
+            <p className="text-white/25 text-sm font-light">ابدأوا في لحظات — بدون تعقيدات</p>
           </motion.div>
 
           {/* Decorative bottom ornament */}

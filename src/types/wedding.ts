@@ -76,6 +76,14 @@ export interface ThemeConfig {
   patternStyle?: string;
   description?: string;
   previewGradient?: string;
+  layoutStyle: 'classic' | 'modern' | 'minimal' | 'ornate' | 'romantic' | 'traditional';
+  heroStyle: 'centered' | 'split' | 'cinematic' | 'frame';
+  sectionSpacing: 'compact' | 'normal' | 'spacious';
+  showPattern: boolean;
+  patternType?: 'geometric' | 'floral' | 'arabesque' | 'dots' | 'lines';
+  ornamentStyle: 'gold' | 'subtle' | 'none' | 'bold';
+  cornerOrnaments: boolean;
+  fontScale: number; // 0.9 for smaller, 1 for normal, 1.1 for larger
 }
 
 export interface WeddingFormData {

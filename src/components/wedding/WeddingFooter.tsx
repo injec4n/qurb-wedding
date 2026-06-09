@@ -18,6 +18,11 @@ export default function WeddingFooter({ groomName, brideName, colors }: WeddingF
         <div className="h-px w-20 sm:w-32" style={{ backgroundColor: colors.primary + '25' }} />
       </div>
 
+      {/* Dua message */}
+      <p className="text-base sm:text-lg mb-6 font-serif" style={{ color: colors.text + 'BB' }}>
+        نسأل الله أن يوفقكم ويسعدكم
+      </p>
+
       <p className="text-lg sm:text-xl mb-3 font-serif" style={{ color: colors.text + 'CC' }}>
         صُنع بكل حب ❤️
       </p>

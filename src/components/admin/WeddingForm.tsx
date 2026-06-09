@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check } from 'lucide-react';
+import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check, Upload, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const weddingFormSchema = z.object({
@@ -49,6 +49,7 @@ interface WeddingFormProps {
   initialData?: Wedding;
   onSubmit: (data: WeddingFormValues) => void;
   isLoading?: boolean;
+  onFormChange?: (data: Record<string, unknown>) => void;
 }
 
 // Helper: parse galleryImages from either string (DB) or array (API)
@@ -66,12 +67,31 @@ function parseGalleryImages(value: string | string[] | undefined | null): string
   return [];
 }
 
-export default function WeddingForm({ initialData, onSubmit, isLoading }: WeddingFormProps) {
+// Upload function
+const uploadFile = async (file: File, type: 'image' | 'music'): Promise<string> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch('/api/upload', { method: 'POST', body: formData });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error || 'Upload failed');
+  return data.data.url;
+};
+
+export default function WeddingForm({ initialData, onSubmit, isLoading, onFormChange }: WeddingFormProps) {
   const router = useRouter();
   const [galleryInput, setGalleryInput] = useState('');
   const [galleryImages, setGalleryImages] = useState<string[]>(
     parseGalleryImages(initialData?.galleryImages)
   );
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
+  const [musicUploading, setMusicUploading] = useState(false);
+  const [coverDragOver, setCoverDragOver] = useState(false);
+  const [musicDragOver, setMusicDragOver] = useState(false);
+
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const musicInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<WeddingFormValues>({
     resolver: zodResolver(weddingFormSchema),
@@ -110,6 +130,22 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
   const groomName = watch('groomName');
   const brideName = watch('brideName');
   const selectedTheme = watch('theme');
+  const coverImageValue = watch('coverImage');
+  const musicUrlValue = watch('backgroundMusicUrl');
+
+  // Watch all form values for live preview using callback to avoid infinite loops
+  useEffect(() => {
+    const subscription = watch((formValues) => {
+      if (onFormChange) {
+        onFormChange({
+          ...formValues,
+          groomName: formValues.groomName ?? groomName,
+          brideName: formValues.brideName ?? brideName,
+        } as Record<string, unknown>);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, onFormChange]);
 
   // Auto-generate slug from names
   useEffect(() => {
@@ -131,6 +167,80 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
       setValue('accentColor', themeConfig.colors.accent);
     }
   }, [selectedTheme, setValue]);
+
+  // Cover image upload handler
+  const handleCoverUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    try {
+      setCoverUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('coverImage', url);
+    } catch (err) {
+      console.error('Cover upload error:', err);
+    } finally {
+      setCoverUploading(false);
+    }
+  }, [setValue]);
+
+  // Gallery image upload handler
+  const handleGalleryUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    try {
+      setGalleryUploading(true);
+      const url = await uploadFile(file, 'image');
+      const updated = [...galleryImages, url];
+      setGalleryImages(updated);
+      setValue('galleryImages', updated);
+    } catch (err) {
+      console.error('Gallery upload error:', err);
+    } finally {
+      setGalleryUploading(false);
+    }
+  }, [galleryImages, setValue]);
+
+  // Music upload handler
+  const handleMusicUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('audio/')) return;
+    try {
+      setMusicUploading(true);
+      const url = await uploadFile(file, 'music');
+      setValue('backgroundMusicUrl', url);
+    } catch (err) {
+      console.error('Music upload error:', err);
+    } finally {
+      setMusicUploading(false);
+    }
+  }, [setValue]);
+
+  // Drag and drop handlers for cover
+  const handleCoverDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setCoverDragOver(true);
+  };
+  const handleCoverDragLeave = () => setCoverDragOver(false);
+  const handleCoverDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setCoverDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleCoverUpload(file);
+    }
+  };
+
+  // Drag and drop handlers for music
+  const handleMusicDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setMusicDragOver(true);
+  };
+  const handleMusicDragLeave = () => setMusicDragOver(false);
+  const handleMusicDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setMusicDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('audio/')) {
+      handleMusicUpload(file);
+    }
+  };
 
   const addGalleryImage = () => {
     if (galleryInput.trim()) {
@@ -303,19 +413,84 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
             الوسائط
           </h2>
         </div>
-        <div className="px-6 pb-6 space-y-4">
-          <div className="space-y-2">
+        <div className="px-6 pb-6 space-y-5">
+          {/* Cover Image Upload */}
+          <div className="space-y-3">
             <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الغلاف</Label>
-            <Input
-              {...register('coverImage')}
-              className="admin-input"
-              placeholder="رابط صورة الغلاف"
-              dir="ltr"
-            />
+            {/* Drag-and-drop upload zone */}
+            <div
+              className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
+                coverDragOver ? 'ring-2 ring-offset-2' : ''
+              }`}
+              style={{
+                border: coverDragOver
+                  ? '2px dashed var(--wedding-gold)'
+                  : '2px dashed var(--admin-border)',
+                background: coverDragOver
+                  ? 'rgba(212,168,83,0.06)'
+                  : 'var(--admin-surface)',
+                ringColor: 'var(--wedding-gold)',
+              }}
+              onDragOver={handleCoverDragOver}
+              onDragLeave={handleCoverDragLeave}
+              onDrop={handleCoverDrop}
+              onClick={() => coverInputRef.current?.click()}
+            >
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/jpg"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleCoverUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              {coverUploading ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-2">
+                  <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                  <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>جاري رفع الصورة...</p>
+                </div>
+              ) : coverImageValue ? (
+                <div className="relative group">
+                  <img
+                    src={coverImageValue}
+                    alt="صورة الغلاف"
+                    className="w-full h-48 object-cover rounded-xl"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                    <p className="text-sm text-white font-medium">اضغط لتغيير الصورة</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 gap-2">
+                  <Upload className="h-8 w-8" style={{ color: 'var(--admin-text-muted)' }} />
+                  <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
+                    اسحب الصورة هنا أو اضغط للاختيار
+                  </p>
+                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                    JPG, PNG, WebP — حتى 10MB
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* URL fallback */}
+            <div className="space-y-1.5">
+              <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>أو أدخل رابط الصورة يدوياً:</p>
+              <Input
+                {...register('coverImage')}
+                className="admin-input"
+                placeholder="رابط صورة الغلاف"
+                dir="ltr"
+              />
+            </div>
           </div>
 
-          <div className="space-y-2">
+          {/* Gallery Images */}
+          <div className="space-y-3">
             <Label style={{ color: 'var(--admin-text-secondary)' }}>صور المعرض</Label>
+            {/* Upload button + URL input */}
             <div className="flex gap-2">
               <Input
                 value={galleryInput}
@@ -338,43 +513,154 @@ export default function WeddingForm({ initialData, onSubmit, isLoading }: Weddin
               >
                 <Plus className="h-4 w-4" />
               </button>
+              <button
+                type="button"
+                onClick={() => galleryInputRef.current?.click()}
+                disabled={galleryUploading}
+                className="flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-medium transition-all duration-300 shrink-0"
+                style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)', border: '1px solid rgba(212,168,83,0.15)' }}
+              >
+                {galleryUploading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Upload className="h-4 w-4" />
+                )}
+                رفع صورة
+              </button>
+              <input
+                ref={galleryInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/jpg"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleGalleryUpload(file);
+                  e.target.value = '';
+                }}
+              />
             </div>
             {galleryImages.length > 0 && (
-              <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
+              <div className="mt-2 grid grid-cols-3 gap-2 max-h-72 overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
                 {galleryImages.map((img, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center gap-2 rounded-xl p-2.5"
-                    style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
+                    className="relative group rounded-xl overflow-hidden"
+                    style={{ border: '1px solid var(--admin-border)' }}
                   >
-                    <span className="flex-1 truncate text-sm" style={{ color: 'var(--admin-text-secondary)' }} dir="ltr">
-                      {img}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeGalleryImage(idx)}
-                      className="flex items-center justify-center h-7 w-7 rounded-lg transition-colors"
-                      style={{ color: '#EF4444' }}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
+                    <img
+                      src={img}
+                      alt={`صورة المعرض ${idx + 1}`}
+                      className="w-full h-24 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => removeGalleryImage(idx)}
+                        className="flex items-center justify-center h-7 w-7 rounded-lg bg-red-500/80 text-white transition-colors hover:bg-red-500"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    {/* URL fallback display */}
+                    <div className="p-1.5" style={{ background: 'var(--admin-surface)' }}>
+                      <p className="text-[9px] truncate" style={{ color: 'var(--admin-text-muted)' }} dir="ltr">
+                        {img}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="space-y-2">
+          {/* Background Music Upload */}
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Music className="h-4 w-4" style={{ color: 'var(--admin-text-muted)' }} />
-              <Label style={{ color: 'var(--admin-text-secondary)' }}>رابط الموسيقى</Label>
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>موسيقى الخلفية</Label>
             </div>
-            <Input
-              {...register('backgroundMusicUrl')}
-              className="admin-input"
-              placeholder="رابط ملف الموسيقى"
-              dir="ltr"
-            />
+            {/* Drag-and-drop upload zone for music */}
+            <div
+              className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
+                musicDragOver ? 'ring-2 ring-offset-2' : ''
+              }`}
+              style={{
+                border: musicDragOver
+                  ? '2px dashed var(--wedding-gold)'
+                  : '2px dashed var(--admin-border)',
+                background: musicDragOver
+                  ? 'rgba(212,168,83,0.06)'
+                  : 'var(--admin-surface)',
+                ringColor: 'var(--wedding-gold)',
+              }}
+              onDragOver={handleMusicDragOver}
+              onDragLeave={handleMusicDragLeave}
+              onDrop={handleMusicDrop}
+              onClick={() => musicInputRef.current?.click()}
+            >
+              <input
+                ref={musicInputRef}
+                type="file"
+                accept="audio/mpeg,audio/wav,audio/ogg,.mp3,.wav,.ogg"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleMusicUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              {musicUploading ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-2">
+                  <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                  <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>جاري رفع الموسيقى...</p>
+                </div>
+              ) : musicUrlValue ? (
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-xl"
+                      style={{ background: 'rgba(212,168,83,0.12)' }}
+                    >
+                      <Music className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate" style={{ color: 'var(--admin-text-primary)' }} dir="ltr">
+                        {musicUrlValue.split('/').pop()}
+                      </p>
+                      <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>اضغط لتغيير الملف</p>
+                    </div>
+                  </div>
+                  {/* Audio player preview */}
+                  <audio
+                    controls
+                    className="w-full h-8"
+                    style={{ filter: 'invert(0.8) hue-rotate(180deg)' }}
+                  >
+                    <source src={musicUrlValue} />
+                  </audio>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 gap-2">
+                  <Upload className="h-8 w-8" style={{ color: 'var(--admin-text-muted)' }} />
+                  <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
+                    اسحب ملف الموسيقى هنا أو اضغط للاختيار
+                  </p>
+                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                    MP3, WAV, OGG — حتى 20MB
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* URL fallback */}
+            <div className="space-y-1.5">
+              <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>أو أدخل رابط الموسيقى يدوياً:</p>
+              <Input
+                {...register('backgroundMusicUrl')}
+                className="admin-input"
+                placeholder="رابط ملف الموسيقى"
+                dir="ltr"
+              />
+            </div>
           </div>
         </div>
       </div>

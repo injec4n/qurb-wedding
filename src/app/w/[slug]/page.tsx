@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import WeddingPageClient from '@/components/wedding/WeddingPageClient';
 import { parseGalleryImages } from '@/lib/wedding-utils';
+import { incrementVisitCount } from '@/lib/db-helpers';
 import type { Wedding } from '@/types/wedding';
 
 interface WeddingPageProps {
@@ -55,6 +56,11 @@ export default async function WeddingPage({ params, searchParams }: WeddingPageP
     createdAt: weddingRow.createdAt.toISOString(),
     updatedAt: weddingRow.updatedAt.toISOString(),
   };
+
+  // Increment visit count
+  if (wedding) {
+    await incrementVisitCount(wedding.id);
+  }
 
   // Decode guest name from URL
   const guestName = guest ? decodeURIComponent(guest) : undefined;

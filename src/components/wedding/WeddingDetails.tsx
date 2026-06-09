@@ -46,13 +46,25 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-14 font-serif"
+        className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-6 font-serif"
         style={{ color: colors.text }}
       >
-        تفاصيل الحفل
+        تفاصيل الليلة السعيدة
       </motion.h2>
 
-      <div className="max-w-lg mx-auto space-y-5">
+      {/* Emotional pre-message */}
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="text-center text-base sm:text-lg font-serif mb-14"
+        style={{ color: colors.text + 'AA' }}
+      >
+        ننتظركم بين أهلنا وأحبابنا
+      </motion.p>
+
+      <div className="max-w-lg mx-auto space-y-6">
         {details.map((detail, index) => (
           <motion.div
             key={index}
@@ -130,7 +142,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="max-w-lg mx-auto mt-10 p-8 rounded-3xl text-center relative"
+          className="max-w-lg mx-auto mt-12 p-8 rounded-3xl text-center relative"
           style={{
             backgroundColor: colors.accent + '08',
             border: `1px solid ${colors.accent}15`,
@@ -164,7 +176,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex justify-center mt-10"
+          className="flex justify-center mt-12"
         >
           <a
             href={wedding.googleMapsLink}

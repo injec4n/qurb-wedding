@@ -239,7 +239,28 @@ export default function AdminPage() {
             transition={{ duration: 0.2 }}
           >
             {activeTab === 'weddings' && (
-              <WeddingList />
+              <div className="space-y-6">
+                {/* Welcome Section */}
+                <div className="admin-card card-glow p-6 sm:p-8">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full" style={{ background: 'linear-gradient(135deg, var(--wedding-gold), var(--wedding-gold-light))', boxShadow: '0 4px 16px rgba(212,168,83,0.25)' }}>
+                      <Heart className="h-6 w-6" style={{ color: 'var(--admin-surface)' }} fill="currentColor" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gold-gradient">مرحباً بك في زفاتي</h2>
+                      <p className="text-sm mt-0.5" style={{ color: 'var(--admin-text-secondary)' }}>إدارة دعوات الزفاف بكل أناقة</p>
+                    </div>
+                  </div>
+                  <div className="ornament-separator mt-2 mb-2">
+                    <div className="diamond" />
+                  </div>
+                  <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
+                    من هنا يمكنك إنشاء وإدارة دعوات الزفاف، متابعة ردود الضيوف، وتخصيص كل تفصيلة بدقة.
+                  </p>
+                </div>
+
+                <WeddingList />
+              </div>
             )}
 
             {activeTab === 'guests' && selectedWedding && (

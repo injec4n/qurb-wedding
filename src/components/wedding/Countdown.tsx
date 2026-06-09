@@ -150,10 +150,10 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
             ))}
 
             <p className="text-3xl sm:text-4xl font-bold mb-3 relative" style={{ color: colors.primary }}>
-              الحفل قد بدأ! 🎉
+              مبروك للعروسين! 🤲
             </p>
             <p className="text-lg sm:text-xl font-serif relative" style={{ color: colors.text + 'BB' }}>
-              ألف مبروك للعروسين
+              حياة سعيدة إن شاء الله
             </p>
           </div>
         </motion.div>
@@ -190,7 +190,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
         className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-12 font-serif"
         style={{ color: colors.text }}
       >
-        العد التنازلي لأجمل ليلة
+        يتبقى على ليلة العمر
       </motion.h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 max-w-2xl mx-auto">
