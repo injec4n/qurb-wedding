@@ -13,9 +13,9 @@ export default function Venue({ wedding, colors }: VenueProps) {
   const hasMap = !!wedding.googleMapsLink;
 
   return (
-    <div className="py-16 sm:py-24 px-4" dir="rtl">
+    <div className="py-10 sm:py-16 px-4" dir="rtl">
       {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-10">
+      <div className="flex items-center justify-center gap-4 mb-6">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -35,10 +35,10 @@ export default function Venue({ wedding, colors }: VenueProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-12 font-serif"
+          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 font-serif"
           style={{ color: colors.text }}
         >
-          موقع الحفل
+          حيث تُحتفل الفرحة
         </motion.h2>
 
         {/* Venue card */}
@@ -55,7 +55,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
         >
           {/* Decorative header */}
           <div
-            className="w-full h-36 sm:h-52 flex items-center justify-center relative overflow-hidden"
+            className="w-full h-28 sm:h-40 flex items-center justify-center relative overflow-hidden"
             style={{
               background: `linear-gradient(135deg, ${colors.secondary}40 0%, ${colors.primary}20 100%)`,
             }}
@@ -85,7 +85,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
           </div>
 
           {/* Venue info */}
-          <div className="p-8 sm:p-10 text-center">
+          <div className="p-6 sm:p-8 text-center">
             <h3
               className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 font-serif"
               style={{ color: colors.primary }}
@@ -126,7 +126,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
       </motion.div>
 
       {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-14">
+      <div className="flex items-center justify-center gap-4 mt-8">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />

@@ -50,8 +50,8 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
         setSubmitted(true);
         toast.success(
           responseStatus === 'attending'
-            ? 'شكراً! نتطلع لرؤيتك 🎉'
-            : 'شكراً لتوصالك 🙏'
+            ? 'شكراً! سعداء بحضورك 🎉'
+            : 'شكراً لتوصالك واهتمامك 🙏'
         );
       } else {
         toast.error(data.error || 'حدث خطأ، يرجى المحاولة مرة أخرى');
@@ -66,9 +66,9 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
   };
 
   return (
-    <div className="py-16 sm:py-24 px-4" dir="rtl">
+    <div className="py-10 sm:py-16 px-4" dir="rtl">
       {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-10">
+      <div className="flex items-center justify-center gap-4 mb-6">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -88,14 +88,14 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-12 font-serif"
+          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 font-serif"
           style={{ color: colors.text }}
         >
-          هل ستكونون معنا في هذه الليلة السعيدة؟
+          هل نتشرف بحضوركم ليلة العمر؟
         </motion.h2>
 
         <div
-          className="rounded-3xl p-8 sm:p-10 text-center card-glow"
+          className="rounded-3xl p-6 sm:p-8 text-center card-glow"
           style={{
             backgroundColor: colors.primary + '0A',
             border: `1px solid ${colors.primary}20`,
@@ -124,7 +124,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
               </div>
 
               <p className="text-2xl sm:text-3xl font-bold mb-4" style={{ color: colors.primary }}>
-                {status === 'attending' ? 'تم تأكيد الحضور بكل سرور ✅' : 'تم تسجيل الاعتذار 🙏'}
+                {status === 'attending' ? 'تم تأكيد الحضور بكل سرور ✅' : 'تم استلام الاعتذار 🙏'}
               </p>
 
               {/* Ornamental divider */}
@@ -136,8 +136,8 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
 
               <p className="text-lg sm:text-xl font-serif" style={{ color: colors.text + 'BB' }}>
                 {status === 'attending'
-                  ? 'نتطلع لرؤيتك في الحفل! ستجعل فرحتنا أكمل 🌹'
-                  : 'نتمنى أن نراك في مناسبة أخرى، ونسأل الله أن يوفقك 💐'}
+                  ? 'فرحتنا تكتمل بحضوركم! نلقاكم عن قريب إن شاء الله 🌹'
+                  : 'نسأل الله أن يجمعنا في مناسبة أسعد وأجمل 💐'}
               </p>
             </motion.div>
           ) : (
@@ -149,7 +149,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   className="text-xl sm:text-2xl mb-6 font-serif"
                   style={{ color: colors.text + 'CC' }}
                 >
-                  يا {guestName}، هل ستتمكن من الحضور؟
+                  يا {guestName}، فرحتنا تكتمل بحضورك معنا
                 </motion.p>
               ) : (
                 <div className="mb-6 text-right">
@@ -191,7 +191,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   ) : (
                     <Check className="w-5 h-5" />
                   )}
-                  بكل سرور سأحضر 🌹
+                  يتشرفني الحضور بكل سرور 🌹
                 </motion.button>
 
                 <motion.button
@@ -211,7 +211,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   ) : (
                     <X className="w-5 h-5" />
                   )}
-                  أتمنى لو أستطيع الحضور 💐
+                  أعتذر، وأتمنى لكم أجمل ليلة 💐
                 </motion.button>
               </div>
 
@@ -240,7 +240,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
       </motion.div>
 
       {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-14">
+      <div className="flex items-center justify-center gap-4 mt-8">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />

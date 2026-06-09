@@ -7,11 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Wedding, ThemeName } from '@/types/wedding';
 import { themeOptions, getTheme } from '@/lib/themes';
 import { generateSlug } from '@/lib/wedding-utils';
+import { covers, coverCategoryLabels, getCoversByCategory, CoverCategory, CoverItem } from '@/lib/covers';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check, Upload, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check, Upload, Loader2, Eye, EyeOff, Lock, UserCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const weddingFormSchema = z.object({
@@ -26,8 +27,13 @@ const weddingFormSchema = z.object({
   welcomeMessage: z.string().optional().default(''),
   contactPhone: z.string().optional().default(''),
   coverImage: z.string().optional().default(''),
+  coverCategory: z.string().optional().default(''),
   galleryImages: z.array(z.string()).optional().default([]),
   backgroundMusicUrl: z.string().optional().default(''),
+  groomPhoto: z.string().optional().default(''),
+  bridePhoto: z.string().optional().default(''),
+  couplePhoto: z.string().optional().default(''),
+  clientPassword: z.string().optional().default(''),
   theme: z.string().optional().default('classic-gold'),
   colorPreset: z.string().optional().default(''),
   primaryColor: z.string().optional().default('#D4A853'),
@@ -86,12 +92,23 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const [coverUploading, setCoverUploading] = useState(false);
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [musicUploading, setMusicUploading] = useState(false);
+  const [groomPhotoUploading, setGroomPhotoUploading] = useState(false);
+  const [bridePhotoUploading, setBridePhotoUploading] = useState(false);
+  const [couplePhotoUploading, setCouplePhotoUploading] = useState(false);
   const [coverDragOver, setCoverDragOver] = useState(false);
   const [musicDragOver, setMusicDragOver] = useState(false);
+  const [groomPhotoDragOver, setGroomPhotoDragOver] = useState(false);
+  const [bridePhotoDragOver, setBridePhotoDragOver] = useState(false);
+  const [couplePhotoDragOver, setCouplePhotoDragOver] = useState(false);
+  const [showClientPassword, setShowClientPassword] = useState(false);
+  const [selectedCoverCategory, setSelectedCoverCategory] = useState<CoverCategory>('luxury');
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const musicInputRef = useRef<HTMLInputElement>(null);
+  const groomPhotoInputRef = useRef<HTMLInputElement>(null);
+  const bridePhotoInputRef = useRef<HTMLInputElement>(null);
+  const couplePhotoInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<WeddingFormValues>({
     resolver: zodResolver(weddingFormSchema),
@@ -107,8 +124,13 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
       welcomeMessage: initialData?.welcomeMessage || '',
       contactPhone: initialData?.contactPhone || '',
       coverImage: initialData?.coverImage || '',
+      coverCategory: initialData?.coverCategory || '',
       galleryImages: parseGalleryImages(initialData?.galleryImages),
       backgroundMusicUrl: initialData?.backgroundMusicUrl || '',
+      groomPhoto: initialData?.groomPhoto || '',
+      bridePhoto: initialData?.bridePhoto || '',
+      couplePhoto: initialData?.couplePhoto || '',
+      clientPassword: initialData?.clientPassword || '',
       theme: initialData?.theme || 'classic-gold',
       colorPreset: initialData?.colorPreset || '',
       primaryColor: initialData?.primaryColor || '#D4A853',
@@ -132,6 +154,10 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const selectedTheme = watch('theme');
   const coverImageValue = watch('coverImage');
   const musicUrlValue = watch('backgroundMusicUrl');
+  const groomPhotoValue = watch('groomPhoto');
+  const bridePhotoValue = watch('bridePhoto');
+  const couplePhotoValue = watch('couplePhoto');
+  const coverCategoryValue = watch('coverCategory');
 
   // Watch all form values for live preview using callback to avoid infinite loops
   useEffect(() => {
@@ -227,6 +253,46 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     }
   };
 
+  // Photo upload handlers
+  const handleGroomPhotoUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    try {
+      setGroomPhotoUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('groomPhoto', url);
+    } catch (err) {
+      console.error('Groom photo upload error:', err);
+    } finally {
+      setGroomPhotoUploading(false);
+    }
+  }, [setValue]);
+
+  const handleBridePhotoUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    try {
+      setBridePhotoUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('bridePhoto', url);
+    } catch (err) {
+      console.error('Bride photo upload error:', err);
+    } finally {
+      setBridePhotoUploading(false);
+    }
+  }, [setValue]);
+
+  const handleCouplePhotoUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    try {
+      setCouplePhotoUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('couplePhoto', url);
+    } catch (err) {
+      console.error('Couple photo upload error:', err);
+    } finally {
+      setCouplePhotoUploading(false);
+    }
+  }, [setValue]);
+
   // Drag and drop handlers for music
   const handleMusicDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -240,6 +306,31 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     if (file && file.type.startsWith('audio/')) {
       handleMusicUpload(file);
     }
+  };
+
+  // Drag and drop handlers for photos
+  const handleGroomPhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setGroomPhotoDragOver(true); };
+  const handleGroomPhotoDragLeave = () => setGroomPhotoDragOver(false);
+  const handleGroomPhotoDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setGroomPhotoDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleGroomPhotoUpload(file);
+  };
+
+  const handleBridePhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setBridePhotoDragOver(true); };
+  const handleBridePhotoDragLeave = () => setBridePhotoDragOver(false);
+  const handleBridePhotoDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setBridePhotoDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleBridePhotoUpload(file);
+  };
+
+  const handleCouplePhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setCouplePhotoDragOver(true); };
+  const handleCouplePhotoDragLeave = () => setCouplePhotoDragOver(false);
+  const handleCouplePhotoDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setCouplePhotoDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleCouplePhotoUpload(file);
   };
 
   const addGalleryImage = () => {
@@ -809,6 +900,292 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Cover Library */}
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <Palette className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
+            مكتبة الأغلفة
+          </h2>
+        </div>
+        <div className="px-6 pb-6 space-y-4">
+          {/* Category Tabs */}
+          <div className="flex gap-2 flex-wrap">
+            {(Object.keys(coverCategoryLabels) as CoverCategory[]).map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCoverCategory(cat)}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300"
+                style={{
+                  background: selectedCoverCategory === cat ? 'var(--wedding-gold)' : 'var(--admin-surface)',
+                  color: selectedCoverCategory === cat ? 'var(--admin-surface)' : 'var(--admin-text-secondary)',
+                  border: selectedCoverCategory === cat ? '1px solid var(--wedding-gold)' : '1px solid var(--admin-border)',
+                }}
+              >
+                {coverCategoryLabels[cat]}
+              </button>
+            ))}
+          </div>
+
+          {/* Cover Grid */}
+          <div className="grid grid-cols-3 gap-3 md:grid-cols-5">
+            {getCoversByCategory(selectedCoverCategory).map((cover) => {
+              const isSelected = coverCategoryValue === cover.id;
+              return (
+                <button
+                  key={cover.id}
+                  type="button"
+                  onClick={() => {
+                    setValue('coverImage', cover.style);
+                    setValue('coverCategory', cover.id);
+                  }}
+                  className="relative rounded-xl overflow-hidden transition-all duration-300 aspect-[3/4]"
+                  style={{
+                    border: isSelected ? '2px solid var(--wedding-gold)' : '2px solid var(--admin-border)',
+                    boxShadow: isSelected ? '0 0 12px rgba(212,168,83,0.2)' : 'none',
+                  }}
+                >
+                  {/* Gradient preview */}
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: cover.style }}
+                  />
+                  {/* SVG pattern overlay */}
+                  <div className="absolute inset-0" dangerouslySetInnerHTML={{ __html: cover.patternSvg }} />
+                  {/* Cover name */}
+                  <div className="absolute bottom-0 inset-x-0 p-1.5 text-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+                    <p className="text-[10px] font-medium text-white truncate">{cover.name}</p>
+                  </div>
+                  {/* Selected indicator */}
+                  {isSelected && (
+                    <div className="absolute top-1.5 left-1.5 flex h-4 w-4 items-center justify-center rounded-full" style={{ background: 'var(--wedding-gold)' }}>
+                      <Check className="h-2.5 w-2.5" style={{ color: 'var(--admin-surface)' }} />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Current cover info */}
+          {coverCategoryValue && (
+            <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+              الغلاف المختار: {covers.find(c => c.id === coverCategoryValue)?.name || coverCategoryValue}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Photos Section */}
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <UserCircle2 className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
+            صور العروسين
+          </h2>
+        </div>
+        <div className="px-6 pb-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {/* Groom Photo */}
+            <div className="space-y-3">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العريس</Label>
+              <div
+                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${groomPhotoDragOver ? 'ring-2 ring-offset-2' : ''}`}
+                style={{
+                  border: groomPhotoDragOver ? '2px dashed var(--wedding-gold)' : '2px dashed var(--admin-border)',
+                  background: groomPhotoDragOver ? 'rgba(212,168,83,0.06)' : 'var(--admin-surface)',
+                  ringColor: 'var(--wedding-gold)',
+                }}
+                onDragOver={handleGroomPhotoDragOver}
+                onDragLeave={handleGroomPhotoDragLeave}
+                onDrop={handleGroomPhotoDrop}
+                onClick={() => groomPhotoInputRef.current?.click()}
+              >
+                <input
+                  ref={groomPhotoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/jpg"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleGroomPhotoUpload(file);
+                    e.target.value = '';
+                  }}
+                />
+                {groomPhotoUploading ? (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                  </div>
+                ) : groomPhotoValue ? (
+                  <div className="relative group">
+                    <img src={groomPhotoValue} alt="صورة العريس" className="w-full h-32 object-cover rounded-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>صورة العريس</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                {...register('groomPhoto')}
+                className="admin-input text-xs"
+                placeholder="رابط صورة العريس"
+                dir="ltr"
+              />
+            </div>
+
+            {/* Bride Photo */}
+            <div className="space-y-3">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العروس</Label>
+              <div
+                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${bridePhotoDragOver ? 'ring-2 ring-offset-2' : ''}`}
+                style={{
+                  border: bridePhotoDragOver ? '2px dashed var(--wedding-gold)' : '2px dashed var(--admin-border)',
+                  background: bridePhotoDragOver ? 'rgba(212,168,83,0.06)' : 'var(--admin-surface)',
+                  ringColor: 'var(--wedding-gold)',
+                }}
+                onDragOver={handleBridePhotoDragOver}
+                onDragLeave={handleBridePhotoDragLeave}
+                onDrop={handleBridePhotoDrop}
+                onClick={() => bridePhotoInputRef.current?.click()}
+              >
+                <input
+                  ref={bridePhotoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/jpg"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleBridePhotoUpload(file);
+                    e.target.value = '';
+                  }}
+                />
+                {bridePhotoUploading ? (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                  </div>
+                ) : bridePhotoValue ? (
+                  <div className="relative group">
+                    <img src={bridePhotoValue} alt="صورة العروس" className="w-full h-32 object-cover rounded-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>صورة العروس</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                {...register('bridePhoto')}
+                className="admin-input text-xs"
+                placeholder="رابط صورة العروس"
+                dir="ltr"
+              />
+            </div>
+
+            {/* Couple Photo */}
+            <div className="space-y-3">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين</Label>
+              <div
+                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${couplePhotoDragOver ? 'ring-2 ring-offset-2' : ''}`}
+                style={{
+                  border: couplePhotoDragOver ? '2px dashed var(--wedding-gold)' : '2px dashed var(--admin-border)',
+                  background: couplePhotoDragOver ? 'rgba(212,168,83,0.06)' : 'var(--admin-surface)',
+                  ringColor: 'var(--wedding-gold)',
+                }}
+                onDragOver={handleCouplePhotoDragOver}
+                onDragLeave={handleCouplePhotoDragLeave}
+                onDrop={handleCouplePhotoDrop}
+                onClick={() => couplePhotoInputRef.current?.click()}
+              >
+                <input
+                  ref={couplePhotoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/jpg"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleCouplePhotoUpload(file);
+                    e.target.value = '';
+                  }}
+                />
+                {couplePhotoUploading ? (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                  </div>
+                ) : couplePhotoValue ? (
+                  <div className="relative group">
+                    <img src={couplePhotoValue} alt="صورة الزوجين" className="w-full h-32 object-cover rounded-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                {...register('couplePhoto')}
+                className="admin-input text-xs"
+                placeholder="رابط صورة الزوجين"
+                dir="ltr"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Client Password */}
+      <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
+        <div className="p-6 pb-4">
+          <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
+              <Lock className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+            </div>
+            كلمة مرور لوحة العميل
+          </h2>
+        </div>
+        <div className="px-6 pb-6 space-y-3">
+          <div className="relative">
+            <Input
+              type={showClientPassword ? 'text' : 'password'}
+              {...register('clientPassword')}
+              className="admin-input pl-10"
+              placeholder="أدخل كلمة المرور"
+            />
+            <button
+              type="button"
+              onClick={() => setShowClientPassword(!showClientPassword)}
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-colors"
+              style={{ color: 'var(--admin-text-muted)' }}
+            >
+              {showClientPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+            اتركها فارغة للسماح بالدخول بدون كلمة مرور
+          </p>
         </div>
       </div>
 

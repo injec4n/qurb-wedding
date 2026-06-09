@@ -1,45 +1,45 @@
 'use client';
 
-import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Loader2 } from 'lucide-react';
+import { MessageCircle, Facebook, Send, Link2 } from 'lucide-react';
 import { Wedding, ThemeColors } from '@/types/wedding';
 import { formatDateArabic, formatTimeArabic } from '@/lib/wedding-utils';
+import { toast } from 'sonner';
 
 interface InvitationCardProps {
   wedding: Wedding;
   colors: ThemeColors;
+  slug: string;
+  couplePhoto?: string;
 }
 
-export default function InvitationCard({ wedding, colors }: InvitationCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [downloading, setDownloading] = useState(false);
+export default function InvitationCard({ wedding, colors, slug, couplePhoto }: InvitationCardProps) {
+  const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/w/${slug}` : '';
+  const shareText = `يدعوكم ${wedding.groomName} و ${wedding.brideName} لحضور حفل زفافهما - ${formatDateArabic(wedding.weddingDate)} - ${wedding.venueName}`;
 
-  const handleDownload = async () => {
-    if (!cardRef.current || downloading) return;
-    setDownloading(true);
+  const handleWhatsAppShare = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + '\n' + invitationUrl)}`, '_blank');
+  };
 
+  const handleFacebookShare = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(invitationUrl)}`, '_blank');
+  };
+
+  const handleTelegramShare = () => {
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(invitationUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+  };
+
+  const handleCopyLink = async () => {
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: null,
-      });
-
-      const link = document.createElement('a');
-      link.download = `دعوة-زفاف-${wedding.groomName}-${wedding.brideName}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } catch (error) {
-      console.error('Error generating card:', error);
-    } finally {
-      setDownloading(false);
+      await navigator.clipboard.writeText(invitationUrl);
+      toast.success('تم نسخ الرابط بنجاح');
+    } catch {
+      toast.error('فشل في نسخ الرابط');
     }
   };
 
   return (
-    <div className="py-20 px-4" dir="rtl">
+    <div className="py-12 px-4" dir="rtl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -52,16 +52,15 @@ export default function InvitationCard({ wedding, colors }: InvitationCardProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-2xl sm:text-3xl font-bold mb-12 font-serif"
+          className="text-2xl sm:text-3xl font-bold mb-8 font-serif"
           style={{ color: colors.text }}
         >
           بطاقة الدعوة
         </motion.h2>
 
-        {/* The card to be captured */}
+        {/* The card preview */}
         <div className="flex justify-center mb-8">
           <div
-            ref={cardRef}
             className="w-[360px] h-[360px] sm:w-[440px] sm:h-[440px] relative overflow-hidden flex flex-col items-center justify-center"
             style={{
               backgroundColor: colors.background,
@@ -145,19 +144,30 @@ export default function InvitationCard({ wedding, colors }: InvitationCardProps)
                 {wedding.groomName}
               </h3>
 
-              {/* Decorative monogram/ornament between names */}
-              <div className="flex items-center justify-center gap-2 my-2">
-                <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
-                <svg viewBox="0 0 40 24" className="w-8 h-5" style={{ color: colors.accent }}>
-                  <path d="M20 2 L24 12 L20 22 L16 12Z" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <circle cx="20" cy="12" r="2.5" fill="currentColor" opacity="0.4" />
-                  <path d="M4 12 L14 12" stroke="currentColor" strokeWidth="0.8" />
-                  <path d="M26 12 L36 12" stroke="currentColor" strokeWidth="0.8" />
-                  <circle cx="4" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
-                  <circle cx="36" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
-                </svg>
-                <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
-              </div>
+              {/* Couple photo or ornamental divider between names */}
+              {couplePhoto ? (
+                <div className="flex justify-center my-3">
+                  <div
+                    className="w-16 h-16 rounded-full overflow-hidden"
+                    style={{ border: `2px solid ${colors.primary}60`, padding: '2px' }}
+                  >
+                    <img src={couplePhoto} alt="الزوجين" className="w-full h-full rounded-full object-cover" />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-2 my-2">
+                  <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
+                  <svg viewBox="0 0 40 24" className="w-8 h-5" style={{ color: colors.accent }}>
+                    <path d="M20 2 L24 12 L20 22 L16 12Z" fill="none" stroke="currentColor" strokeWidth="1" />
+                    <circle cx="20" cy="12" r="2.5" fill="currentColor" opacity="0.4" />
+                    <path d="M4 12 L14 12" stroke="currentColor" strokeWidth="0.8" />
+                    <path d="M26 12 L36 12" stroke="currentColor" strokeWidth="0.8" />
+                    <circle cx="4" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
+                    <circle cx="36" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
+                  </svg>
+                  <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
+                </div>
+              )}
 
               <h3 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: colors.primary }}>
                 {wedding.brideName}
@@ -189,26 +199,74 @@ export default function InvitationCard({ wedding, colors }: InvitationCardProps)
           </div>
         </div>
 
-        {/* Download button */}
-        <motion.button
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleDownload}
-          disabled={downloading}
-          className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 disabled:opacity-50"
-          style={{
-            backgroundColor: colors.button,
-            color: colors.background,
-            boxShadow: `0 4px 16px ${colors.button}25`,
-          }}
+        {/* Share buttons row */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex items-center justify-center gap-3"
         >
-          {downloading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : (
-            <Download className="w-5 h-5" />
-          )}
-          {downloading ? 'جاري التحميل...' : 'تحميل البطاقة'}
-        </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleWhatsAppShare}
+            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            style={{
+              backgroundColor: '#25D36620',
+              color: '#25D366',
+              border: '1px solid #25D36630',
+            }}
+            title="مشاركة عبر واتساب"
+          >
+            <MessageCircle className="w-5 h-5" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleFacebookShare}
+            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            style={{
+              backgroundColor: '#1877F220',
+              color: '#1877F2',
+              border: '1px solid #1877F230',
+            }}
+            title="مشاركة عبر فيسبوك"
+          >
+            <Facebook className="w-5 h-5" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleTelegramShare}
+            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            style={{
+              backgroundColor: '#0088cc20',
+              color: '#0088cc',
+              border: '1px solid #0088cc30',
+            }}
+            title="مشاركة عبر تيليغرام"
+          >
+            <Send className="w-5 h-5" />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleCopyLink}
+            className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300"
+            style={{
+              backgroundColor: colors.accent + '20',
+              color: colors.accent,
+              border: `1px solid ${colors.accent}30`,
+            }}
+            title="نسخ الرابط"
+          >
+            <Link2 className="w-5 h-5" />
+          </motion.button>
+        </motion.div>
       </motion.div>
     </div>
   );

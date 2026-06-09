@@ -36,11 +36,13 @@ function SectionDivider({ colors, ornamentStyle }: { colors: ThemeColors; orname
   const isNone = ornamentStyle === 'none';
 
   if (isNone) {
-    return <div className="py-4" />;
+    return <div className="py-2 flex items-center justify-center">
+      <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '15' }} />
+    </div>;
   }
 
   return (
-    <div className="flex items-center justify-center py-6" dir="rtl">
+    <div className="flex items-center justify-center py-2" dir="rtl">
       <div className="flex items-center justify-center gap-4">
         <div
           className="h-px w-12 sm:w-20"
@@ -69,7 +71,7 @@ function SectionDivider({ colors, ornamentStyle }: { colors: ThemeColors; orname
 
 // Section reveal animation variants - slower, more graceful
 const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 25 },
   visible: {
     opacity: 1,
     y: 0,
@@ -81,12 +83,12 @@ const sectionVariants = {
 function getSectionPadding(spacing: ThemeConfig['sectionSpacing']): string {
   switch (spacing) {
     case 'compact':
-      return 'py-2';
+      return 'py-0.5';
     case 'spacious':
-      return 'py-8';
+      return 'py-4';
     case 'normal':
     default:
-      return 'py-4';
+      return 'py-2';
   }
 }
 
@@ -175,6 +177,9 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           showPattern={themeConfig.showPattern}
           patternType={themeConfig.patternType}
           fontScale={themeConfig.fontScale}
+          couplePhoto={wedding.couplePhoto}
+          groomPhoto={wedding.groomPhoto}
+          bridePhoto={wedding.bridePhoto}
         />
       </section>
 
@@ -195,6 +200,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             groomName={wedding.groomName}
             brideName={wedding.brideName}
             colors={colors}
+            couplePhoto={wedding.couplePhoto}
           />
         </motion.section>
       )}
@@ -318,8 +324,8 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         className={sectionPadding}
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 max-w-5xl mx-auto">
-          <InvitationCard wedding={wedding} colors={colors} />
-          <InstagramStory wedding={wedding} colors={colors} />
+          <InvitationCard wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
+          <InstagramStory wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
         </div>
       </motion.section>
 

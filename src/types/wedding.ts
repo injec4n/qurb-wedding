@@ -11,8 +11,13 @@ export interface Wedding {
   welcomeMessage: string;
   contactPhone: string;
   coverImage: string;
+  coverCategory: string;
   galleryImages: string[]; // JSON array stored as string in DB
   backgroundMusicUrl: string;
+  groomPhoto: string;
+  bridePhoto: string;
+  couplePhoto: string;
+  clientPassword: string;
   theme: ThemeName;
   colorPreset: string;
   primaryColor: string;
@@ -97,8 +102,13 @@ export interface WeddingFormData {
   welcomeMessage: string;
   contactPhone: string;
   coverImage: string;
+  coverCategory: string;
   galleryImages: string[];
   backgroundMusicUrl: string;
+  groomPhoto: string;
+  bridePhoto: string;
+  couplePhoto: string;
+  clientPassword: string;
   theme: ThemeName;
   colorPreset: string;
   primaryColor: string;

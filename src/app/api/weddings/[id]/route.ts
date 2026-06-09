@@ -24,7 +24,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const allowedFields = [
       'groomName', 'brideName', 'slug', 'weddingDate', 'weddingTime',
       'venueName', 'venueAddress', 'googleMapsLink', 'welcomeMessage',
-      'contactPhone', 'coverImage', 'backgroundMusicUrl', 'theme',
+      'contactPhone', 'coverImage', 'coverCategory', 'backgroundMusicUrl',
+      'groomPhoto', 'bridePhoto', 'couplePhoto', 'clientPassword', 'theme',
       'colorPreset', 'primaryColor', 'secondaryColor', 'backgroundColor',
       'textColor', 'buttonColor', 'accentColor', 'enableRsvp',
       'enableGallery', 'enableCountdown', 'enableMusic',

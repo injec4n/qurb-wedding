@@ -12,6 +12,55 @@ interface HeroProps {
   showPattern?: boolean;
   patternType?: 'geometric' | 'floral' | 'arabesque' | 'dots' | 'lines';
   fontScale?: number;
+  couplePhoto?: string;
+  groomPhoto?: string;
+  bridePhoto?: string;
+}
+
+// Circular photo with ornamental gold border
+function CircularPhoto({ src, size = 'lg', borderColor }: { src: string; size?: 'sm' | 'lg' | 'xl'; borderColor: string }) {
+  const sizeClasses = size === 'xl' ? 'w-36 h-36 sm:w-44 sm:h-44' : size === 'lg' ? 'w-28 h-28 sm:w-36 sm:h-36' : 'w-20 h-20 sm:w-24 sm:h-24';
+  const borderW = size === 'xl' ? 3 : size === 'lg' ? 2.5 : 2;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
+      className="relative inline-flex items-center justify-center"
+    >
+      {/* Outer ornamental ring */}
+      <div
+        className={`absolute ${sizeClasses} rounded-full`}
+        style={{
+          border: `${borderW + 2}px solid ${borderColor}20`,
+          boxShadow: `0 0 30px ${borderColor}15`,
+        }}
+      />
+      {/* Main border ring */}
+      <div
+        className={`absolute ${sizeClasses} rounded-full`}
+        style={{
+          border: `${borderW}px solid ${borderColor}60`,
+          boxShadow: `inset 0 0 15px ${borderColor}10`,
+        }}
+      />
+      {/* Photo */}
+      <div
+        className={`${sizeClasses} rounded-full overflow-hidden`}
+        style={{
+          border: `${borderW}px solid ${borderColor}`,
+          padding: '3px',
+        }}
+      >
+        <img
+          src={src}
+          alt="صورة الزوجين"
+          className="w-full h-full rounded-full object-cover"
+        />
+      </div>
+    </motion.div>
+  );
 }
 
 // Pattern SVG component based on patternType
@@ -172,7 +221,7 @@ function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: str
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.2, delay: 0.3 }}
-      className="mb-12 flex flex-col items-center gap-4"
+      className="mb-8 flex flex-col items-center gap-3"
     >
       {/* Top decorative line */}
       <div className="flex items-center gap-3">
@@ -274,7 +323,7 @@ function ScrollIndicator({ color }: { color: string }) {
 // ==============================
 
 /** Centered hero: large names centered with decorative elements */
-function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle'>>) {
+function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-6xl sm:text-7xl md:text-9xl' : 'text-5xl sm:text-6xl md:text-8xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -301,7 +350,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
         <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
-          <OrnamentalLine color={colors.primary} className="mb-10" />
+          <OrnamentalLine color={colors.primary} className="mb-6" />
         </motion.div>
 
         {/* Groom name */}
@@ -320,18 +369,40 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
           </h1>
         </motion.div>
 
+        {/* Couple Photo or Individual Photos */}
+        {couplePhoto ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
+            className="flex justify-center mt-8 mb-4"
+          >
+            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
+          </motion.div>
+        ) : groomPhoto && bridePhoto ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="flex items-center justify-center gap-6 mt-6"
+          >
+            <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
+            <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
+          </motion.div>
+        ) : null}
+
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-          <OrnamentalLine color={colors.primary} className="mt-8 mb-8" />
+          <OrnamentalLine color={colors.primary} className="mt-5 mb-5" />
         </motion.div>
 
         {/* Subtitle */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-xl sm:text-2xl md:text-3xl font-serif mb-3" style={{ color: colors.text + 'DD' }}>
-          يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
+          بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-base sm:text-lg font-serif" style={{ color: colors.text + 'AA' }}>
-          ليلة العمر التي طالما حلمنا بها
+          ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -356,7 +427,7 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
 }
 
 /** Split hero: names on one side, decorative pattern on the other */
-function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments'>>) {
+function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-4xl sm:text-5xl md:text-6xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -429,7 +500,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
         <div className="max-w-lg">
           {/* Decorative line top */}
           <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
-            <OrnamentalLine color={colors.primary} className="mb-8" />
+            <OrnamentalLine color={colors.primary} className="mb-5" />
           </motion.div>
 
           {/* Groom name */}
@@ -456,9 +527,31 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             </h1>
           </motion.div>
 
+          {/* Photo in split hero */}
+          {couplePhoto ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
+              className="flex justify-center mt-6"
+            >
+              <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
+            </motion.div>
+          ) : groomPhoto && bridePhoto ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.2 }}
+              className="flex items-center justify-center gap-4 mt-6"
+            >
+              <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
+              <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
+            </motion.div>
+          ) : null}
+
           {/* Decorative line bottom */}
           <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-            <OrnamentalLine color={colors.primary} className="mt-8 mb-6" />
+            <OrnamentalLine color={colors.primary} className="mt-5 mb-4" />
           </motion.div>
 
           {/* Subtitle */}
@@ -469,7 +562,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-lg sm:text-xl md:text-2xl font-serif text-right mb-2"
             style={{ color: colors.text + 'DD' }}
           >
-            يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
+            بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -478,7 +571,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             className="text-sm sm:text-base font-serif text-right"
             style={{ color: colors.text + 'AA' }}
           >
-            ليلة العمر التي طالما حلمنا بها
+            ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
           </motion.p>
         </div>
 
@@ -504,7 +597,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
 }
 
 /** Cinematic hero: full-width dramatic overlay with larger text */
-function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle'>>) {
+function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-7xl sm:text-8xl md:text-9xl' : 'text-6xl sm:text-7xl md:text-8xl';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
@@ -544,7 +637,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 0.6 }}>
-          <div className="flex items-center justify-center gap-6 mb-12">
+          <div className="flex items-center justify-center gap-6 mb-8">
             <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
             <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -569,9 +662,31 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
           </h1>
         </motion.div>
 
+        {/* Photo in cinematic hero */}
+        {couplePhoto ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
+            className="flex justify-center mt-8 mb-4"
+          >
+            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
+          </motion.div>
+        ) : groomPhoto && bridePhoto ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="flex items-center justify-center gap-6 mt-6"
+          >
+            <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
+            <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
+          </motion.div>
+        ) : null}
+
         {/* Dramatic lower ornament */}
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 1.4 }}>
-          <div className="flex items-center justify-center gap-6 mt-10 mb-10">
+          <div className="flex items-center justify-center gap-6 mt-6 mb-6">
             <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
             <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -583,11 +698,11 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         {/* Subtitle - larger and more dramatic */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-2xl sm:text-3xl md:text-4xl font-serif mb-4" style={{ color: colors.text + 'DD' }}>
-          يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
+          بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
         </motion.p>
         <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
           className="text-lg sm:text-xl font-serif" style={{ color: colors.text + 'AA' }}>
-          ليلة العمر التي طالما حلمنا بها
+          ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
         </motion.p>
 
         <ScrollIndicator color={colors.primary} />
@@ -612,7 +727,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 }
 
 /** Frame hero: names inside an ornate decorative frame/border */
-function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale }: HeroProps & Required<Omit<HeroProps, 'heroStyle'>>) {
+function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto, groomPhoto, bridePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto' | 'groomPhoto' | 'bridePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-8xl' : 'text-4xl sm:text-5xl md:text-7xl';
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
@@ -733,19 +848,41 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
               </h1>
             </motion.div>
 
+            {/* Photo in frame hero */}
+            {couplePhoto ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
+                className="flex justify-center mt-6 mb-2"
+              >
+                <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
+              </motion.div>
+            ) : groomPhoto && bridePhoto ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 1.2 }}
+                className="flex items-center justify-center gap-4 mt-6"
+              >
+                <CircularPhoto src={groomPhoto} size="sm" borderColor={colors.primary} />
+                <CircularPhoto src={bridePhoto} size="sm" borderColor={colors.primary} />
+              </motion.div>
+            ) : null}
+
             {/* Ornamental line */}
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-              <OrnamentalLine color={colors.primary} className="mt-8 mb-6" />
+              <OrnamentalLine color={colors.primary} className="mt-5 mb-4" />
             </motion.div>
 
             {/* Subtitle */}
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
               className="text-xl sm:text-2xl md:text-3xl font-serif mb-3 text-center" style={{ color: colors.text + 'DD' }}>
-              يتشرفان بدعوتكم لحضور أجمل ليلة في حياتهما
+              بقلوب يملؤها الشوق، نتشرف بدعوتكم لمشاركتنا أجمل ليلة في العمر
             </motion.p>
             <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
               className="text-base sm:text-lg font-serif text-center" style={{ color: colors.text + 'AA' }}>
-              ليلة العمر التي طالما حلمنا بها
+              ليلة نلتقي فيها على مائدة الحب، ويجمعنا الله على خير وبركة
             </motion.p>
           </div>
         </motion.div>
@@ -811,6 +948,9 @@ export default function Hero({
   showPattern = true,
   patternType = 'geometric',
   fontScale = 1,
+  couplePhoto,
+  groomPhoto,
+  bridePhoto,
 }: HeroProps) {
   const commonProps = {
     wedding,
@@ -821,6 +961,9 @@ export default function Hero({
     showPattern,
     patternType,
     fontScale,
+    couplePhoto,
+    groomPhoto,
+    bridePhoto,
   };
 
   switch (heroStyle) {

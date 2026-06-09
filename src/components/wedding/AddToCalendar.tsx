@@ -100,7 +100,7 @@ export default function AddToCalendar({ groomName, brideName, weddingDate, weddi
           className="text-xl sm:text-2xl font-bold mb-6 font-serif"
           style={{ color: colors.text }}
         >
-          أضف لخططك
+          أضف الموعد للتقويم
         </motion.h3>
         
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

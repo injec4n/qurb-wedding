@@ -369,6 +369,14 @@ export default function LandingPage() {
             <span className="text-xl font-bold text-gold-gradient">زفاتي</span>
           </Link>
           <div className="flex items-center gap-3">
+            <Link href="/client/login">
+              <Button
+                variant="ghost"
+                className="text-white/60 hover:text-[var(--wedding-gold)] hover:bg-[var(--wedding-gold)]/8 transition-all duration-300 font-light"
+              >
+                دخول العملاء
+              </Button>
+            </Link>
             <Link href="/w/mohamed-fatma">
               <Button
                 variant="ghost"
@@ -795,6 +803,12 @@ export default function LandingPage() {
               </p>
 
               <div className="flex items-center gap-6 text-sm">
+                <Link
+                  href="/client/login"
+                  className="text-white/35 hover:text-[var(--wedding-gold)] transition-colors duration-300 font-light"
+                >
+                  لوحة العميل
+                </Link>
                 <Link
                   href="/admin"
                   className="text-white/35 hover:text-[var(--wedding-gold)] transition-colors duration-300 font-light"

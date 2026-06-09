@@ -42,7 +42,7 @@ function CountdownUnit({ value, label, colors, delay }: { value: number; label: 
       className="flex flex-col items-center gap-3"
     >
       <div
-        className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl flex items-center justify-center"
+        className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl flex items-center justify-center"
         style={{
           backgroundColor: colors.primary + '15',
           border: `1px solid ${colors.primary}30`,
@@ -102,9 +102,9 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
 
   if (hasPassed) {
     return (
-      <div className="py-16 sm:py-24 px-4" dir="rtl">
+      <div className="py-10 sm:py-16 px-4" dir="rtl">
         {/* Ornamental divider above */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex items-center justify-center gap-4 mb-6">
           <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
           <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
           <div className="w-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -150,16 +150,16 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
             ))}
 
             <p className="text-3xl sm:text-4xl font-bold mb-3 relative" style={{ color: colors.primary }}>
-              مبروك للعروسين! 🤲
+              بارك الله لهما وجمع بينهما في خير 🤲
             </p>
             <p className="text-lg sm:text-xl font-serif relative" style={{ color: colors.text + 'BB' }}>
-              حياة سعيدة إن شاء الله
+              أسأل الله أن يديم المحبة بينهما
             </p>
           </div>
         </motion.div>
 
         {/* Ornamental divider below */}
-        <div className="flex items-center justify-center gap-4 mt-12">
+        <div className="flex items-center justify-center gap-4 mt-8">
           <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
           <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
           <div className="w-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -173,9 +173,9 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
   if (!timeLeft) return null;
 
   return (
-    <div className="py-16 sm:py-24 px-4" dir="rtl">
+    <div className="py-10 sm:py-16 px-4" dir="rtl">
       {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-10">
+      <div className="flex items-center justify-center gap-4 mb-6">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -187,10 +187,10 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-14 sm:mb-16 font-serif"
+        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-10 font-serif"
         style={{ color: colors.text }}
       >
-        العد التنازلي لأجمل ليلة
+        نحو ليلة لا تُنسى
       </motion.h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 max-w-2xl mx-auto">
@@ -201,7 +201,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
       </div>
 
       {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-14">
+      <div className="flex items-center justify-center gap-4 mt-8">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />

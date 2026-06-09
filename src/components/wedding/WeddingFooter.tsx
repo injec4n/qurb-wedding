@@ -8,9 +8,9 @@ interface WeddingFooterProps {
 
 export default function WeddingFooter({ groomName, brideName, colors }: WeddingFooterProps) {
   return (
-    <footer className="py-16 sm:py-20 px-4 text-center" dir="rtl">
+    <footer className="py-10 sm:py-14 px-4 text-center" dir="rtl">
       {/* Larger ornamental divider at top */}
-      <div className="flex items-center justify-center gap-5 mb-10">
+      <div className="flex items-center justify-center gap-5 mb-6">
         <div className="h-px w-20 sm:w-32" style={{ backgroundColor: colors.primary + '25' }} />
         <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
         <div className="w-3 h-3 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
@@ -20,11 +20,11 @@ export default function WeddingFooter({ groomName, brideName, colors }: WeddingF
 
       {/* Dua message */}
       <p className="text-lg sm:text-xl mb-6 font-serif" style={{ color: colors.text + 'BB' }}>
-        نسأل الله أن يوفقكم ويسعدكم ويجمعكم على خير
+        نسأل الله أن يبارك في زواجكما ويجمع بينكما على خير ومحبة، ويجعلكما قرة أعين لبعضكما
       </p>
 
       <p className="text-xl sm:text-2xl mb-3 font-serif" style={{ color: colors.text + 'CC' }}>
-        صُنع بكل حب ❤️
+        صُنع بكل حب ودعاء ❤️
       </p>
       <p className="text-base sm:text-lg font-semibold mb-4" style={{ color: colors.primary + 'CC' }}>
         زفاف {groomName} و {brideName}

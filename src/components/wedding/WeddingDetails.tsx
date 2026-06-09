@@ -31,9 +31,9 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
   ];
 
   return (
-    <div className="py-16 sm:py-24 px-4" dir="rtl">
+    <div className="py-10 sm:py-16 px-4" dir="rtl">
       {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-10">
+      <div className="flex items-center justify-center gap-4 mb-6">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
@@ -49,7 +49,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-serif"
         style={{ color: colors.text }}
       >
-        تفاصيل أجمل ليلة
+        تفاصيل ليلة العمر
       </motion.h2>
 
       {/* Emotional pre-message */}
@@ -58,10 +58,10 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="text-center text-base sm:text-lg font-serif mb-14"
+        className="text-center text-base sm:text-lg font-serif mb-8"
         style={{ color: colors.text + 'AA' }}
       >
-        ننتظركم لتشاركونا فرحة ليلة العمر
+        بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر
       </motion.p>
 
       <div className="max-w-lg mx-auto space-y-7">
@@ -72,7 +72,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.15 }}
-            className="flex items-start gap-5 p-7 rounded-2xl card-glow"
+            className="flex items-start gap-5 p-5 rounded-2xl card-glow"
             style={{
               backgroundColor: colors.primary + '0A',
               border: `1px solid ${colors.primary}18`,
@@ -142,7 +142,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="max-w-lg mx-auto mt-12 p-8 rounded-3xl text-center relative"
+          className="max-w-lg mx-auto mt-8 p-8 rounded-3xl text-center relative"
           style={{
             backgroundColor: colors.accent + '08',
             border: `1px solid ${colors.accent}15`,
@@ -176,7 +176,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex justify-center mt-12"
+          className="flex justify-center mt-8"
         >
           <a
             href={wedding.googleMapsLink}
@@ -196,7 +196,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
       )}
 
       {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-14">
+      <div className="flex items-center justify-center gap-4 mt-8">
         <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
         <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
