@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Wedding, ThemeName } from '@/types/wedding';
 import { themeOptions, getTheme } from '@/lib/themes';
 import { generateSlug } from '@/lib/wedding-utils';
-import { covers, coverCategoryLabels, getCoversByCategory, CoverCategory, CoverItem } from '@/lib/covers';
+import { covers, coverCategoryLabels, getCoversByCategory, getCoverById, CoverCategory, CoverItem, couplePhotos } from '@/lib/covers';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -718,6 +718,43 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
               placeholder="أو رابط صورة الزوجين"
               dir="ltr"
             />
+
+            {/* Default Couple Photo Selection */}
+            <div className="space-y-2">
+              <p className="text-xs font-medium" style={{ color: 'var(--admin-text-secondary)' }}>
+                أو اختر من الصور الافتراضية:
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                {couplePhotos.map((option) => {
+                  const isSelected = couplePhotoValue === option.image;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setValue('couplePhoto', option.image)}
+                      className="relative rounded-xl overflow-hidden transition-all duration-300 group"
+                      style={{
+                        width: '56px',
+                        height: '56px',
+                        border: isSelected ? '2px solid var(--wedding-gold)' : '2px solid var(--admin-border)',
+                        boxShadow: isSelected ? '0 0 10px rgba(212,168,83,0.25)' : 'none',
+                      }}
+                    >
+                      <img
+                        src={option.image}
+                        alt={option.name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      {isSelected && (
+                        <div className="absolute top-0.5 left-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full" style={{ background: 'var(--wedding-gold)' }}>
+                          <Check className="h-2 w-2" style={{ color: 'var(--admin-surface)' }} />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* Background Music Upload */}
@@ -1068,7 +1105,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                   key={cover.id}
                   type="button"
                   onClick={() => {
-                    setValue('coverImage', cover.style);
+                    setValue('coverImage', cover.image);
                     setValue('coverCategory', cover.id);
                   }}
                   className="relative rounded-xl overflow-hidden transition-all duration-300 aspect-[3/4]"
@@ -1077,13 +1114,12 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                     boxShadow: isSelected ? '0 0 12px rgba(212,168,83,0.2)' : 'none',
                   }}
                 >
-                  {/* Gradient preview */}
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: cover.style }}
+                  {/* Cover image preview */}
+                  <img
+                    src={cover.image}
+                    alt={cover.name}
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
-                  {/* SVG pattern overlay */}
-                  <div className="absolute inset-0" dangerouslySetInnerHTML={{ __html: cover.patternSvg }} />
                   {/* Cover name */}
                   <div className="absolute bottom-0 inset-x-0 p-1.5 text-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
                     <p className="text-[10px] font-medium text-white truncate">{cover.name}</p>

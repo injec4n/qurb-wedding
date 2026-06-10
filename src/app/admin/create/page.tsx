@@ -71,6 +71,7 @@ export default function CreateWeddingPage() {
     venueAddress: string;
     welcomeMessage: string;
     coverImage: string;
+    couplePhoto: string;
     theme: string;
     primaryColor: string;
     secondaryColor: string;
@@ -90,6 +91,7 @@ export default function CreateWeddingPage() {
     venueAddress: '',
     welcomeMessage: '',
     coverImage: '',
+    couplePhoto: '',
     theme: 'royal-gold',
     primaryColor: '#C9A84C',
     secondaryColor: '#152040',
@@ -131,6 +133,7 @@ export default function CreateWeddingPage() {
       venueAddress: data.venueAddress,
       welcomeMessage: data.welcomeMessage,
       coverImage: data.coverImage,
+      couplePhoto: data.couplePhoto,
       theme: data.theme,
       primaryColor: data.primaryColor,
       secondaryColor: data.secondaryColor,

@@ -16,6 +16,7 @@ interface LivePreviewProps {
     venueAddress: string;
     welcomeMessage: string;
     coverImage: string;
+    couplePhoto: string;
     theme: string;
     primaryColor: string;
     secondaryColor: string;
@@ -108,11 +109,20 @@ export default function LivePreview({ formData, isOpen = true, onToggle }: LiveP
 
       {/* Cover Image (if provided) */}
       {formData.coverImage && (
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${formData.coverImage})` }}
-        >
-          <div className="absolute inset-0" style={{ backgroundColor: colors.background + 'CC' }} />
+        <div className="absolute inset-0">
+          {formData.coverImage.startsWith('/') || formData.coverImage.startsWith('http') ? (
+            <img
+              src={formData.coverImage}
+              alt="غلاف"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div
+              className="w-full h-full"
+              style={{ background: formData.coverImage }}
+            />
+          )}
+          <div className="absolute inset-0" style={{ backgroundColor: colors.background + 'AA' }} />
         </div>
       )}
 
@@ -149,17 +159,32 @@ export default function LivePreview({ formData, isOpen = true, onToggle }: LiveP
           {formData.groomName || 'اسم العريس'}
         </h3>
 
-        {/* Decorative ornament between names */}
-        <div className="flex items-center justify-center gap-1.5 my-1">
-          <div className="h-px w-4" style={{ backgroundColor: colors.primary + '40' }} />
-          <svg viewBox="0 0 40 24" className="w-5 h-3" style={{ color: colors.accent }}>
-            <path d="M20 2 L24 12 L20 22 L16 12Z" fill="none" stroke="currentColor" strokeWidth="1" />
-            <circle cx="20" cy="12" r="2.5" fill="currentColor" opacity="0.4" />
-            <path d="M4 12 L14 12" stroke="currentColor" strokeWidth="0.8" />
-            <path d="M26 12 L36 12" stroke="currentColor" strokeWidth="0.8" />
-          </svg>
-          <div className="h-px w-4" style={{ backgroundColor: colors.primary + '40' }} />
-        </div>
+        {/* Couple Photo or Decorative ornament between names */}
+        {formData.couplePhoto ? (
+          <div className="flex justify-center my-2">
+            <div
+              className="w-14 h-14 rounded-full overflow-hidden"
+              style={{ border: `2px solid ${colors.primary}50`, padding: '2px' }}
+            >
+              <img
+                src={formData.couplePhoto}
+                alt="الزوجين"
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-1.5 my-1">
+            <div className="h-px w-4" style={{ backgroundColor: colors.primary + '40' }} />
+            <svg viewBox="0 0 40 24" className="w-5 h-3" style={{ color: colors.accent }}>
+              <path d="M20 2 L24 12 L20 22 L16 12Z" fill="none" stroke="currentColor" strokeWidth="1" />
+              <circle cx="20" cy="12" r="2.5" fill="currentColor" opacity="0.4" />
+              <path d="M4 12 L14 12" stroke="currentColor" strokeWidth="0.8" />
+              <path d="M26 12 L36 12" stroke="currentColor" strokeWidth="0.8" />
+            </svg>
+            <div className="h-px w-4" style={{ backgroundColor: colors.primary + '40' }} />
+          </div>
+        )}
 
         {/* Bride Name */}
         <h3

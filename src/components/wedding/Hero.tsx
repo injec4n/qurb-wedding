@@ -16,6 +16,15 @@ interface HeroProps {
 }
 
 // Circular photo with ornamental gold border
+
+// Helper: render cover image as either <img> (for URL paths) or gradient div
+function CoverImageLayer({ coverImage, className }: { coverImage: string; className?: string }) {
+  const isImageUrl = coverImage.startsWith('/') || coverImage.startsWith('http');
+  if (isImageUrl) {
+    return <img src={coverImage} alt="" className={`absolute inset-0 w-full h-full object-cover ${className || ''}`} />;
+  }
+  return <div className={`absolute inset-0 ${className || ''}`} style={{ background: coverImage }} />;
+}
 function CircularPhoto({ src, size = 'lg', borderColor }: { src: string; size?: 'sm' | 'lg' | 'xl'; borderColor: string }) {
   const sizeClasses = size === 'xl' ? 'w-36 h-36 sm:w-44 sm:h-44' : size === 'lg' ? 'w-28 h-28 sm:w-36 sm:h-36' : 'w-20 h-20 sm:w-24 sm:h-24';
   const borderW = size === 'xl' ? 3 : size === 'lg' ? 2.5 : 2;
@@ -397,7 +406,8 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
           <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
         </motion.div>
       ) : hasCoverImage ? (
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
+        <div className="absolute inset-0">
+          <CoverImageLayer coverImage={wedding.coverImage} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
         </div>
       ) : (
@@ -707,7 +717,8 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
       {/* Background */}
       {hasCoverImage ? (
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
+        <div className="absolute inset-0">
+          <CoverImageLayer coverImage={wedding.coverImage} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}88 35%, ${colors.background}88 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
@@ -827,7 +838,8 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
       {/* Background */}
       {hasCoverImage ? (
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
+        <div className="absolute inset-0">
+          <CoverImageLayer coverImage={wedding.coverImage} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
         </div>
       ) : (
