@@ -1,8 +1,35 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { supabase, STORAGE_BUCKET, isSupabaseConfigured } from '@/lib/supabase';
 
 export async function GET() {
   try {
+    const storageResults: string[] = [];
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const { data: buckets } = await supabase.storage.listBuckets();
+        const bucketExists = buckets?.some(b => b.name === STORAGE_BUCKET);
+        if (!bucketExists) {
+          const { error: createError } = await supabase.storage.createBucket(STORAGE_BUCKET, {
+            public: true,
+            fileSizeLimit: '20MB',
+          });
+          if (createError) {
+            storageResults.push('Storage bucket error: ' + createError.message);
+          } else {
+            storageResults.push('Storage bucket "' + STORAGE_BUCKET + '" created successfully');
+          }
+        } else {
+          storageResults.push('Storage bucket "' + STORAGE_BUCKET + '" already exists');
+        }
+      } catch (storageErr: unknown) {
+        const err = storageErr as Error;
+        storageResults.push('Storage setup error: ' + err.message);
+      }
+    } else {
+      storageResults.push('Supabase not configured - skipping storage setup');
+    }
+
     const statements = [
       `CREATE TABLE IF NOT EXISTS "Wedding" (
         "id" TEXT NOT NULL,
@@ -120,7 +147,12 @@ export async function GET() {
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Database tables created!', details: results });
+    return NextResponse.json({
+      success: true,
+      message: 'Database tables created!',
+      storage: storageResults,
+      details: results,
+    });
   } catch (error: unknown) {
     const err = error as Error;
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
