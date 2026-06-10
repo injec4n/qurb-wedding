@@ -30,16 +30,18 @@ const weddingFormSchema = z.object({
   coverCategory: z.string().optional().default(''),
   galleryImages: z.array(z.string()).optional().default([]),
   backgroundMusicUrl: z.string().optional().default(''),
+  groomPhoto: z.string().optional().default(''),
+  bridePhoto: z.string().optional().default(''),
   couplePhoto: z.string().optional().default(''),
   clientPassword: z.string().optional().default(''),
-  theme: z.string().optional().default('classic-gold'),
+  theme: z.string().optional().default('royal-gold'),
   colorPreset: z.string().optional().default(''),
-  primaryColor: z.string().optional().default('#D4A853'),
-  secondaryColor: z.string().optional().default('#1A1A2E'),
-  backgroundColor: z.string().optional().default('#0D0D1A'),
-  textColor: z.string().optional().default('#FFFFFF'),
-  buttonColor: z.string().optional().default('#D4A853'),
-  accentColor: z.string().optional().default('#E8C874'),
+  primaryColor: z.string().optional().default('#C9A84C'),
+  secondaryColor: z.string().optional().default('#152040'),
+  backgroundColor: z.string().optional().default('#0A0F1E'),
+  textColor: z.string().optional().default('#F5E6C8'),
+  buttonColor: z.string().optional().default('#C9A84C'),
+  accentColor: z.string().optional().default('#E0C878'),
   enableRsvp: z.boolean().optional().default(true),
   enableGallery: z.boolean().optional().default(true),
   enableCountdown: z.boolean().optional().default(true),
@@ -91,9 +93,13 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [musicUploading, setMusicUploading] = useState(false);
   const [couplePhotoUploading, setCouplePhotoUploading] = useState(false);
+  const [groomPhotoUploading, setGroomPhotoUploading] = useState(false);
+  const [bridePhotoUploading, setBridePhotoUploading] = useState(false);
   const [coverDragOver, setCoverDragOver] = useState(false);
   const [musicDragOver, setMusicDragOver] = useState(false);
   const [couplePhotoDragOver, setCouplePhotoDragOver] = useState(false);
+  const [groomPhotoDragOver, setGroomPhotoDragOver] = useState(false);
+  const [bridePhotoDragOver, setBridePhotoDragOver] = useState(false);
   const [showClientPassword, setShowClientPassword] = useState(false);
   const [selectedCoverCategory, setSelectedCoverCategory] = useState<CoverCategory>('luxury');
 
@@ -101,6 +107,8 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const musicInputRef = useRef<HTMLInputElement>(null);
   const couplePhotoInputRef = useRef<HTMLInputElement>(null);
+  const groomPhotoInputRef = useRef<HTMLInputElement>(null);
+  const bridePhotoInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<WeddingFormValues>({
     resolver: zodResolver(weddingFormSchema),
@@ -119,16 +127,18 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
       coverCategory: initialData?.coverCategory || '',
       galleryImages: parseGalleryImages(initialData?.galleryImages),
       backgroundMusicUrl: initialData?.backgroundMusicUrl || '',
+      groomPhoto: initialData?.groomPhoto || '',
+      bridePhoto: initialData?.bridePhoto || '',
       couplePhoto: initialData?.couplePhoto || '',
       clientPassword: initialData?.clientPassword || '',
-      theme: initialData?.theme || 'classic-gold',
+      theme: initialData?.theme || 'royal-gold',
       colorPreset: initialData?.colorPreset || '',
-      primaryColor: initialData?.primaryColor || '#D4A853',
-      secondaryColor: initialData?.secondaryColor || '#1A1A2E',
-      backgroundColor: initialData?.backgroundColor || '#0D0D1A',
-      textColor: initialData?.textColor || '#FFFFFF',
-      buttonColor: initialData?.buttonColor || '#D4A853',
-      accentColor: initialData?.accentColor || '#E8C874',
+      primaryColor: initialData?.primaryColor || '#C9A84C',
+      secondaryColor: initialData?.secondaryColor || '#152040',
+      backgroundColor: initialData?.backgroundColor || '#0A0F1E',
+      textColor: initialData?.textColor || '#F5E6C8',
+      buttonColor: initialData?.buttonColor || '#C9A84C',
+      accentColor: initialData?.accentColor || '#E0C878',
       enableRsvp: initialData?.enableRsvp ?? true,
       enableGallery: initialData?.enableGallery ?? true,
       enableCountdown: initialData?.enableCountdown ?? true,
@@ -145,6 +155,8 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const coverImageValue = watch('coverImage');
   const musicUrlValue = watch('backgroundMusicUrl');
   const couplePhotoValue = watch('couplePhoto');
+  const groomPhotoValue = watch('groomPhoto');
+  const bridePhotoValue = watch('bridePhoto');
   const coverCategoryValue = watch('coverCategory');
 
   // Watch all form values for live preview using callback to avoid infinite loops
@@ -284,6 +296,52 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     e.preventDefault(); setCouplePhotoDragOver(false);
     const file = e.dataTransfer.files[0];
     if (file && isImageFile(file)) handleCouplePhotoUpload(file);
+  };
+
+  // Groom photo upload handler
+  const handleGroomPhotoUpload = useCallback(async (file: File) => {
+    if (!isImageFile(file)) return;
+    try {
+      setGroomPhotoUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('groomPhoto', url);
+    } catch (err) {
+      console.error('Groom photo upload error:', err);
+    } finally {
+      setGroomPhotoUploading(false);
+    }
+  }, [setValue]);
+
+  // Bride photo upload handler
+  const handleBridePhotoUpload = useCallback(async (file: File) => {
+    if (!isImageFile(file)) return;
+    try {
+      setBridePhotoUploading(true);
+      const url = await uploadFile(file, 'image');
+      setValue('bridePhoto', url);
+    } catch (err) {
+      console.error('Bride photo upload error:', err);
+    } finally {
+      setBridePhotoUploading(false);
+    }
+  }, [setValue]);
+
+  // Drag and drop handlers for groom photo
+  const handleGroomPhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setGroomPhotoDragOver(true); };
+  const handleGroomPhotoDragLeave = () => setGroomPhotoDragOver(false);
+  const handleGroomPhotoDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setGroomPhotoDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && isImageFile(file)) handleGroomPhotoUpload(file);
+  };
+
+  // Drag and drop handlers for bride photo
+  const handleBridePhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setBridePhotoDragOver(true); };
+  const handleBridePhotoDragLeave = () => setBridePhotoDragOver(false);
+  const handleBridePhotoDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setBridePhotoDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && isImageFile(file)) handleBridePhotoUpload(file);
   };
 
   const addGalleryImage = () => {
@@ -720,13 +778,15 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
           </h2>
         </div>
         <div className="px-6 pb-6 space-y-6">
-          {/* Visual Theme Cards Grid */}
+          {/* Visual Theme Cards — 5 truly different templates */}
           <div className="space-y-3">
             <Label className="text-sm font-medium" style={{ color: 'var(--admin-text-secondary)' }}>اختار قالب التصميم</Label>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {themeOptions.map((option) => {
                 const isSelected = selectedTheme === option.value;
                 const themeConfig = getTheme(option.value as ThemeName);
+                const isDark = themeConfig.colors.background === '#050505' || themeConfig.colors.background === '#0A0F1E' || themeConfig.colors.background === '#0A1A15';
+                const isLight = themeConfig.colors.background === '#FAFAFA' || themeConfig.colors.background === '#FFF5F5';
                 return (
                   <button
                     key={option.value}
@@ -735,43 +795,111 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                     className="relative rounded-xl overflow-hidden transition-all duration-300 text-right"
                     style={{
                       border: isSelected ? '2px solid var(--wedding-gold)' : '2px solid var(--admin-border)',
-                      boxShadow: isSelected ? '0 0 20px rgba(212,168,83,0.15)' : 'none',
+                      boxShadow: isSelected ? '0 0 24px rgba(212,168,83,0.2)' : 'none',
                       background: 'var(--admin-surface)',
                     }}
                   >
-                    {/* Mini Preview */}
+                    {/* Large Preview Area */}
                     <div
-                      className="h-20 relative flex items-center justify-center"
+                      className="h-32 sm:h-36 relative flex flex-col items-center justify-center gap-3 overflow-hidden"
                       style={{ background: option.previewGradient || themeConfig.colors.background }}
                     >
-                      {/* Mini color circles */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="h-5 w-5 rounded-full border"
-                          style={{ background: themeConfig.colors.primary, borderColor: 'rgba(255,255,255,0.2)' }}
-                        />
-                        <div
-                          className="h-5 w-5 rounded-full border"
-                          style={{ background: themeConfig.colors.accent, borderColor: 'rgba(255,255,255,0.2)' }}
-                        />
-                        <div
-                          className="h-5 w-5 rounded-full border"
-                          style={{ background: themeConfig.colors.secondary, borderColor: 'rgba(255,255,255,0.2)' }}
-                        />
+                      {/* Mini mockup of hero layout */}
+                      <div className="relative w-full h-full flex items-center justify-center px-4">
+                        {/* Background pattern indicator */}
+                        {themeConfig.showPattern && (
+                          <div className="absolute inset-0 opacity-20" style={{ color: themeConfig.colors.primary }}>
+                            {themeConfig.patternType === 'arabesque' && (
+                              <svg className="w-full h-full"><defs><pattern id={`tp-${option.value}`} x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" /><path d="M20 10 Q25 15 20 20 Q15 15 20 10Z" fill="none" stroke="currentColor" strokeWidth="0.3" /></pattern></defs><rect width="100%" height="100%" fill={`url(#tp-${option.value})`} /></svg>
+                            )}
+                            {themeConfig.patternType === 'floral' && (
+                              <svg className="w-full h-full"><defs><pattern id={`tp-${option.value}`} x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="6" fill="none" stroke="currentColor" strokeWidth="0.4" /><circle cx="15" cy="15" r="2" fill="none" stroke="currentColor" strokeWidth="0.3" /></pattern></defs><rect width="100%" height="100%" fill={`url(#tp-${option.value})`} /></svg>
+                            )}
+                            {themeConfig.patternType === 'lines' && (
+                              <svg className="w-full h-full"><defs><pattern id={`tp-${option.value}`} x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse"><line x1="0" y1="15" x2="15" y2="0" stroke="currentColor" strokeWidth="0.3" /></pattern></defs><rect width="100%" height="100%" fill={`url(#tp-${option.value})`} /></svg>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Hero style indicator */}
+                        {themeConfig.heroStyle === 'cinematic' && (
+                          <div className="relative z-10 text-center">
+                            <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العريس</div>
+                            <div className="w-1 h-1 rounded-full mx-auto my-1" style={{ backgroundColor: themeConfig.colors.accent }} />
+                            <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العروس</div>
+                            {/* Light beam indicators */}
+                            <div className="absolute top-0 left-1/4 w-px h-full opacity-30" style={{ background: `linear-gradient(180deg, transparent, ${themeConfig.colors.primary}, transparent)` }} />
+                            <div className="absolute top-0 left-3/4 w-px h-full opacity-30" style={{ background: `linear-gradient(180deg, transparent, ${themeConfig.colors.primary}, transparent)` }} />
+                          </div>
+                        )}
+                        {themeConfig.heroStyle === 'split' && (
+                          <div className="relative z-10 w-full flex items-center">
+                            <div className="w-1/2 flex items-center justify-center">
+                              <div className="w-10 h-12 rounded-sm" style={{ border: `1px solid ${themeConfig.colors.primary}40` }} />
+                            </div>
+                            <div className="w-px h-12" style={{ backgroundColor: themeConfig.colors.primary + '30' }} />
+                            <div className="w-1/2 text-center pr-2">
+                              <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العريس</div>
+                              <div className="w-1 h-1 rounded-full mx-auto my-0.5" style={{ backgroundColor: themeConfig.colors.accent + '60' }} />
+                              <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العروس</div>
+                            </div>
+                          </div>
+                        )}
+                        {themeConfig.heroStyle === 'centered' && (
+                          <div className="relative z-10 text-center">
+                            <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العريس</div>
+                            {themeConfig.ornamentStyle !== 'none' ? (
+                              <div className="flex items-center justify-center gap-1 my-1">
+                                <div className="h-px w-3" style={{ backgroundColor: themeConfig.colors.primary + '40' }} />
+                                <div className="w-1 h-1 rotate-45" style={{ backgroundColor: themeConfig.colors.accent + '60' }} />
+                                <div className="h-px w-3" style={{ backgroundColor: themeConfig.colors.primary + '40' }} />
+                              </div>
+                            ) : (
+                              <div className="h-px w-6 mx-auto my-1" style={{ backgroundColor: themeConfig.colors.primary + '20' }} />
+                            )}
+                            <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العروس</div>
+                          </div>
+                        )}
+                        {themeConfig.heroStyle === 'frame' && (
+                          <div className="relative z-10">
+                            <div className="p-3 text-center" style={{ border: `1px solid ${themeConfig.colors.primary}50` }}>
+                              <div className="absolute -top-1 -right-1 w-3 h-3" style={{ color: themeConfig.colors.primary + '80' }}><svg viewBox="0 0 20 20"><path d="M0 0 L20 0 L20 3 L3 3 L3 20 L0 20Z" fill="currentColor" /></svg></div>
+                              <div className="absolute -top-1 -left-1 w-3 h-3" style={{ color: themeConfig.colors.primary + '80', transform: 'scaleX(-1)' }}><svg viewBox="0 0 20 20"><path d="M0 0 L20 0 L20 3 L3 3 L3 20 L0 20Z" fill="currentColor" /></svg></div>
+                              <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العريس</div>
+                              <div className="w-1 h-1 rounded-full mx-auto my-0.5" style={{ backgroundColor: themeConfig.colors.accent }} />
+                              <div className="text-xs font-bold" style={{ color: themeConfig.colors.primary }}>اسم العروس</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
+
                       {/* Selected indicator */}
                       {isSelected && (
-                        <div className="absolute top-2 left-2 flex h-5 w-5 items-center justify-center rounded-full" style={{ background: 'var(--wedding-gold)' }}>
-                          <Check className="h-3 w-3" style={{ color: 'var(--admin-surface)' }} />
+                        <div className="absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'var(--wedding-gold)' }}>
+                          <Check className="h-3.5 w-3.5" style={{ color: 'var(--admin-surface)' }} />
                         </div>
                       )}
+
+                      {/* Color swatches at bottom */}
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+                        <div className="h-4 w-4 rounded-full border" style={{ background: themeConfig.colors.primary, borderColor: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)' }} />
+                        <div className="h-4 w-4 rounded-full border" style={{ background: themeConfig.colors.accent, borderColor: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)' }} />
+                        <div className="h-4 w-4 rounded-full border" style={{ background: themeConfig.colors.background, borderColor: 'rgba(128,128,128,0.3)' }} />
+                        <div className="h-4 w-4 rounded-full border" style={{ background: themeConfig.colors.text, borderColor: 'rgba(128,128,128,0.3)' }} />
+                      </div>
                     </div>
-                    {/* Theme info */}
-                    <div className="p-2.5">
-                      <p className="text-sm font-semibold" style={{ color: isSelected ? 'var(--wedding-gold)' : 'var(--admin-text-primary)' }}>
-                        {option.labelAr}
-                      </p>
-                      <p className="text-[10px] mt-0.5" style={{ color: 'var(--admin-text-muted)' }}>
+
+                    {/* Theme info — more detailed */}
+                    <div className="p-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-bold" style={{ color: isSelected ? 'var(--wedding-gold)' : 'var(--admin-text-primary)' }}>
+                          {option.labelAr}
+                        </p>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: 'var(--admin-surface-overlay)', color: 'var(--admin-text-muted)' }}>
+                          {themeConfig.heroStyle === 'cinematic' ? 'سينمائي' : themeConfig.heroStyle === 'split' ? 'منقسم' : themeConfig.heroStyle === 'frame' ? 'إطار' : 'وسطي'}
+                        </span>
+                      </div>
+                      <p className="text-[11px] mt-1 leading-relaxed" style={{ color: 'var(--admin-text-muted)' }}>
                         {option.description}
                       </p>
                     </div>
@@ -942,14 +1070,134 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
             <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
               <UserCircle2 className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
             </div>
-            صورة الزوجين
+            الصور الشخصية
           </h2>
         </div>
-        <div className="px-6 pb-6 space-y-3">
+        <div className="px-6 pb-6 space-y-5">
+          {/* Groom & Bride Photos - side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Groom Photo */}
+            <div className="space-y-2">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العريس</Label>
+              <div
+                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
+                  groomPhotoDragOver ? 'ring-2 ring-offset-2' : ''
+                }`}
+                style={{
+                  border: groomPhotoDragOver
+                    ? '2px dashed var(--wedding-gold)'
+                    : '2px dashed var(--admin-border)',
+                  background: groomPhotoDragOver
+                    ? 'rgba(212,168,83,0.06)'
+                    : 'var(--admin-surface)',
+                  ringColor: 'var(--wedding-gold)',
+                }}
+                onDragOver={handleGroomPhotoDragOver}
+                onDragLeave={handleGroomPhotoDragLeave}
+                onDrop={handleGroomPhotoDrop}
+                onClick={() => groomPhotoInputRef.current?.click()}
+              >
+                <input
+                  ref={groomPhotoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleGroomPhotoUpload(file);
+                    e.target.value = '';
+                  }}
+                />
+                {groomPhotoUploading ? (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                  </div>
+                ) : groomPhotoValue ? (
+                  <div className="relative group">
+                    <img src={groomPhotoValue} alt="صورة العريس" className="w-full h-36 object-cover rounded-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 gap-1.5">
+                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>رفع صورة العريس</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                {...register('groomPhoto')}
+                className="admin-input text-xs"
+                placeholder="أو رابط صورة العريس"
+                dir="ltr"
+              />
+            </div>
+
+            {/* Bride Photo */}
+            <div className="space-y-2">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العريسة</Label>
+              <div
+                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
+                  bridePhotoDragOver ? 'ring-2 ring-offset-2' : ''
+                }`}
+                style={{
+                  border: bridePhotoDragOver
+                    ? '2px dashed var(--wedding-gold)'
+                    : '2px dashed var(--admin-border)',
+                  background: bridePhotoDragOver
+                    ? 'rgba(212,168,83,0.06)'
+                    : 'var(--admin-surface)',
+                  ringColor: 'var(--wedding-gold)',
+                }}
+                onDragOver={handleBridePhotoDragOver}
+                onDragLeave={handleBridePhotoDragLeave}
+                onDrop={handleBridePhotoDrop}
+                onClick={() => bridePhotoInputRef.current?.click()}
+              >
+                <input
+                  ref={bridePhotoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleBridePhotoUpload(file);
+                    e.target.value = '';
+                  }}
+                />
+                {bridePhotoUploading ? (
+                  <div className="flex flex-col items-center justify-center py-6 gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                  </div>
+                ) : bridePhotoValue ? (
+                  <div className="relative group">
+                    <img src={bridePhotoValue} alt="صورة العريسة" className="w-full h-36 object-cover rounded-xl" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6 gap-1.5">
+                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>رفع صورة العريسة</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                {...register('bridePhoto')}
+                className="admin-input text-xs"
+                placeholder="أو رابط صورة العريسة"
+                dir="ltr"
+              />
+            </div>
+          </div>
+
           {/* Couple Photo Upload */}
-          <div className="space-y-3">
-            <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين</Label>
-            {/* Drag-and-drop upload zone */}
+          <div className="space-y-2">
+            <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين معاً</Label>
             <div
               className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
                 couplePhotoDragOver ? 'ring-2 ring-offset-2' : ''
@@ -980,9 +1228,9 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                 }}
               />
               {couplePhotoUploading ? (
-                <div className="flex flex-col items-center justify-center py-8 gap-2">
-                  <Loader2 className="h-8 w-8 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
-                  <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>جاري رفع الصورة...</p>
+                <div className="flex flex-col items-center justify-center py-6 gap-2">
+                  <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
                 </div>
               ) : couplePhotoValue ? (
                 <div className="relative group">
@@ -996,8 +1244,8 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-8 gap-2">
-                  <Upload className="h-8 w-8" style={{ color: 'var(--admin-text-muted)' }} />
+                <div className="flex flex-col items-center justify-center py-6 gap-1.5">
+                  <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
                   <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
                     اسحب الصورة هنا أو اضغط للاختيار
                   </p>
@@ -1007,16 +1255,12 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                 </div>
               )}
             </div>
-            {/* URL fallback */}
-            <div className="space-y-1.5">
-              <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>أو أدخل رابط الصورة يدوياً:</p>
-              <Input
-                {...register('couplePhoto')}
-                className="admin-input"
-                placeholder="رابط صورة الزوجين"
-                dir="ltr"
-              />
-            </div>
+            <Input
+              {...register('couplePhoto')}
+              className="admin-input text-xs"
+              placeholder="أو رابط صورة الزوجين"
+              dir="ltr"
+            />
           </div>
         </div>
       </div>

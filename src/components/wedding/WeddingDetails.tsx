@@ -31,22 +31,13 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
   ];
 
   return (
-    <div className="py-10 sm:py-16 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-serif"
+        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-3 font-serif"
         style={{ color: colors.text }}
       >
         تفاصيل ليلة العمر
@@ -58,13 +49,13 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="text-center text-base sm:text-lg font-serif mb-8"
+        className="text-center text-base sm:text-lg font-serif mb-5"
         style={{ color: colors.text + 'AA' }}
       >
         بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر
       </motion.p>
 
-      <div className="max-w-lg mx-auto space-y-7">
+      <div className="max-w-lg mx-auto space-y-3">
         {details.map((detail, index) => (
           <motion.div
             key={index}
@@ -72,27 +63,27 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.15 }}
-            className="flex items-start gap-5 p-5 rounded-2xl card-glow"
+            className="flex items-start gap-4 p-3 sm:p-4 rounded-2xl card-glow"
             style={{
               backgroundColor: colors.primary + '0A',
               border: `1px solid ${colors.primary}18`,
             }}
           >
             <div
-              className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
+              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
               style={{
                 backgroundColor: colors.primary + '18',
                 border: `1px solid ${colors.primary}20`,
               }}
             >
-              <detail.icon className="w-6 h-6" style={{ color: colors.primary }} />
+              <detail.icon className="w-5 h-5" style={{ color: colors.primary }} />
             </div>
-            <div className="flex-1 min-w-0 pt-1">
-              <p className="text-lg sm:text-xl font-semibold" style={{ color: colors.text }}>
+            <div className="flex-1 min-w-0 pt-0.5">
+              <p className="text-base sm:text-lg font-semibold" style={{ color: colors.text }}>
                 {detail.label}
               </p>
               {detail.sublabel && (
-                <p className="text-base mt-1.5" style={{ color: colors.text + '99' }}>
+                <p className="text-sm mt-1" style={{ color: colors.text + '99' }}>
                   {detail.sublabel}
                 </p>
               )}
@@ -108,23 +99,23 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            className="flex items-start gap-5 p-7 rounded-2xl cursor-pointer hover:scale-[1.02] transition-transform card-glow"
+            className="flex items-start gap-4 p-3 sm:p-4 rounded-2xl cursor-pointer hover:scale-[1.02] transition-transform card-glow"
             style={{
               backgroundColor: colors.primary + '0A',
               border: `1px solid ${colors.primary}18`,
             }}
           >
             <div
-              className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
+              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
               style={{
                 backgroundColor: colors.primary + '18',
                 border: `1px solid ${colors.primary}20`,
               }}
             >
-              <Phone className="w-6 h-6" style={{ color: colors.primary }} />
+              <Phone className="w-5 h-5" style={{ color: colors.primary }} />
             </div>
-            <div className="flex-1 min-w-0 pt-1">
-              <p className="text-lg sm:text-xl font-semibold" style={{ color: colors.text }}>
+            <div className="flex-1 min-w-0 pt-0.5">
+              <p className="text-base sm:text-lg font-semibold" style={{ color: colors.text }}>
                 {wedding.contactPhone}
               </p>
               <p className="text-sm mt-1" style={{ color: colors.text + '88' }}>
@@ -142,7 +133,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="max-w-lg mx-auto mt-8 p-8 rounded-3xl text-center relative"
+          className="max-w-lg mx-auto mt-5 p-5 rounded-3xl text-center relative"
           style={{
             backgroundColor: colors.accent + '08',
             border: `1px solid ${colors.accent}15`,
@@ -162,27 +153,27 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             <svg viewBox="0 0 20 20"><path d="M20 20 L0 20 L0 16 L16 16 L16 0 L20 0Z" fill="currentColor" /></svg>
           </div>
 
-          <MessageCircle className="w-7 h-7 mx-auto mb-4" style={{ color: colors.accent }} />
-          <p className="text-lg sm:text-xl leading-relaxed font-serif" style={{ color: colors.text + 'DD' }}>
+          <MessageCircle className="w-6 h-6 mx-auto mb-3" style={{ color: colors.accent }} />
+          <p className="text-base sm:text-lg leading-relaxed font-serif" style={{ color: colors.text + 'DD' }}>
             {wedding.welcomeMessage}
           </p>
         </motion.div>
       )}
 
-      {/* Map button - more prominent */}
+      {/* Map button */}
       {wedding.googleMapsLink && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex justify-center mt-8"
+          className="flex justify-center mt-5"
         >
           <a
             href={wedding.googleMapsLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="inline-flex items-center gap-3 px-7 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
             style={{
               backgroundColor: colors.button,
               color: colors.background,
@@ -194,15 +185,6 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
           </a>
         </motion.div>
       )}
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-8">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
     </div>
   );
 }

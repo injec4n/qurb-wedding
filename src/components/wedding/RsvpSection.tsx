@@ -66,16 +66,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
   };
 
   return (
-    <div className="py-10 sm:py-16 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -88,14 +79,14 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 font-serif"
+          className="text-center text-2xl sm:text-3xl font-bold mb-5 font-serif"
           style={{ color: colors.text }}
         >
           هنيتشرفوا بحضوركم ليلة العمر؟
         </motion.h2>
 
         <div
-          className="rounded-3xl p-6 sm:p-8 text-center card-glow"
+          className="rounded-3xl p-4 sm:p-6 text-center card-glow"
           style={{
             backgroundColor: colors.primary + '0A',
             border: `1px solid ${colors.primary}20`,
@@ -106,35 +97,35 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="py-6"
+              className="py-4"
             >
               {/* Celebration icon */}
               <div
-                className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
+                className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
                 style={{
                   backgroundColor: status === 'attending' ? '#22C55E18' : colors.primary + '18',
                   border: `2px solid ${status === 'attending' ? '#22C55E30' : colors.primary + '30'}`,
                 }}
               >
                 {status === 'attending' ? (
-                  <Heart className="w-10 h-10 text-green-500" />
+                  <Heart className="w-8 h-8 text-green-500" />
                 ) : (
-                  <X className="w-10 h-10" style={{ color: colors.primary }} />
+                  <X className="w-8 h-8" style={{ color: colors.primary }} />
                 )}
               </div>
 
-              <p className="text-2xl sm:text-3xl font-bold mb-4" style={{ color: colors.primary }}>
+              <p className="text-xl sm:text-2xl font-bold mb-3" style={{ color: colors.primary }}>
                 {status === 'attending' ? 'تم تأكيد الحضور بكل سرور ✅' : 'تم استلام الاعتذار 🙏'}
               </p>
 
               {/* Ornamental divider */}
-              <div className="flex items-center justify-center gap-3 my-6">
+              <div className="flex items-center justify-center gap-3 my-4">
                 <div className="h-px w-10" style={{ backgroundColor: colors.primary + '30' }} />
                 <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '50' }} />
                 <div className="h-px w-10" style={{ backgroundColor: colors.primary + '30' }} />
               </div>
 
-              <p className="text-lg sm:text-xl font-serif" style={{ color: colors.text + 'BB' }}>
+              <p className="text-base sm:text-lg font-serif" style={{ color: colors.text + 'BB' }}>
                 {status === 'attending'
                   ? 'فرحتنا تكتمل بحضوركم! نلقاكم عن قريب إن شاء الله 🌹'
                   : 'نسأل الله أن يجمعنا في مناسبة أسعد وأجمل 💐'}
@@ -146,13 +137,13 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-xl sm:text-2xl mb-6 font-serif"
+                  className="text-lg sm:text-xl mb-5 font-serif"
                   style={{ color: colors.text + 'CC' }}
                 >
                   يا {guestName}، فرحتنا تكتمل بحضورك معنا
                 </motion.p>
               ) : (
-                <div className="mb-6 text-right">
+                <div className="mb-5 text-right">
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.text + 'BB' }}>
                     اسمك *
                   </label>
@@ -161,7 +152,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                     value={nameInput}
                     onChange={(e) => setNameInput(e.target.value)}
                     placeholder="أدخل اسمك"
-                    className="w-full rounded-xl px-5 py-3.5 text-base outline-none transition-all duration-300 focus:ring-2"
+                    className="w-full rounded-xl px-4 py-3 text-base outline-none transition-all duration-300 focus:ring-2"
                     style={{
                       backgroundColor: colors.background,
                       color: colors.text,
@@ -172,14 +163,14 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                 </div>
               )}
 
-              {/* Response buttons - larger and more elegant */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              {/* Response buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-6">
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleSubmit('attending')}
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-lg font-semibold transition-all duration-300 disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 disabled:opacity-50"
                   style={{
                     backgroundColor: colors.button,
                     color: colors.background,
@@ -199,7 +190,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleSubmit('not-attending')}
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-lg font-semibold transition-all duration-300 disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 disabled:opacity-50"
                   style={{
                     backgroundColor: colors.button + '12',
                     color: colors.button,
@@ -225,7 +216,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="اترك رسالة للعروسين..."
                   rows={3}
-                  className="w-full rounded-xl px-5 py-3.5 text-base resize-none outline-none transition-all duration-300 focus:ring-2"
+                  className="w-full rounded-xl px-4 py-3 text-base resize-none outline-none transition-all duration-300 focus:ring-2"
                   style={{
                     backgroundColor: colors.background,
                     color: colors.text,
@@ -238,15 +229,6 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
           )}
         </div>
       </motion.div>
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-8">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
     </div>
   );
 }

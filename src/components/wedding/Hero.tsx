@@ -27,7 +27,6 @@ function CircularPhoto({ src, size = 'lg', borderColor }: { src: string; size?: 
       transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
       className="relative inline-flex items-center justify-center"
     >
-      {/* Outer ornamental ring */}
       <div
         className={`absolute ${sizeClasses} rounded-full`}
         style={{
@@ -35,7 +34,6 @@ function CircularPhoto({ src, size = 'lg', borderColor }: { src: string; size?: 
           boxShadow: `0 0 30px ${borderColor}15`,
         }}
       />
-      {/* Main border ring */}
       <div
         className={`absolute ${sizeClasses} rounded-full`}
         style={{
@@ -43,7 +41,6 @@ function CircularPhoto({ src, size = 'lg', borderColor }: { src: string; size?: 
           boxShadow: `inset 0 0 15px ${borderColor}10`,
         }}
       />
-      {/* Photo */}
       <div
         className={`${sizeClasses} rounded-full overflow-hidden`}
         style={{
@@ -159,7 +156,6 @@ function PatternOverlay({ patternType, color }: { patternType: string; color: st
 // Corner Ornaments component
 function CornerOrnaments({ color, size = 'lg' }: { color: string; size?: 'sm' | 'lg' }) {
   const dim = size === 'lg' ? 'w-40 h-40 sm:w-56 sm:h-56' : 'w-24 h-24 sm:w-36 sm:h-36';
-  const dimInner = size === 'lg' ? 'w-8 h-8' : 'w-5 h-5';
 
   return (
     <>
@@ -212,8 +208,19 @@ function OrnamentalLine({ color, className = '' }: { color: string; className?: 
   );
 }
 
-// Bismallah component - elegant standalone design with decorative lines
+// Thin minimal divider line (for modern-dark)
+function ThinLine({ color, className = '' }: { color: string; className?: string }) {
+  return (
+    <div className={`flex items-center justify-center ${className}`}>
+      <div className="h-px w-32 sm:w-48" style={{ backgroundColor: color + '30' }} />
+    </div>
+  );
+}
+
+// Bismallah component
 function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: string }) {
+  const isNone = ornamentStyle === 'none';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -221,14 +228,14 @@ function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: str
       transition={{ duration: 1.2, delay: 0.3 }}
       className="mb-8 flex flex-col items-center gap-3"
     >
-      {/* Top decorative line */}
-      <div className="flex items-center gap-3">
-        <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to left, ${color}50, transparent)` }} />
-        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: color + '60' }} />
-        <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to right, ${color}50, transparent)` }} />
-      </div>
+      {!isNone && (
+        <div className="flex items-center gap-3">
+          <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to left, ${color}50, transparent)` }} />
+          <div className="w-2 h-2 rotate-45" style={{ backgroundColor: color + '60' }} />
+          <div className="h-px w-12 sm:w-20" style={{ background: `linear-gradient(to right, ${color}50, transparent)` }} />
+        </div>
+      )}
 
-      {/* Bismallah text */}
       <p
         className="text-2xl sm:text-3xl font-serif tracking-[0.15em]"
         style={{ color: color + 'CC' }}
@@ -236,12 +243,13 @@ function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: str
         بسم الله الرحمن الرحيم
       </p>
 
-      {/* Bottom decorative line */}
-      <div className="flex items-center gap-3">
-        <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to left, ${color}35, transparent)` }} />
-        <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: color + '40' }} />
-        <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to right, ${color}35, transparent)` }} />
-      </div>
+      {!isNone && (
+        <div className="flex items-center gap-3">
+          <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to left, ${color}35, transparent)` }} />
+          <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: color + '40' }} />
+          <div className="h-px w-8 sm:w-14" style={{ background: `linear-gradient(to right, ${color}35, transparent)` }} />
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -249,6 +257,22 @@ function Bismallah({ color, ornamentStyle }: { color: string; ornamentStyle: str
 // Ornament between names
 function NameOrnament({ color, accentColor, ornamentStyle }: { color: string; accentColor: string; ornamentStyle: string }) {
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
+  const isNone = ornamentStyle === 'none';
+
+  if (isNone) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 1.1 }}
+        className="my-4 sm:my-6 flex items-center justify-center"
+      >
+        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: color + '25' }} />
+        <div className="w-1.5 h-1.5 rounded-full mx-3" style={{ backgroundColor: color + '40' }} />
+        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: color + '25' }} />
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -316,276 +340,65 @@ function ScrollIndicator({ color }: { color: string }) {
   );
 }
 
-// ==============================
-// HERO STYLES
-// ==============================
-
-/** Centered hero: large names centered with decorative elements */
-function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
-  const hasCoverImage = !!wedding.coverImage;
-  const nameSize = fontScale >= 1.1 ? 'text-6xl sm:text-7xl md:text-9xl' : 'text-5xl sm:text-6xl md:text-8xl';
-  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
-
+// Simple corner ornaments for frame hero
+function CornerOrnantsSimple({ color }: { color: string }) {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
-      {/* Background */}
-      {hasCoverImage ? (
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
-        </div>
-      ) : (
-        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
-      )}
-
-      {/* Pattern */}
-      {showPattern && <PatternOverlay patternType={patternType} color={colors.primary} />}
-
-      {/* Corner Ornaments */}
-      {cornerOrnaments && <CornerOrnaments color={colors.primary} />}
-
-      {/* Content */}
-      <div className="relative z-10 text-center px-8 sm:px-6 max-w-4xl mx-auto pb-8">
-        <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
-
-        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
-          <OrnamentalLine color={colors.primary} className="mb-6" />
-        </motion.div>
-
-        {/* Groom name */}
-        <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
-            {wedding.groomName}
-          </h1>
-        </motion.div>
-
-        <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
-
-        {/* Bride name */}
-        <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
-          <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
-            {wedding.brideName}
-          </h1>
-        </motion.div>
-
-        {/* Couple Photo */}
-        {couplePhoto && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
-            className="flex justify-center mt-8 mb-4"
-          >
-            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
-          </motion.div>
-        )}
-
-        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-          <OrnamentalLine color={colors.primary} className="mt-5 mb-5" />
-        </motion.div>
-
-        {/* Subtitle */}
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
-          className="text-xl sm:text-2xl md:text-3xl font-serif mb-3" style={{ color: colors.text + 'DD' }}>
-          بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
-        </motion.p>
-        <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
-          className="text-base sm:text-lg font-serif" style={{ color: colors.text + 'AA' }}>
-          ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
-        </motion.p>
-
-        <ScrollIndicator color={colors.primary} />
+    <>
+      <div className="absolute top-4 right-4 w-8 h-8 opacity-20" style={{ color }}>
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+          <path d="M0 0 L40 0 L40 4 L4 4 L4 40 L0 40Z" fill="currentColor" />
+        </svg>
       </div>
-
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        .shimmer-text {
-          background: linear-gradient(90deg, ${colors.primary} 0%, ${colors.accent} 25%, ${colors.primary} 50%, ${colors.accent} 75%, ${colors.primary} 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 6s linear infinite;
-        }
-      `}</style>
-    </div>
+      <div className="absolute top-4 left-4 w-8 h-8 opacity-20" style={{ color, transform: 'scaleX(-1)' }}>
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+          <path d="M0 0 L40 0 L40 4 L4 4 L4 40 L0 40Z" fill="currentColor" />
+        </svg>
+      </div>
+      <div className="absolute bottom-4 right-4 w-8 h-8 opacity-20" style={{ color, transform: 'scaleY(-1)' }}>
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+          <path d="M0 0 L40 0 L40 4 L4 4 L4 40 L0 40Z" fill="currentColor" />
+        </svg>
+      </div>
+      <div className="absolute bottom-4 left-4 w-8 h-8 opacity-20" style={{ color, transform: 'scale(-1)' }}>
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+          <path d="M0 0 L40 0 L40 4 L4 4 L4 40 L0 40Z" fill="currentColor" />
+        </svg>
+      </div>
+    </>
   );
 }
 
-/** Split hero: names on one side, decorative pattern on the other */
-function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments' | 'couplePhoto'>>) {
-  const hasCoverImage = !!wedding.coverImage;
-  const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-4xl sm:text-5xl md:text-6xl';
-  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
+// ==============================
+// HERO STYLES — Each truly distinct
+// ==============================
 
-  return (
-    <div className="relative min-h-screen flex overflow-hidden" dir="rtl">
-      {/* Background - full width */}
-      {hasCoverImage ? (
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
-        </div>
-      ) : (
-        <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
-      )}
-
-      {/* Left decorative panel (visible on desktop) */}
-      <div className="hidden lg:flex w-1/2 relative items-center justify-center">
-        {showPattern && <PatternOverlay patternType={patternType} color={colors.primary} />}
-        <div className="relative z-10 flex flex-col items-center">
-          {/* Large decorative geometric element */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.5 }}
-            className="relative"
-          >
-            <svg viewBox="0 0 300 300" className="w-64 h-64 xl:w-80 xl:h-80" style={{ color: colors.primary + '30' }}>
-              {/* Outer ring */}
-              <circle cx="150" cy="150" r="140" fill="none" stroke="currentColor" strokeWidth="0.5" />
-              <circle cx="150" cy="150" r="120" fill="none" stroke="currentColor" strokeWidth="0.5" />
-              <circle cx="150" cy="150" r="100" fill="none" stroke="currentColor" strokeWidth="0.3" />
-              {/* Cross lines */}
-              <line x1="150" y1="10" x2="150" y2="290" stroke="currentColor" strokeWidth="0.3" />
-              <line x1="10" y1="150" x2="290" y2="150" stroke="currentColor" strokeWidth="0.3" />
-              {/* Diamond */}
-              <path d="M150 20 L280 150 L150 280 L20 150Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
-              {/* Center ornament */}
-              <circle cx="150" cy="150" r="20" fill="none" stroke={colors.primary} strokeWidth="0.8" />
-              <circle cx="150" cy="150" r="8" fill="none" stroke={colors.primary} strokeWidth="0.5" />
-            </svg>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="text-lg font-serif mt-4 tracking-widest"
-            style={{ color: colors.primary + '50' }}
-          >
-            بسم الله الرحمن الرحيم
-          </motion.p>
-        </div>
-      </div>
-
-      {/* Right side - content */}
-      <div className="w-full lg:w-1/2 relative z-10 flex items-center justify-center px-8 sm:px-10">
-        {/* Mobile Bismallah */}
-        <div className="lg:hidden absolute top-8 left-0 right-0 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="text-2xl sm:text-3xl font-serif tracking-[0.15em]"
-            style={{ color: colors.primary + 'CC' }}
-          >
-            بسم الله الرحمن الرحيم
-          </motion.p>
-        </div>
-
-        <div className="max-w-lg">
-          {/* Decorative line top */}
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
-            <OrnamentalLine color={colors.primary} className="mb-5" />
-          </motion.div>
-
-          {/* Groom name */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, delay: 0.8 }}
-          >
-            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={nameStyle}>
-              {wedding.groomName}
-            </h1>
-          </motion.div>
-
-          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
-
-          {/* Bride name */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, delay: 1 }}
-          >
-            <h1 className={`${nameSize} font-bold leading-tight shimmer-text text-right`} style={nameStyle}>
-              {wedding.brideName}
-            </h1>
-          </motion.div>
-
-          {/* Photo in split hero */}
-          {couplePhoto && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
-              className="flex justify-center mt-6"
-            >
-              <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
-            </motion.div>
-          )}
-
-          {/* Decorative line bottom */}
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-            <OrnamentalLine color={colors.primary} className="mt-5 mb-4" />
-          </motion.div>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.6 }}
-            className="text-lg sm:text-xl md:text-2xl font-serif text-right mb-2"
-            style={{ color: colors.text + 'DD' }}
-          >
-            بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
-            className="text-sm sm:text-base font-serif text-right"
-            style={{ color: colors.text + 'AA' }}
-          >
-            ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
-          </motion.p>
-        </div>
-
-        <ScrollIndicator color={colors.primary} />
-      </div>
-
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        .shimmer-text {
-          background: linear-gradient(90deg, ${colors.primary} 0%, ${colors.accent} 25%, ${colors.primary} 50%, ${colors.accent} 75%, ${colors.primary} 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 6s linear infinite;
-        }
-      `}</style>
-    </div>
-  );
-}
-
-/** Cinematic hero: full-width dramatic overlay with larger text */
+/**
+ * CINEMATIC HERO (Royal Gold) — Luxury hotel style
+ * Dramatic with multiple light beams, parallax background, large serif fonts
+ * Couple photo as large background with overlay
+ * Grand, majestic feeling
+ */
 function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-7xl sm:text-8xl md:text-9xl' : 'text-6xl sm:text-7xl md:text-8xl';
-  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 4px 30px rgba(0,0,0,0.7)' } : { color: colors.primary };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
-      {/* Dramatic Background */}
-      {hasCoverImage ? (
+      {/* Dramatic Background with parallax effect */}
+      {couplePhoto ? (
+        <motion.div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${couplePhoto})` }}
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 20, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
+        >
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
+        </motion.div>
+      ) : hasCoverImage ? (
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}66 35%, ${colors.background}66 65%, ${colors.background}E6 100%)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
         </div>
       ) : (
         <div className="absolute inset-0" style={{
@@ -593,9 +406,14 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         }} />
       )}
 
-      {/* Cinematic top gradient overlay */}
+      {/* Cinematic vignette overlay */}
       <div className="absolute inset-0" style={{
-        background: `linear-gradient(180deg, ${colors.background}40 0%, transparent 30%, transparent 70%, ${colors.background} 100%)`,
+        background: `radial-gradient(ellipse at center, transparent 40%, ${colors.background}80 100%)`,
+      }} />
+
+      {/* Cinematic top/bottom gradient */}
+      <div className="absolute inset-0" style={{
+        background: `linear-gradient(180deg, ${colors.background}60 0%, transparent 20%, transparent 80%, ${colors.background} 100%)`,
       }} />
 
       {/* Pattern */}
@@ -604,28 +422,59 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
       {/* Corner Ornaments */}
       {cornerOrnaments && <CornerOrnaments color={colors.primary} />}
 
-      {/* Cinematic light beams */}
+      {/* DRAMATIC light beams — 5 beams radiating from center */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-px h-full opacity-10" style={{ background: `linear-gradient(180deg, transparent, ${colors.primary}, transparent)` }} />
-        <div className="absolute top-0 right-1/4 w-px h-full opacity-10" style={{ background: `linear-gradient(180deg, transparent, ${colors.primary}, transparent)` }} />
+        <div className="absolute top-0 left-[15%] w-px h-full" style={{ background: `linear-gradient(180deg, transparent 10%, ${colors.primary}30, transparent 90%)`, opacity: 0.15 }} />
+        <div className="absolute top-0 left-[35%] w-px h-full" style={{ background: `linear-gradient(180deg, transparent 5%, ${colors.primary}50, transparent 95%)`, opacity: 0.12 }} />
+        <div className="absolute top-0 left-[50%] w-0.5 h-full -translate-x-1/2" style={{ background: `linear-gradient(180deg, transparent, ${colors.primary}60, transparent)`, opacity: 0.18 }} />
+        <div className="absolute top-0 left-[65%] w-px h-full" style={{ background: `linear-gradient(180deg, transparent 5%, ${colors.primary}50, transparent 95%)`, opacity: 0.12 }} />
+        <div className="absolute top-0 left-[85%] w-px h-full" style={{ background: `linear-gradient(180deg, transparent 10%, ${colors.primary}30, transparent 90%)`, opacity: 0.15 }} />
+      </div>
+
+      {/* Floating gold particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: 2 + (i % 3),
+              height: 2 + (i % 3),
+              backgroundColor: colors.primary,
+              left: `${10 + (i * 7) % 80}%`,
+              opacity: 0.15 + (i % 4) * 0.05,
+            }}
+            animate={{
+              y: [0, -30 - (i % 3) * 20, 0],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 4 + (i % 3) * 2,
+              delay: i * 0.4,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
       </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-8 sm:px-6 max-w-5xl mx-auto pb-8">
         <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
+        {/* Grand ornamental divider */}
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 0.6 }}>
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
-            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-            <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="h-px w-20 sm:w-36" style={{ background: `linear-gradient(to left, ${colors.primary}60, transparent)` }} />
+            <div className="w-5 h-5 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors.primary }} />
+            <div className="w-5 h-5 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+            <div className="h-px w-20 sm:w-36" style={{ background: `linear-gradient(to right, ${colors.primary}60, transparent)` }} />
           </div>
         </motion.div>
 
-        {/* Groom name - dramatic */}
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4, delay: 0.8 }}>
+        {/* Groom name - DRAMATIC scale */}
+        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.6, delay: 0.8 }}>
           <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.groomName}
           </h1>
@@ -633,37 +482,25 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 
         <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
 
-        {/* Bride name - dramatic */}
-        <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4, delay: 0.8 }}>
+        {/* Bride name - DRAMATIC scale */}
+        <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.6, delay: 0.8 }}>
           <h1 className={`${nameSize} font-bold leading-tight shimmer-text`} style={nameStyle}>
             {wedding.brideName}
           </h1>
         </motion.div>
 
-        {/* Photo in cinematic hero */}
-        {couplePhoto && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
-            className="flex justify-center mt-8 mb-4"
-          >
-            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
-          </motion.div>
-        )}
-
-        {/* Dramatic lower ornament */}
+        {/* Grand lower ornament */}
         <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 1.4 }}>
-          <div className="flex items-center justify-center gap-6 mt-6 mb-6">
-            <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
-            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-            <div className="h-px w-24 sm:w-40" style={{ backgroundColor: colors.primary + '40' }} />
+          <div className="flex items-center justify-center gap-4 mt-8 mb-6">
+            <div className="h-px w-20 sm:w-36" style={{ background: `linear-gradient(to left, ${colors.primary}60, transparent)` }} />
+            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.primary }} />
+            <div className="w-4 h-4 rotate-45" style={{ backgroundColor: colors.primary + '40' }} />
+            <div className="h-px w-20 sm:w-36" style={{ background: `linear-gradient(to right, ${colors.primary}60, transparent)` }} />
           </div>
         </motion.div>
 
-        {/* Subtitle - larger and more dramatic */}
+        {/* Subtitle - large and majestic */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
           className="text-2xl sm:text-3xl md:text-4xl font-serif mb-4" style={{ color: colors.text + 'DD' }}>
           بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
@@ -694,13 +531,296 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
   );
 }
 
-/** Frame hero: names inside an ornate decorative frame/border */
+/**
+ * SPLIT HERO (Luxury Dark) — Cinematic black and gold
+ * Desktop: Left decorative panel with gradient/lines + right content panel
+ * Mobile: Stacked with decorative header band
+ * Image on the left panel; sans-serif, clean
+ */
+function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'cornerOrnaments' | 'couplePhoto'>>) {
+  const hasCoverImage = !!wedding.coverImage;
+  const nameSize = 'text-4xl sm:text-5xl md:text-6xl';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
+
+  return (
+    <div className="relative min-h-screen flex overflow-hidden" dir="rtl">
+      {/* ===== LEFT DECORATIVE PANEL (Desktop) ===== */}
+      <div className="hidden lg:flex w-1/2 relative items-center justify-center" style={{ background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.secondary} 100%)` }}>
+        {/* Diagonal lines pattern */}
+        {showPattern && <PatternOverlay patternType={patternType} color={colors.primary} />}
+
+        {/* Vertical gold accent line at the edge */}
+        <div className="absolute top-0 left-0 w-px h-full" style={{ background: `linear-gradient(180deg, transparent 10%, ${colors.primary}40 30%, ${colors.primary}60 50%, ${colors.primary}40 70%, transparent 90%)` }} />
+
+        <div className="relative z-10 flex flex-col items-center">
+          {/* Couple photo or geometric element */}
+          {couplePhoto ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
+              className="relative"
+            >
+              <div className="w-64 h-80 xl:w-72 xl:h-96 overflow-hidden" style={{ border: `1px solid ${colors.primary}30` }}>
+                <img
+                  src={couplePhoto}
+                  alt="صورة الزوجين"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Thin frame overlay */}
+              <div className="absolute inset-3 pointer-events-none" style={{ border: `1px solid ${colors.primary}20` }} />
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
+              className="relative"
+            >
+              <svg viewBox="0 0 300 300" className="w-64 h-64 xl:w-80 xl:h-80" style={{ color: colors.primary + '25' }}>
+                <circle cx="150" cy="150" r="140" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="150" cy="150" r="120" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="150" cy="150" r="100" fill="none" stroke="currentColor" strokeWidth="0.3" />
+                <line x1="150" y1="10" x2="150" y2="290" stroke="currentColor" strokeWidth="0.3" />
+                <line x1="10" y1="150" x2="290" y2="150" stroke="currentColor" strokeWidth="0.3" />
+                <path d="M150 20 L280 150 L150 280 L20 150Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="150" cy="150" r="20" fill="none" stroke={colors.primary} strokeWidth="0.8" />
+                <circle cx="150" cy="150" r="8" fill="none" stroke={colors.primary} strokeWidth="0.5" />
+              </svg>
+            </motion.div>
+          )}
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="text-lg font-serif mt-6 tracking-[0.2em]"
+            style={{ color: colors.primary + '40' }}
+          >
+            بسم الله الرحمن الرحيم
+          </motion.p>
+        </div>
+      </div>
+
+      {/* ===== RIGHT CONTENT PANEL ===== */}
+      <div className="w-full lg:w-1/2 relative z-10 flex items-center" style={{ background: colors.background }}>
+        {/* Mobile decorative header */}
+        <div className="lg:hidden absolute top-0 left-0 right-0 h-48" style={{ background: `linear-gradient(180deg, ${colors.secondary}40 0%, transparent 100%)` }}>
+          {/* Mobile Bismallah */}
+          <motion.p
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="text-2xl sm:text-3xl font-serif tracking-[0.15em] text-center pt-8"
+            style={{ color: colors.primary + 'CC' }}
+          >
+            بسم الله الرحمن الرحيم
+          </motion.p>
+          {/* Mobile photo */}
+          {couplePhoto && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="flex justify-center mt-4"
+            >
+              <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
+            </motion.div>
+          )}
+        </div>
+
+        <div className="max-w-lg mx-auto px-8 sm:px-10 pt-56 lg:pt-0">
+          {/* Thin line top */}
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
+            <ThinLine color={colors.primary} className="mb-8" />
+          </motion.div>
+
+          {/* Groom name */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 0.8 }}
+          >
+            <h1 className={`${nameSize} font-bold leading-tight text-right`} style={nameStyle}>
+              {wedding.groomName}
+            </h1>
+          </motion.div>
+
+          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
+
+          {/* Bride name */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 1 }}
+          >
+            <h1 className={`${nameSize} font-bold leading-tight text-right`} style={nameStyle}>
+              {wedding.brideName}
+            </h1>
+          </motion.div>
+
+          {/* Thin line bottom */}
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
+            <ThinLine color={colors.primary} className="mt-8 mb-6" />
+          </motion.div>
+
+          {/* Subtitle — clean sans-serif */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.6 }}
+            className="text-lg sm:text-xl md:text-2xl text-right mb-2"
+            style={{ color: colors.text + 'DD' }}
+          >
+            بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
+            className="text-sm sm:text-base text-right"
+            style={{ color: colors.text + 'AA' }}
+          >
+            ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
+          </motion.p>
+
+          <ScrollIndicator color={colors.primary} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * CENTERED HERO (Floral Romance & Minimal Modern) — Clean centered layout
+ * Names centered with subtle shimmer, circular photo centered between names
+ * Works for both romantic (with ornaments) and minimal (without) vibes
+ */
+function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
+  const hasCoverImage = !!wedding.coverImage;
+  const nameSize = fontScale >= 1.1 ? 'text-6xl sm:text-7xl md:text-9xl' : 'text-5xl sm:text-6xl md:text-8xl';
+  const isNone = ornamentStyle === 'none';
+  const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
+      {/* Background */}
+      {hasCoverImage ? (
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wedding.coverImage})` }}>
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}E6 0%, ${colors.background}88 35%, ${colors.background}88 65%, ${colors.background}E6 100%)` }} />
+        </div>
+      ) : (
+        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)` }} />
+      )}
+
+      {/* Subtle radial glow for romantic feel */}
+      {!isNone && (
+        <div className="absolute inset-0" style={{
+          background: `radial-gradient(ellipse at 50% 40%, ${colors.primary}08 0%, transparent 60%)`,
+        }} />
+      )}
+
+      {/* Pattern */}
+      {showPattern && <PatternOverlay patternType={patternType} color={colors.primary} />}
+
+      {/* Corner Ornaments */}
+      {cornerOrnaments && <CornerOrnaments color={colors.primary} />}
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-8 sm:px-6 max-w-4xl mx-auto pb-8">
+        <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
+
+        {isNone ? (
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
+            <ThinLine color={colors.primary} className="mb-8" />
+          </motion.div>
+        ) : (
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.6 }}>
+            <OrnamentalLine color={colors.primary} className="mb-6" />
+          </motion.div>
+        )}
+
+        {/* Groom name */}
+        <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
+          <h1 className={`${nameSize} font-bold leading-tight ${isNone ? '' : 'shimmer-text-romantic'}`} style={nameStyle}>
+            {wedding.groomName}
+          </h1>
+        </motion.div>
+
+        {/* Couple Photo — centered BETWEEN names */}
+        {couplePhoto ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
+            className="flex justify-center my-6"
+          >
+            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
+          </motion.div>
+        ) : (
+          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
+        )}
+
+        {/* Bride name */}
+        <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
+          <h1 className={`${nameSize} font-bold leading-tight ${isNone ? '' : 'shimmer-text-romantic'}`} style={nameStyle}>
+            {wedding.brideName}
+          </h1>
+        </motion.div>
+
+        {isNone ? (
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
+            <ThinLine color={colors.primary} className="mt-8 mb-6" />
+          </motion.div>
+        ) : (
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
+            <OrnamentalLine color={colors.primary} className="mt-5 mb-5" />
+          </motion.div>
+        )}
+
+        {/* Subtitle */}
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
+          className={`text-xl sm:text-2xl md:text-3xl ${isNone ? '' : 'font-serif'} mb-3`} style={{ color: colors.text + 'DD' }}>
+          بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
+        </motion.p>
+        <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
+          className={`text-base sm:text-lg ${isNone ? '' : 'font-serif'}`} style={{ color: colors.text + 'AA' }}>
+          ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة
+        </motion.p>
+
+        <ScrollIndicator color={colors.primary} />
+      </div>
+
+      {!isNone && (
+        <style jsx>{`
+          @keyframes shimmer-romantic {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+          }
+          .shimmer-text-romantic {
+            background: linear-gradient(90deg, ${colors.primary} 0%, ${colors.accent} 25%, ${colors.primary} 50%, ${colors.accent} 75%, ${colors.primary} 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer-romantic 8s linear infinite;
+          }
+        `}</style>
+      )}
+    </div>
+  );
+}
+
+/**
+ * FRAME HERO (Arabic Heritage) — Arabic patterns and traditional elegance
+ * Ornate SVG frame around names with corner ornaments, Arabic calligraphy feel
+ * Photo inside the ornamental frame
+ */
 function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPattern, patternType, fontScale, couplePhoto }: HeroProps & Required<Omit<HeroProps, 'heroStyle' | 'couplePhoto'>>) {
   const hasCoverImage = !!wedding.coverImage;
   const nameSize = fontScale >= 1.1 ? 'text-5xl sm:text-6xl md:text-8xl' : 'text-4xl sm:text-5xl md:text-7xl';
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
-  const borderWidth = isBold ? '2px' : '1px';
-  const borderOuterWidth = isBold ? '1.5px' : '1px';
   const nameStyle = hasCoverImage ? { color: colors.primary, textShadow: '0 2px 20px rgba(0,0,0,0.5)' } : { color: colors.primary };
 
   return (
@@ -720,84 +840,84 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
       {/* Corner Ornaments */}
       {cornerOrnaments && <CornerOrnantsSimple color={colors.primary} />}
 
-      {/* Main ornate frame */}
-      <div className="relative z-10 px-8 sm:px-10 max-w-4xl mx-auto w-full pb-8">
+      {/* ===== ORNATE ARABIC FRAME ===== */}
+      <div className="relative z-10 px-6 sm:px-8 max-w-4xl mx-auto w-full pb-8">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: 'easeOut' }}
           className="relative"
         >
-          {/* Outer decorative border */}
+          {/* Outer decorative border with Arabic pattern */}
           <div
-            className="absolute -inset-6 sm:-inset-10 rounded-sm"
+            className="absolute -inset-8 sm:-inset-12"
             style={{
-              border: `${borderOuterWidth} solid ${colors.primary}25`,
+              border: `1px solid ${colors.primary}15`,
             }}
-          />
+          >
+            {/* Arabic corner pieces — more ornate than simple corners */}
+            <div className="absolute -top-2 -right-2 w-20 h-20 sm:w-28 sm:h-28" style={{ color: colors.primary + '80' }}>
+              <svg viewBox="0 0 120 120" className="w-full h-full">
+                <path d="M0 0 L120 0 L120 6 L6 6 L6 120 L0 120Z" fill="currentColor" />
+                <path d="M6 6 L30 6 L6 30Z" fill="currentColor" opacity="0.5" />
+                <circle cx="20" cy="20" r="5" fill="currentColor" />
+                <path d="M30 6 Q40 6 40 16 L40 30 Q40 40 30 40 L16 40 Q6 40 6 30" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            </div>
+            <div className="absolute -top-2 -left-2 w-20 h-20 sm:w-28 sm:h-28" style={{ color: colors.primary + '80', transform: 'scaleX(-1)' }}>
+              <svg viewBox="0 0 120 120" className="w-full h-full">
+                <path d="M0 0 L120 0 L120 6 L6 6 L6 120 L0 120Z" fill="currentColor" />
+                <path d="M6 6 L30 6 L6 30Z" fill="currentColor" opacity="0.5" />
+                <circle cx="20" cy="20" r="5" fill="currentColor" />
+                <path d="M30 6 Q40 6 40 16 L40 30 Q40 40 30 40 L16 40 Q6 40 6 30" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            </div>
+            <div className="absolute -bottom-2 -right-2 w-20 h-20 sm:w-28 sm:h-28" style={{ color: colors.primary + '80', transform: 'scaleY(-1)' }}>
+              <svg viewBox="0 0 120 120" className="w-full h-full">
+                <path d="M0 0 L120 0 L120 6 L6 6 L6 120 L0 120Z" fill="currentColor" />
+                <path d="M6 6 L30 6 L6 30Z" fill="currentColor" opacity="0.5" />
+                <circle cx="20" cy="20" r="5" fill="currentColor" />
+                <path d="M30 6 Q40 6 40 16 L40 30 Q40 40 30 40 L16 40 Q6 40 6 30" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            </div>
+            <div className="absolute -bottom-2 -left-2 w-20 h-20 sm:w-28 sm:h-28" style={{ color: colors.primary + '80', transform: 'scale(-1)' }}>
+              <svg viewBox="0 0 120 120" className="w-full h-full">
+                <path d="M0 0 L120 0 L120 6 L6 6 L6 120 L0 120Z" fill="currentColor" />
+                <path d="M6 6 L30 6 L6 30Z" fill="currentColor" opacity="0.5" />
+                <circle cx="20" cy="20" r="5" fill="currentColor" />
+                <path d="M30 6 Q40 6 40 16 L40 30 Q40 40 30 40 L16 40 Q6 40 6 30" fill="none" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            </div>
+          </div>
 
-          {/* Main frame border */}
+          {/* Main frame border — thicker for Arabic Heritage */}
           <div
             className="relative p-8 sm:p-12 md:p-16"
             style={{
-              border: `${borderWidth} solid ${colors.primary}40`,
-              backgroundColor: colors.background + '40',
+              border: `2px solid ${colors.primary}50`,
+              backgroundColor: colors.background + '50',
             }}
           >
-            {/* Frame corner ornaments */}
-            {isBold ? (
-              <>
-                {/* Top-right corner */}
-                <div className="absolute -top-1 -right-1 w-16 h-16 sm:w-24 sm:h-24" style={{ color: colors.primary }}>
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d="M0 0 L100 0 L100 8 L8 8 L8 100 L0 100Z" fill="currentColor" />
-                    <circle cx="16" cy="16" r="4" fill="currentColor" />
-                  </svg>
-                </div>
-                {/* Top-left corner */}
-                <div className="absolute -top-1 -left-1 w-16 h-16 sm:w-24 sm:h-24" style={{ color: colors.primary, transform: 'scaleX(-1)' }}>
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d="M0 0 L100 0 L100 8 L8 8 L8 100 L0 100Z" fill="currentColor" />
-                    <circle cx="16" cy="16" r="4" fill="currentColor" />
-                  </svg>
-                </div>
-                {/* Bottom-right corner */}
-                <div className="absolute -bottom-1 -right-1 w-16 h-16 sm:w-24 sm:h-24" style={{ color: colors.primary, transform: 'scaleY(-1)' }}>
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d="M0 0 L100 0 L100 8 L8 8 L8 100 L0 100Z" fill="currentColor" />
-                    <circle cx="16" cy="16" r="4" fill="currentColor" />
-                  </svg>
-                </div>
-                {/* Bottom-left corner */}
-                <div className="absolute -bottom-1 -left-1 w-16 h-16 sm:w-24 sm:h-24" style={{ color: colors.primary, transform: 'scale(-1)' }}>
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d="M0 0 L100 0 L100 8 L8 8 L8 100 L0 100Z" fill="currentColor" />
-                    <circle cx="16" cy="16" r="4" fill="currentColor" />
-                  </svg>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Subtle corner accents */}
-                <div className="absolute top-2 right-2 w-4 h-4" style={{ color: colors.primary + '60' }}>
-                  <svg viewBox="0 0 20 20"><path d="M0 0 L20 0 L20 3 L3 3 L3 20 L0 20Z" fill="currentColor" /></svg>
-                </div>
-                <div className="absolute top-2 left-2 w-4 h-4" style={{ color: colors.primary + '60' }}>
-                  <svg viewBox="0 0 20 20"><path d="M20 0 L0 0 L0 3 L17 3 L17 20 L20 20Z" fill="currentColor" /></svg>
-                </div>
-                <div className="absolute bottom-2 right-2 w-4 h-4" style={{ color: colors.primary + '60' }}>
-                  <svg viewBox="0 0 20 20"><path d="M0 20 L20 20 L20 17 L3 17 L3 0 L0 0Z" fill="currentColor" /></svg>
-                </div>
-                <div className="absolute bottom-2 left-2 w-4 h-4" style={{ color: colors.primary + '60' }}>
-                  <svg viewBox="0 0 20 20"><path d="M20 20 L0 20 L0 17 L17 17 L17 0 L20 0Z" fill="currentColor" /></svg>
-                </div>
-              </>
-            )}
+            {/* Inner decorative border with Arabic arch pattern */}
+            <div className="absolute inset-5 sm:inset-8 pointer-events-none" style={{ border: `1px solid ${colors.primary}20` }}>
+              {/* Top center arch decoration */}
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2" style={{ color: colors.primary + '60' }}>
+                <svg viewBox="0 0 80 40" className="w-20 h-10 sm:w-28 sm:h-14">
+                  <path d="M0 40 Q0 0 40 0 Q80 0 80 40" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <circle cx="40" cy="12" r="3" fill="currentColor" />
+                  <path d="M0 40 L10 40 Q10 10 40 10 Q70 10 70 40 L80 40" fill="none" stroke="currentColor" strokeWidth="0.8" />
+                </svg>
+              </div>
+              {/* Bottom center arch */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2" style={{ color: colors.primary + '60', transform: 'translateX(-50%) scaleY(-1)' }}>
+                <svg viewBox="0 0 80 40" className="w-20 h-10 sm:w-28 sm:h-14">
+                  <path d="M0 40 Q0 0 40 0 Q80 0 80 40" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <circle cx="40" cy="12" r="3" fill="currentColor" />
+                </svg>
+              </div>
+            </div>
 
-            {/* Inner border line */}
-            <div className="absolute inset-4 sm:inset-6 pointer-events-none" style={{ border: `1px solid ${colors.primary}15` }} />
-
-            {/* Bismallah */}
+            {/* Bismallah inside the frame */}
             <Bismallah color={colors.primary} ornamentStyle={ornamentStyle} />
 
             {/* Groom name */}
@@ -816,7 +936,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
               </h1>
             </motion.div>
 
-            {/* Photo in frame hero */}
+            {/* Photo INSIDE the ornamental frame */}
             {couplePhoto && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -824,18 +944,17 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
                 transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
                 className="flex justify-center mt-6 mb-2"
               >
-                <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
+                <div className="relative">
+                  {/* Decorative frame around photo */}
+                  <div className="absolute -inset-3" style={{ border: `1px solid ${colors.primary}30` }} />
+                  <CircularPhoto src={couplePhoto} size="lg" borderColor={colors.primary} />
+                </div>
               </motion.div>
             )}
 
-            {/* Ornamental line */}
-            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.4 }}>
-              <OrnamentalLine color={colors.primary} className="mt-5 mb-4" />
-            </motion.div>
-
-            {/* Subtitle */}
+            {/* Subtitle inside frame */}
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.6 }}
-              className="text-xl sm:text-2xl md:text-3xl font-serif mb-3 text-center" style={{ color: colors.text + 'DD' }}>
+              className="text-xl sm:text-2xl md:text-3xl font-serif text-center mt-6 mb-3" style={{ color: colors.text + 'DD' }}>
               بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر
             </motion.p>
             <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.8 }}
@@ -866,52 +985,24 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
   );
 }
 
-/** Simpler corner ornaments for the frame hero */
-function CornerOrnantsSimple({ color }: { color: string }) {
-  return (
-    <>
-      <div className="absolute top-0 left-0 w-24 h-24 sm:w-36 sm:h-36 opacity-15">
-        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ color }}>
-          <path d="M0 0 Q100 0 100 100 Q0 100 0 0Z" fill="none" stroke="currentColor" strokeWidth="1" />
-          <path d="M0 0 Q50 0 50 50 Q0 50 0 0Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
-        </svg>
-      </div>
-      <div className="absolute top-0 right-0 w-24 h-24 sm:w-36 sm:h-36 opacity-15" style={{ transform: 'scaleX(-1)' }}>
-        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ color }}>
-          <path d="M0 0 Q100 0 100 100 Q0 100 0 0Z" fill="none" stroke="currentColor" strokeWidth="1" />
-          <path d="M0 0 Q50 0 50 50 Q0 50 0 0Z" fill="none" stroke="currentColor" strokeWidth="0.5" />
-        </svg>
-      </div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 opacity-15" style={{ transform: 'scaleY(-1)' }}>
-        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ color }}>
-          <path d="M0 0 Q100 0 100 100 Q0 100 0 0Z" fill="none" stroke="currentColor" strokeWidth="1" />
-        </svg>
-      </div>
-      <div className="absolute bottom-0 right-0 w-24 h-24 sm:w-36 sm:h-36 opacity-15" style={{ transform: 'scale(-1)' }}>
-        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ color }}>
-          <path d="M0 0 Q100 0 100 100 Q0 100 0 0Z" fill="none" stroke="currentColor" strokeWidth="1" />
-        </svg>
-      </div>
-    </>
-  );
-}
+// ==============================
+// MAIN HERO COMPONENT
+// ==============================
 
-// Main Hero component
 export default function Hero({
   wedding,
   colors,
   heroStyle = 'centered',
   ornamentStyle = 'subtle',
-  cornerOrnaments = true,
-  showPattern = true,
+  cornerOrnaments = false,
+  showPattern = false,
   patternType = 'geometric',
-  fontScale = 1,
+  fontScale = 1.0,
   couplePhoto,
 }: HeroProps) {
   const commonProps = {
     wedding,
     colors,
-    heroStyle,
     ornamentStyle,
     cornerOrnaments,
     showPattern,

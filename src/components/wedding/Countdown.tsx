@@ -36,13 +36,13 @@ function calculateTimeLeft(targetDate: string, targetTime: string): TimeLeft | n
 function CountdownUnit({ value, label, colors, delay }: { value: number; label: string; colors: ThemeColors; delay: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay, ease: 'easeOut' }}
-      className="flex flex-col items-center gap-3"
+      className="flex flex-col items-center gap-2"
     >
       <div
-        className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl flex items-center justify-center"
+        className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center"
         style={{
           backgroundColor: colors.primary + '15',
           border: `1px solid ${colors.primary}30`,
@@ -65,14 +65,14 @@ function CountdownUnit({ value, label, colors, delay }: { value: number; label: 
           initial={{ scale: 1.15, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="relative text-4xl sm:text-5xl md:text-6xl font-bold"
+          className="relative text-3xl sm:text-4xl md:text-5xl font-bold"
           style={{ color: colors.primary }}
         >
           {String(value).padStart(2, '0')}
         </motion.span>
       </div>
       <span
-        className="text-sm sm:text-base font-semibold tracking-wide"
+        className="text-xs sm:text-sm font-semibold tracking-wide"
         style={{ color: colors.primary + 'BB' }}
       >
         {label}
@@ -102,16 +102,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
 
   if (hasPassed) {
     return (
-      <div className="py-10 sm:py-16 px-4" dir="rtl">
-        {/* Ornamental divider above */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
-          <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-          <div className="w-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
-          <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-          <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
-        </div>
-
+      <div className="py-4 sm:py-6 px-4" dir="rtl">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -119,7 +110,7 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
           className="text-center"
         >
           <div
-            className="inline-block px-10 py-8 rounded-3xl relative overflow-hidden"
+            className="inline-block px-8 py-6 rounded-3xl relative overflow-hidden"
             style={{
               backgroundColor: colors.primary + '12',
               border: `2px solid ${colors.primary}30`,
@@ -149,23 +140,14 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
               />
             ))}
 
-            <p className="text-3xl sm:text-4xl font-bold mb-3 relative" style={{ color: colors.primary }}>
+            <p className="text-2xl sm:text-3xl font-bold mb-2 relative" style={{ color: colors.primary }}>
               بارك الله لهما وجمع بينهما في خير 🤲
             </p>
-            <p className="text-lg sm:text-xl font-serif relative" style={{ color: colors.text + 'BB' }}>
+            <p className="text-base sm:text-lg font-serif relative" style={{ color: colors.text + 'BB' }}>
               أسأل الله أن يديم المحبة بينهما
             </p>
           </div>
         </motion.div>
-
-        {/* Ornamental divider below */}
-        <div className="flex items-center justify-center gap-4 mt-8">
-          <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
-          <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-          <div className="w-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
-          <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-          <div className="h-px w-12 sm:w-20" style={{ backgroundColor: colors.primary + '30' }} />
-        </div>
       </div>
     );
   }
@@ -173,40 +155,22 @@ export default function Countdown({ targetDate, targetTime, colors }: CountdownP
   if (!timeLeft) return null;
 
   return (
-    <div className="py-10 sm:py-16 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-10 font-serif"
+        className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-4 font-serif"
         style={{ color: colors.text }}
       >
         نحو ليلة لا تُنسى
       </motion.h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 max-w-2xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 max-w-2xl mx-auto">
         <CountdownUnit value={timeLeft.days} label="أيام" colors={colors} delay={0} />
         <CountdownUnit value={timeLeft.hours} label="ساعات" colors={colors} delay={0.15} />
         <CountdownUnit value={timeLeft.minutes} label="دقائق" colors={colors} delay={0.3} />
         <CountdownUnit value={timeLeft.seconds} label="ثواني" colors={colors} delay={0.45} />
-      </div>
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-8">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
       </div>
     </div>
   );

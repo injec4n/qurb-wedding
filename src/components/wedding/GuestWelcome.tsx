@@ -15,16 +15,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
   const isPersonalized = !!guestName;
 
   return (
-    <div className="py-6 sm:py-10 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -33,7 +24,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
         className="max-w-xl mx-auto"
       >
         <div
-          className="relative rounded-3xl p-6 sm:p-8 text-center card-glow"
+          className="relative rounded-3xl p-5 sm:p-6 text-center card-glow"
           style={{
             backgroundColor: colors.primary + '0A',
             border: `2px solid ${colors.primary}25`,
@@ -63,12 +54,8 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
 
           {/* Inner decorative border */}
           <div
-            className="absolute inset-5 rounded-2xl pointer-events-none"
+            className="absolute inset-4 rounded-2xl pointer-events-none"
             style={{ border: `1px solid ${colors.primary}12` }}
-          />
-          <div
-            className="absolute inset-7 rounded-xl pointer-events-none"
-            style={{ border: `1px solid ${colors.primary}08` }}
           />
 
           {/* Couple photo */}
@@ -78,10 +65,10 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="flex justify-center mb-6"
+              className="flex justify-center mb-4"
             >
               <div
-                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden"
+                className="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden"
                 style={{
                   border: `3px solid ${colors.primary}`,
                   boxShadow: `0 0 20px ${colors.primary}20, inset 0 0 10px ${colors.primary}10`,
@@ -105,7 +92,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <p className="text-5xl sm:text-6xl font-bold mb-5" style={{ color: colors.primary }}>
+                <p className="text-4xl sm:text-5xl font-bold mb-4" style={{ color: colors.primary }}>
                   أهلاً بيك {' '}
                   <motion.span
                     initial={{ opacity: 0.5 }}
@@ -125,20 +112,20 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="space-y-4"
+                className="space-y-3"
               >
-                <p className="text-xl sm:text-2xl" style={{ color: colors.text + 'CC' }}>
+                <p className="text-lg sm:text-xl" style={{ color: colors.text + 'CC' }}>
                   فرحتنا مش بتتكمل غير بوجودكم معانا
                 </p>
-                <div className="flex items-center justify-center gap-4 my-4">
-                  <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
-                  <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary }} />
-                  <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
+                <div className="flex items-center justify-center gap-3 my-3">
+                  <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
+                  <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary }} />
+                  <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
-                <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
+                <p className="text-xl sm:text-2xl font-serif font-semibold" style={{ color: colors.accent }}>
                   بوجودكم تزدان ليلتنا وتكتمل فرحتنا
                 </p>
-                <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
+                <p className="text-sm sm:text-base" style={{ color: colors.text + '99' }}>
                   أنتم الزينة اللي بتكمل ليلتنا، والفرحة اللي بتملأ قلوبنا
                 </p>
               </motion.div>
@@ -151,7 +138,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <p className="text-5xl sm:text-6xl font-bold mb-5" style={{ color: colors.primary }}>
+                <p className="text-4xl sm:text-5xl font-bold mb-4" style={{ color: colors.primary }}>
                   بيتشرفوا بمشاركتكم أفرح ليلة في حياتنا 🌹
                 </p>
               </motion.div>
@@ -161,20 +148,20 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="space-y-4"
+                className="space-y-3"
               >
-                <p className="text-xl sm:text-2xl" style={{ color: colors.text + 'CC' }}>
+                <p className="text-lg sm:text-xl" style={{ color: colors.text + 'CC' }}>
                   زفاف {groomName} و {brideName}
                 </p>
-                <div className="flex items-center justify-center gap-4 my-4">
-                  <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
-                  <div className="w-2 h-2 rotate-45" style={{ backgroundColor: colors.primary }} />
-                  <div className="h-px w-12" style={{ backgroundColor: colors.primary + '40' }} />
+                <div className="flex items-center justify-center gap-3 my-3">
+                  <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
+                  <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary }} />
+                  <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
-                <p className="text-2xl sm:text-3xl font-serif font-semibold" style={{ color: colors.accent }}>
+                <p className="text-xl sm:text-2xl font-serif font-semibold" style={{ color: colors.accent }}>
                   بوجودكم تزدان ليلتنا وتكتمل فرحتنا
                 </p>
-                <p className="text-base sm:text-lg" style={{ color: colors.text + '99' }}>
+                <p className="text-sm sm:text-base" style={{ color: colors.text + '99' }}>
                   بوجودكم بتتكمل الفرحة وبتزدان الليلة
                 </p>
               </motion.div>
@@ -182,15 +169,6 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
           )}
         </div>
       </motion.div>
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
     </div>
   );
 }

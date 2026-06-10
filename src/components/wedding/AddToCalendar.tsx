@@ -84,7 +84,7 @@ export default function AddToCalendar({ groomName, brideName, weddingDate, weddi
   ];
 
   return (
-    <div className="py-8 px-4" dir="rtl">
+    <div className="py-3 px-4" dir="rtl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -97,13 +97,13 @@ export default function AddToCalendar({ groomName, brideName, weddingDate, weddi
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-xl sm:text-2xl font-bold mb-6 font-serif"
+          className="text-base sm:text-lg font-bold mb-3 font-serif"
           style={{ color: colors.text }}
         >
           أضف الموعد للتقويم
         </motion.h3>
         
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
           {calendarOptions.map((option, index) => (
             <motion.button
               key={option.name}
@@ -114,7 +114,7 @@ export default function AddToCalendar({ groomName, brideName, weddingDate, weddi
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={option.action}
-              className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer"
+              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer"
               style={{
                 backgroundColor: colors.primary + '15',
                 color: colors.primary,

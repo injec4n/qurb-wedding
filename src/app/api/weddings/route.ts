@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Apply theme colors if theme is specified but colors aren't customized
-    const themeName = rest.theme || 'classic-gold';
+    const themeName = rest.theme || 'royal-gold';
     const themeConfig = getTheme(themeName as Parameters<typeof getTheme>[0]);
     const themeColors = themeConfig.colors;
 
@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
         coverCategory: rest.coverCategory || '',
         galleryImages: JSON.stringify(rest.galleryImages || []),
         backgroundMusicUrl: rest.backgroundMusicUrl || '',
+        groomPhoto: rest.groomPhoto || '',
+        bridePhoto: rest.bridePhoto || '',
         couplePhoto: rest.couplePhoto || '',
         clientPassword: rest.clientPassword || '',
         theme: themeName,

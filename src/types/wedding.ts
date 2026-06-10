@@ -41,13 +41,7 @@ export type ThemeName =
   | 'luxury-dark'
   | 'floral-romance'
   | 'arabic-heritage'
-  | 'minimal-modern'
-  | 'classic-gold'
-  | 'modern-dark'
-  | 'elegant-white'
-  | 'royal-blue'
-  | 'rose-gold'
-  | 'traditional-arabic';
+  | 'minimal-modern';
 
 export interface Guest {
   id: string;

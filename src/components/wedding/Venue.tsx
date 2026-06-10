@@ -13,16 +13,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
   const hasMap = !!wedding.googleMapsLink;
 
   return (
-    <div className="py-10 sm:py-16 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -35,7 +26,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-8 font-serif"
+          className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-5 font-serif"
           style={{ color: colors.text }}
         >
           حيث تُحتفل الفرحة
@@ -55,7 +46,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
         >
           {/* Decorative header */}
           <div
-            className="w-full h-28 sm:h-40 flex items-center justify-center relative overflow-hidden"
+            className="w-full h-20 sm:h-32 flex items-center justify-center relative overflow-hidden"
             style={{
               background: `linear-gradient(135deg, ${colors.secondary}40 0%, ${colors.primary}20 100%)`,
             }}
@@ -74,32 +65,32 @@ export default function Venue({ wedding, colors }: VenueProps) {
             </div>
             {/* Prominent map pin icon */}
             <div
-              className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center"
+              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center"
               style={{
                 backgroundColor: colors.primary + '20',
                 border: `2px solid ${colors.primary}30`,
               }}
             >
-              <MapPin className="w-10 h-10 sm:w-12 sm:h-12 relative" style={{ color: colors.primary + '90' }} />
+              <MapPin className="w-8 h-8 sm:w-10 sm:h-10 relative" style={{ color: colors.primary + '90' }} />
             </div>
           </div>
 
           {/* Venue info */}
-          <div className="p-6 sm:p-8 text-center">
+          <div className="p-4 sm:p-6 text-center">
             <h3
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 font-serif"
+              className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 font-serif"
               style={{ color: colors.primary }}
             >
               {wedding.venueName}
             </h3>
             {wedding.venueAddress && (
-              <p className="text-base sm:text-lg mb-6" style={{ color: colors.text + 'BB' }}>
+              <p className="text-sm sm:text-base mb-4" style={{ color: colors.text + 'BB' }}>
                 {wedding.venueAddress}
               </p>
             )}
 
             {/* Ornamental divider inside card */}
-            <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-px w-10" style={{ backgroundColor: colors.primary + '25' }} />
               <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary + '50' }} />
               <div className="h-px w-10" style={{ backgroundColor: colors.primary + '25' }} />
@@ -110,7 +101,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
                 href={wedding.googleMapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-7 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 style={{
                   backgroundColor: colors.button,
                   color: colors.background,
@@ -124,15 +115,6 @@ export default function Venue({ wedding, colors }: VenueProps) {
           </div>
         </motion.div>
       </motion.div>
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-8">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
     </div>
   );
 }

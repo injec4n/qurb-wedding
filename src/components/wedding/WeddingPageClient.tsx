@@ -32,7 +32,7 @@ interface WeddingPageClientProps {
   guestName?: string;
 }
 
-// Decorative section divider component
+// Decorative section divider component - only used between major section groups
 function SectionDivider({ colors, ornamentStyle }: { colors: ThemeColors; ornamentStyle: ThemeConfig['ornamentStyle'] }) {
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
   const isNone = ornamentStyle === 'none';
@@ -73,24 +73,24 @@ function SectionDivider({ colors, ornamentStyle }: { colors: ThemeColors; orname
 
 // Section reveal animation variants - slower, more graceful
 const sectionVariants = {
-  hidden: { opacity: 0, y: 25 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
-// Map sectionSpacing to padding classes
+// Map sectionSpacing to padding classes - significantly reduced
 function getSectionPadding(spacing: ThemeConfig['sectionSpacing']): string {
   switch (spacing) {
     case 'compact':
-      return 'py-0.5';
+      return 'py-1';
     case 'spacious':
-      return 'py-4';
+      return 'py-5';
     case 'normal':
     default:
-      return 'py-2';
+      return 'py-3';
   }
 }
 
@@ -194,9 +194,11 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         />
       </section>
 
+      {/* Divider: Hero → Details Group */}
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
 
       {/* 2. Guest Welcome (if guest parameter exists or personalization enabled) */}
+      {/* No divider between GuestWelcome and Countdown - same visual group */}
       {(guestName || wedding.enableGuestPersonalization) && (
         <motion.section
           id="welcome"
@@ -216,7 +218,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         </motion.section>
       )}
 
-      {/* 3. Countdown (if enabled) */}
+      {/* 3. Countdown (if enabled) - grouped with Details, no divider between */}
       {wedding.enableCountdown && (
         <motion.section
           id="countdown"
@@ -234,9 +236,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         </motion.section>
       )}
 
-      <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
-
-      {/* 4. Wedding Details */}
+      {/* 4. Wedding Details - grouped with Countdown & Calendar */}
       <motion.section
         id="details"
         initial="hidden"
@@ -248,9 +248,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         <WeddingDetails wedding={wedding} colors={colors} />
       </motion.section>
 
-      <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
-
-      {/* 4b. Add To Calendar */}
+      {/* 4b. Add To Calendar - grouped with Details, no divider */}
       <motion.section
         id="calendar"
         initial="hidden"
@@ -270,6 +268,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         />
       </motion.section>
 
+      {/* Divider: Details Group → Venue */}
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
 
       {/* 5. Venue */}
@@ -287,6 +286,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
       {/* 6. Gallery (if enabled) */}
       {wedding.enableGallery && (
         <>
+          {/* Divider: Venue → Gallery */}
           <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
           <motion.section
             id="gallery"
@@ -301,9 +301,10 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         </>
       )}
 
-      {/* 7. RSVP (if enabled) */}
+      {/* 7. RSVP (if enabled) - grouped with InvitationCard */}
       {wedding.enableRsvp && (
         <>
+          {/* Divider: Gallery/Venue → RSVP Group */}
           <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
           <motion.section
             id="rsvp"
@@ -323,9 +324,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         </>
       )}
 
-      <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
-
-      {/* 8. Invitation Card */}
+      {/* 8. Invitation Card - grouped with RSVP, no divider */}
       <motion.section
         id="downloads"
         initial="hidden"
@@ -337,6 +336,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         <InvitationCard wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
       </motion.section>
 
+      {/* Divider: RSVP Group → Footer */}
       <SectionDivider colors={colors} ornamentStyle={themeConfig.ornamentStyle} />
 
       {/* 9. Footer */}

@@ -17,19 +17,19 @@ interface GalleryProps {
 function EmptyPlaceholder({ colors }: { colors: ThemeColors }) {
   return (
     <div
-      className="col-span-2 md:col-span-3 rounded-3xl p-12 sm:p-16 text-center"
+      className="col-span-2 md:col-span-3 rounded-3xl p-8 sm:p-12 text-center"
       style={{
         backgroundColor: colors.primary + '08',
         border: `1px dashed ${colors.primary}25`,
       }}
     >
       <div
-        className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center"
+        className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
         style={{ backgroundColor: colors.primary + '12' }}
       >
-        <Camera className="w-10 h-10" style={{ color: colors.primary + '60' }} />
+        <Camera className="w-8 h-8" style={{ color: colors.primary + '60' }} />
       </div>
-      <p className="text-xl sm:text-2xl font-serif mb-2" style={{ color: colors.primary + '80' }}>
+      <p className="text-lg sm:text-xl font-serif mb-2" style={{ color: colors.primary + '80' }}>
         صور ذكرياتكم ستكون هنا 📸
       </p>
       <p className="text-sm sm:text-base" style={{ color: colors.text + '66' }}>
@@ -57,22 +57,13 @@ export default function Gallery({ images, colors }: GalleryProps) {
   };
 
   return (
-    <div className="py-20 px-4" dir="rtl">
-      {/* Ornamental divider above */}
-      <div className="flex items-center justify-center gap-4 mb-10">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
-
+    <div className="py-4 sm:py-6 px-4" dir="rtl">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-serif"
+        className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-3 font-serif"
         style={{ color: colors.text }}
       >
         معرض الصور
@@ -85,16 +76,16 @@ export default function Gallery({ images, colors }: GalleryProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center text-base mb-10"
+          className="text-center text-sm mb-5"
           style={{ color: colors.primary + '80' }}
         >
           {images.length} صورة
         </motion.p>
       )}
 
-      {!hasImages && <div className="mb-6" />}
+      {!hasImages && <div className="mb-4" />}
 
-      <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+      <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
         {hasImages ? (
           images.map((image, index) => (
             <motion.div
@@ -203,15 +194,6 @@ export default function Gallery({ images, colors }: GalleryProps) {
           </DialogContent>
         </Dialog>
       )}
-
-      {/* Ornamental divider below */}
-      <div className="flex items-center justify-center gap-4 mt-14">
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.primary }} />
-        <div className="w-2.5 h-2.5 rotate-45" style={{ backgroundColor: colors.primary + '60' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: colors.primary + '30' }} />
-      </div>
     </div>
   );
 }

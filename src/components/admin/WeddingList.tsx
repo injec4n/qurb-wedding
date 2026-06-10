@@ -115,7 +115,7 @@ export default function WeddingList() {
 
   const getThemeColor = (themeName: string) => {
     const theme = getTheme(themeName as Wedding['theme']);
-    return theme?.colors?.primary || '#D4A853';
+    return theme?.colors?.primary || '#C9A84C';
   };
 
   const copyInvitationLink = (slug: string, weddingId: string) => {
