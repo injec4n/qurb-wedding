@@ -50,7 +50,7 @@ export default function WeddingFooter({ groomName, brideName, colors }: WeddingF
             className="text-lg sm:text-xl font-bold tracking-wider group-hover:opacity-100 opacity-60 transition-opacity duration-300"
             style={{ color: colors.primary }}
           >
-            قُرب
+            <span className="font-serif">قُرب</span>
           </p>
           <p
             className="text-[10px] tracking-widest opacity-40 group-hover:opacity-70 transition-opacity duration-300"

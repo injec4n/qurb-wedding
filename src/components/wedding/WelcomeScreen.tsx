@@ -371,7 +371,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1.5 }}
                 className="text-sm sm:text-base font-serif"
-                style={{ color: '#ffffffAA' }}
+                style={{ color: colors.text + 'CC' }}
               >
                 حفل زفاف {groomName} و {brideName}
               </motion.p>
@@ -476,7 +476,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 className="w-2.5 h-2.5 rounded-full"
                 style={{ backgroundColor: colors.primary + '50' }}
               />
-              <p className="text-xs font-serif" style={{ color: '#ffffff55' }}>
+              <p className="text-xs font-serif" style={{ color: colors.text + '55' }}>
                 بيتفتحلك باب الفرحة...
               </p>
             </motion.div>
@@ -614,7 +614,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 1.0 }}
                   className="text-lg sm:text-xl font-serif mb-2"
-                  style={{ color: '#ffffffCC' }}
+                  style={{ color: colors.text + 'DD' }}
                 >
                   {groomName} و {brideName}
                 </motion.p>
@@ -625,7 +625,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1.2 }}
                   className="text-sm sm:text-base font-serif"
-                  style={{ color: '#ffffff88' }}
+                  style={{ color: colors.text + '99' }}
                 >
                   بيتشرفوا بدعوتكم لحضور حفل زفافهم
                 </motion.p>

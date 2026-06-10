@@ -263,25 +263,11 @@ function Bismallah({ color, ornamentStyle, text }: { color: string; ornamentStyl
   );
 }
 
-// Ornament between names
-function NameOrnament({ color, accentColor, ornamentStyle }: { color: string; accentColor: string; ornamentStyle: string }) {
+// Ornament between names — shows couple photo or default image
+function NameOrnament({ color, accentColor, ornamentStyle, couplePhoto }: { color: string; accentColor: string; ornamentStyle: string; couplePhoto?: string }) {
   const isBold = ornamentStyle === 'bold' || ornamentStyle === 'gold';
   const isNone = ornamentStyle === 'none';
-
-  if (isNone) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
-        className="my-4 sm:my-6 flex items-center justify-center"
-      >
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: color + '25' }} />
-        <div className="w-1.5 h-1.5 rounded-full mx-3" style={{ backgroundColor: color + '40' }} />
-        <div className="h-px w-16 sm:w-24" style={{ backgroundColor: color + '25' }} />
-      </motion.div>
-    );
-  }
+  const photoSrc = couplePhoto || '/images/demo-couple.png';
 
   return (
     <motion.div
@@ -290,28 +276,18 @@ function NameOrnament({ color, accentColor, ornamentStyle }: { color: string; ac
       transition={{ duration: 1, delay: 1.1, ease: 'easeOut' }}
       className="my-4 sm:my-6 flex items-center justify-center"
     >
-      <div className={`h-px ${isBold ? 'w-12 sm:w-20' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '40' }} />
-      <svg
-        viewBox="0 0 60 50"
-        className={`w-14 h-12 sm:w-20 sm:h-16 mx-2`}
-        style={{ color: accentColor }}
+      <div className={`h-px ${isBold ? 'w-12 sm:w-20' : isNone ? 'w-8 sm:w-14' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '30' }} />
+      <div
+        className={`mx-3 rounded-full overflow-hidden ${isBold ? 'w-16 h-16 sm:w-20 sm:h-20' : isNone ? 'w-12 h-12 sm:w-16 sm:h-16' : 'w-14 h-14 sm:w-18 sm:h-18'}`}
+        style={{ border: `2px solid ${color}50`, padding: '2px', boxShadow: `0 0 20px ${color}15` }}
       >
-        <path
-          d="M30 6 C22 6, 12 12, 12 20 C12 28, 20 35, 30 40 C40 35, 48 28, 48 20 C48 12, 38 6, 30 6Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={isBold ? '1.5' : '1'}
+        <img
+          src={photoSrc}
+          alt="صورة الزوجين"
+          className="w-full h-full rounded-full object-cover"
         />
-        <path d="M30 14 L30 36" stroke="currentColor" strokeWidth={isBold ? '1' : '0.7'} />
-        <circle cx="30" cy="9" r={isBold ? '2.5' : '1.8'} fill="currentColor" opacity="0.6" />
-        <circle cx="16" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
-        <circle cx="44" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
-        <path d="M4 20 L10 20" stroke="currentColor" strokeWidth="0.6" />
-        <path d="M50 20 L56 20" stroke="currentColor" strokeWidth="0.6" />
-        <path d="M30 2 L32 5 L30 8 L28 5Z" fill="currentColor" opacity="0.5" />
-        <path d="M28 42 L30 46 L32 42" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.5" />
-      </svg>
-      <div className={`h-px ${isBold ? 'w-12 sm:w-20' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '40' }} />
+      </div>
+      <div className={`h-px ${isBold ? 'w-12 sm:w-20' : isNone ? 'w-8 sm:w-14' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '30' }} />
     </motion.div>
   );
 }
@@ -490,7 +466,7 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
           </h1>
         </motion.div>
 
-        <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
+        <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} couplePhoto={couplePhoto} />
 
         {/* Bride name - DRAMATIC scale */}
         <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.6, delay: 0.8 }}>
@@ -657,7 +633,7 @@ function HeroSplit({ wedding, colors, ornamentStyle, showPattern, patternType, f
             </h1>
           </motion.div>
 
-          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
+          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} couplePhoto={couplePhoto} />
 
           {/* Bride name */}
           <motion.div
@@ -759,19 +735,8 @@ function HeroCentered({ wedding, colors, ornamentStyle, cornerOrnaments, showPat
           </h1>
         </motion.div>
 
-        {/* Couple Photo — centered BETWEEN names */}
-        {couplePhoto ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1, ease: 'easeOut' }}
-            className="flex justify-center my-6"
-          >
-            <CircularPhoto src={couplePhoto} size="xl" borderColor={colors.primary} />
-          </motion.div>
-        ) : (
-          <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
-        )}
+        {/* Ornament between names */}
+        <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} couplePhoto={couplePhoto} />
 
         {/* Bride name */}
         <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
@@ -939,7 +904,7 @@ function HeroFrame({ wedding, colors, ornamentStyle, cornerOrnaments, showPatter
               </h1>
             </motion.div>
 
-            <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} />
+            <NameOrnament color={colors.primary} accentColor={colors.accent} ornamentStyle={ornamentStyle} couplePhoto={couplePhoto} />
 
             {/* Bride name */}
             <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>

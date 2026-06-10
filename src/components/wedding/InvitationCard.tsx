@@ -167,27 +167,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               </h3>
 
               {/* Couple photo or ornamental divider */}
-              {couplePhoto ? (
+              {(couplePhoto || true) && (
                 <div className="flex justify-center my-3">
                   <div
-                    className="w-24 h-24 rounded-full overflow-hidden"
-                    style={{ border: `3px solid ${colors.primary}60`, padding: '3px', boxShadow: `0 0 20px ${colors.primary}20` }}
+                    className="w-20 h-20 rounded-full overflow-hidden"
+                    style={{ border: `2px solid ${colors.primary}50`, padding: '2px', boxShadow: `0 0 15px ${colors.primary}15` }}
                   >
-                    <img src={couplePhoto} alt="الزوجين" className="w-full h-full rounded-full object-cover" crossOrigin="anonymous" />
+                    <img src={couplePhoto || '/images/demo-couple.png'} alt="الزوجين" className="w-full h-full rounded-full object-cover" crossOrigin="anonymous" />
                   </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center gap-2 my-2">
-                  <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
-                  <svg viewBox="0 0 40 24" className="w-8 h-5" style={{ color: colors.accent }}>
-                    <path d="M20 2 L24 12 L20 22 L16 12Z" fill="none" stroke="currentColor" strokeWidth="1" />
-                    <circle cx="20" cy="12" r="2.5" fill="currentColor" opacity="0.4" />
-                    <path d="M4 12 L14 12" stroke="currentColor" strokeWidth="0.8" />
-                    <path d="M26 12 L36 12" stroke="currentColor" strokeWidth="0.8" />
-                    <circle cx="4" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
-                    <circle cx="36" cy="12" r="1.5" fill="currentColor" opacity="0.3" />
-                  </svg>
-                  <div className="h-px w-6" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
               )}
 
@@ -221,7 +208,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
 
             {/* Brand watermark at bottom */}
             <div className="absolute bottom-3 left-0 right-0 text-center">
-              <p className="text-[9px] tracking-wider" style={{ color: colors.primary + '30' }}>قُرب</p>
+              <p className="text-[9px] tracking-wider font-serif" style={{ color: colors.primary + '40' }}>قُرب</p>
             </div>
           </div>
         </div>

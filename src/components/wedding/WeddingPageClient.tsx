@@ -360,11 +360,11 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         />
       </motion.section>
 
-      {/* 10. Floating Music Player (if enabled and URL provided) */}
-      {wedding.enableMusic && wedding.backgroundMusicUrl && (
+      {/* 10. Floating Music Player (if enabled) */}
+      {wedding.enableMusic && (
         <MusicPlayer
           ref={musicPlayerRef}
-          musicUrl={wedding.backgroundMusicUrl}
+          musicUrl={wedding.backgroundMusicUrl || '/audio/default-music.mp3'}
           colors={colors}
         />
       )}
