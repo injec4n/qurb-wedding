@@ -24,6 +24,7 @@ import { useState } from 'react';
 
 // Dynamic import GoldParticles to avoid SSR hydration mismatch with floating-point precision
 const GoldParticles = dynamic(() => import('@/components/landing/GoldParticles'), { ssr: false });
+const ReviewsSection = dynamic(() => import('@/components/landing/ReviewsSection'), { ssr: false });
 
 /* ─── Animation helpers ─── */
 const fadeUp = {
@@ -708,6 +709,11 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          REVIEWS SECTION — CUSTOMER TESTIMONIALS
+          ═══════════════════════════════════════════════════════════ */}
+      <ReviewsSection />
 
       {/* ═══════════════════════════════════════════════════════════
           CONTACT SECTION — SOCIAL MEDIA

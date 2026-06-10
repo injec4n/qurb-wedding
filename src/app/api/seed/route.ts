@@ -118,3 +118,56 @@ export async function GET() {
     return NextResponse.json({ success: false, error: 'Failed to seed data' }, { status: 500 });
   }
 }
+
+// Seed demo reviews
+export async function POST() {
+  try {
+    const existingReviews = await db.review.count();
+    if (existingReviews > 0) {
+      return NextResponse.json({
+        success: true,
+        message: `Reviews already seeded (${existingReviews} existing)`,
+      });
+    }
+
+    const demoReviews = [
+      {
+        type: 'text',
+        name: 'أحمد الشريف',
+        rating: 5,
+        text: 'تجربة أكثر من رائعة! الدعوة كانت شكلها مذهل وكل الضيوف اتصلوا بي بيشكروني على الذوق. أنصح وبشدة!',
+        weddingName: 'زفاف أحمد ونورة',
+        isActive: true,
+        order: 1,
+      },
+      {
+        type: 'text',
+        name: 'فاطمة العلي',
+        rating: 5,
+        text: 'الدعوة الرقمية خللت الضيوف يتحمسوا للزفاف من بدري. التصميم فاخر والتعامل مع المنصة سهل جداً. شكراً قُرب!',
+        weddingName: 'زفاف خالد وريم',
+        isActive: true,
+        order: 2,
+      },
+      {
+        type: 'text',
+        name: 'سعد المطيري',
+        rating: 4,
+        text: 'تصميم أنيق وخرج عن المألوف. الضيوف انبهرت بالدعوة وبالإمكانيات زي العداد التنازلي والموسيقى. تجربة لا تُنسى!',
+        weddingName: 'زفاف عمر وهند',
+        isActive: true,
+        order: 3,
+      },
+    ];
+
+    await db.review.createMany({ data: demoReviews });
+
+    return NextResponse.json({
+      success: true,
+      message: `Created ${demoReviews.length} demo reviews`,
+    });
+  } catch (error) {
+    console.error('Review seed error:', error);
+    return NextResponse.json({ success: false, error: 'Failed to seed reviews' }, { status: 500 });
+  }
+}

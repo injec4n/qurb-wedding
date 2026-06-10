@@ -8,7 +8,8 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/s
 import WeddingList from '@/components/admin/WeddingList';
 import GuestManager from '@/components/admin/GuestManager';
 import RsvpTable from '@/components/admin/RsvpTable';
-import { Users, Calendar, Menu, Heart, ArrowRight, LogOut, Sparkles } from 'lucide-react';
+import ReviewManager from '@/components/admin/ReviewManager';
+import { Users, Calendar, Menu, Heart, ArrowRight, LogOut, Sparkles, Star } from 'lucide-react';
 
 interface SelectedWedding {
   id: string;
@@ -79,6 +80,7 @@ export default function AdminPage() {
     { id: 'weddings', label: 'الزفات', icon: Heart },
     { id: 'guests', label: 'الضيوف', icon: Users },
     { id: 'rsvps', label: 'الردود', icon: Calendar },
+    { id: 'reviews', label: 'التقييمات', icon: Star },
   ];
 
   return (
@@ -304,6 +306,10 @@ export default function AdminPage() {
                   عرض الزفات
                 </button>
               </div>
+            )}
+
+            {activeTab === 'reviews' && (
+              <ReviewManager />
             )}
           </motion.div>
         </AnimatePresence>

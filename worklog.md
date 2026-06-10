@@ -50,3 +50,28 @@ Stage Summary:
 - Demo name input feature added: users can enter name, select template, preview as guest
 - All button hover effects fixed with proper visible feedback
 - Lint passes, no hydration errors, all pages load correctly
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Add customer reviews/testimonials section with text, image, and audio support, managed from dashboard
+
+Work Log:
+- Added Review model to Prisma schema (id, type, name, rating, text, imageUrl, audioUrl, weddingName, isActive, order)
+- Pushed schema to database with `bun run db:push`
+- Added Review interface to types/wedding.ts
+- Created API routes: /api/reviews (GET/POST/PUT) and /api/reviews/[id] (GET/PUT/DELETE)
+- Created ReviewManager admin component with full CRUD, type selector (text/image/audio), file upload, star rating, active toggle, reordering
+- Integrated ReviewManager into admin dashboard as "التقييمات" tab with Star icon
+- Created ReviewsSection landing page component with carousel, audio playback with waveform visual, type badges, star ratings
+- Added ReviewsSection to landing page between "How It Works" and "Contact" sections
+- Seeded 3 demo text reviews in the database
+- Updated seed API with POST endpoint for review seeding
+- Lint passes, build succeeds, dev server returns 200
+
+Stage Summary:
+- Full customer reviews feature implemented with 3 review types: text, image (screenshot), audio (voice recording)
+- Admin can add/edit/delete/reorder reviews from dashboard, toggle visibility, upload images and audio
+- Landing page shows reviews carousel with playback for audio reviews, image viewer for screenshots
+- 3 demo text reviews seeded for immediate preview
+- All code compiles, lint passes, API tested and working

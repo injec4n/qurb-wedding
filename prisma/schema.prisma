@@ -95,3 +95,18 @@ model Settings {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+model Review {
+  id          String   @id @default(cuid())
+  type        String   @default("text") // text, image, audio
+  name        String
+  rating      Int      @default(5) // 1-5 stars
+  text        String   @default("") // review text content
+  imageUrl    String   @default("") // screenshot image URL (for image type)
+  audioUrl    String   @default("") // audio file URL (for audio type)
+  weddingName String   @default("") // optional: which wedding this review is about
+  isActive    Boolean  @default(true)
+  order       Int      @default(0) // display order
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
