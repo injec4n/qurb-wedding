@@ -26,6 +26,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     ornamentStyle: 'bold',
     cornerOrnaments: true,
     fontScale: 1.15,
+    defaultCover: '/images/covers/luxury-gold-night.png',
+    defaultCouplePhoto: '/images/couples/couple-golden.png',
   },
 
   'luxury-dark': {
@@ -51,6 +53,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     ornamentStyle: 'bold',
     cornerOrnaments: true,
     fontScale: 1.15,
+    defaultCover: '/images/covers/luxury-royal-velvet.png',
+    defaultCouplePhoto: '/images/couples/couple-modern.png',
   },
 
   'floral-romance': {
@@ -76,6 +80,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     ornamentStyle: 'subtle',
     cornerOrnaments: true,
     fontScale: 1.05,
+    defaultCover: '/images/covers/floral-rose-garden.png',
+    defaultCouplePhoto: '/images/couples/couple-floral.png',
   },
 
   'arabic-heritage': {
@@ -101,6 +107,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     ornamentStyle: 'bold',
     cornerOrnaments: true,
     fontScale: 1.15,
+    defaultCover: '/images/covers/islamic-mosque-dome.png',
+    defaultCouplePhoto: '/images/couples/couple-crescent.png',
   },
 
   'minimal-modern': {
@@ -126,6 +134,8 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     ornamentStyle: 'none',
     cornerOrnaments: false,
     fontScale: 1.0,
+    defaultCover: '/images/covers/minimal-silver-mist.png',
+    defaultCouplePhoto: '/images/couples/couple-minimal.png',
   },
 };
 

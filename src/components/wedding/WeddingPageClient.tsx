@@ -8,7 +8,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 gsap.registerPlugin(ScrollTrigger);
 
 import type { Wedding, ThemeColors, ThemeConfig } from '@/types/wedding';
-import { getWeddingColors } from '@/lib/wedding-utils';
+import { getWeddingColors, getEffectiveCoverImage, getEffectiveCouplePhoto } from '@/lib/wedding-utils';
 import { getTheme } from '@/lib/themes';
 
 import dynamic from 'next/dynamic';
@@ -103,6 +103,17 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
     ? wedding.galleryImages
     : [];
 
+  // Compute effective cover image and couple photo (with theme defaults as fallback)
+  const effectiveCoverImage = getEffectiveCoverImage(wedding);
+  const effectiveCouplePhoto = getEffectiveCouplePhoto(wedding);
+
+  // Create a modified wedding object with the effective values
+  const weddingWithDefaults = {
+    ...wedding,
+    coverImage: effectiveCoverImage,
+    couplePhoto: effectiveCouplePhoto,
+  };
+
   const sectionPadding = getSectionPadding(themeConfig.sectionSpacing);
 
   // Welcome screen state - show when guest parameter is present
@@ -157,7 +168,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             groomName={wedding.groomName}
             brideName={wedding.brideName}
             colors={colors}
-            couplePhoto={wedding.couplePhoto}
+            couplePhoto={effectiveCouplePhoto}
             onOpen={handleWelcomeOpen}
           />
         )}
@@ -182,7 +193,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
       {/* 1. Hero Section - Full viewport */}
       <section id="hero" className="parallax-hero">
         <Hero
-          wedding={wedding}
+          wedding={weddingWithDefaults}
           colors={colors}
           heroStyle={themeConfig.heroStyle}
           ornamentStyle={themeConfig.ornamentStyle}
@@ -190,7 +201,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
           showPattern={themeConfig.showPattern}
           patternType={themeConfig.patternType}
           fontScale={themeConfig.fontScale}
-          couplePhoto={wedding.couplePhoto}
+          couplePhoto={effectiveCouplePhoto}
         />
       </section>
 
@@ -213,7 +224,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             groomName={wedding.groomName}
             brideName={wedding.brideName}
             colors={colors}
-            couplePhoto={wedding.couplePhoto}
+            couplePhoto={effectiveCouplePhoto}
             guestWelcomeText={wedding.guestWelcomeText}
             guestSubWelcomeText={wedding.guestSubWelcomeText}
           />
@@ -338,7 +349,7 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
         variants={sectionVariants}
         className={sectionPadding}
       >
-        <InvitationCard wedding={wedding} colors={colors} slug={wedding.slug} couplePhoto={wedding.couplePhoto} />
+        <InvitationCard wedding={weddingWithDefaults} colors={colors} slug={wedding.slug} couplePhoto={effectiveCouplePhoto} />
       </motion.section>
 
       {/* Divider: RSVP Group → Footer */}

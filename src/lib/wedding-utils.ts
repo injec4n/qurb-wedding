@@ -1,4 +1,5 @@
-import { Wedding, ThemeColors } from '@/types/wedding';
+import { Wedding, ThemeColors, ThemeName } from '@/types/wedding';
+import { getTheme } from '@/lib/themes';
 
 export function generateSlug(groomName: string, brideName: string): string {
   const groom = groomName.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u0600-\u06FF-]/g, '');
@@ -75,4 +76,24 @@ export function getGeneralWelcomeMessage(groomName: string, brideName: string): 
 
 export function getCountdownTarget(dateStr: string, timeStr: string): Date {
   return new Date(`${dateStr}T${timeStr || '00:00'}`);
+}
+
+/**
+ * Get the effective cover image for a wedding.
+ * Returns the custom cover if set, otherwise the theme's default cover.
+ */
+export function getEffectiveCoverImage(wedding: Wedding): string {
+  if (wedding.coverImage) return wedding.coverImage;
+  const theme = getTheme((wedding.theme || 'royal-gold') as ThemeName);
+  return theme.defaultCover || '';
+}
+
+/**
+ * Get the effective couple photo for a wedding.
+ * Returns the custom couple photo if set, otherwise the theme's default couple photo.
+ */
+export function getEffectiveCouplePhoto(wedding: Wedding): string {
+  if (wedding.couplePhoto) return wedding.couplePhoto;
+  const theme = getTheme((wedding.theme || 'royal-gold') as ThemeName);
+  return theme.defaultCouplePhoto || '/images/demo-couple.png';
 }

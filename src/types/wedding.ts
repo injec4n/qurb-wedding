@@ -100,6 +100,8 @@ export interface ThemeConfig {
   ornamentStyle: 'gold' | 'subtle' | 'none' | 'bold';
   cornerOrnaments: boolean;
   fontScale: number; // 0.9 for smaller, 1 for normal, 1.1 for larger
+  defaultCover?: string; // Path to default cover image for this theme
+  defaultCouplePhoto?: string; // Path to default couple photo for this theme
 }
 
 export interface WeddingFormData {

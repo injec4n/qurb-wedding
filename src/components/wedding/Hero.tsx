@@ -370,8 +370,19 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
-      {/* Dramatic Background with parallax effect */}
-      {couplePhoto ? (
+      {/* Dramatic Background with parallax effect — use cover image (full-bleed) or fall back to couple photo */}
+      {hasCoverImage ? (
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${wedding.coverImage})` }}
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 20, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
+          />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
+        </div>
+      ) : couplePhoto ? (
         <motion.div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${couplePhoto})` }}
@@ -381,11 +392,6 @@ function HeroCinematic({ wedding, colors, ornamentStyle, cornerOrnaments, showPa
         >
           <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
         </motion.div>
-      ) : hasCoverImage ? (
-        <div className="absolute inset-0">
-          <CoverImageLayer coverImage={wedding.coverImage} />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${colors.background}DD 0%, ${colors.background}88 30%, ${colors.background}88 70%, ${colors.background}DD 100%)` }} />
-        </div>
       ) : (
         <div className="absolute inset-0" style={{
           background: `radial-gradient(ellipse at 50% 30%, ${colors.secondary}90 0%, ${colors.background} 70%)`,

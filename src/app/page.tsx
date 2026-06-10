@@ -203,7 +203,7 @@ function TemplateCard({ theme, index }: { theme: (typeof templateList)[0]; index
                 style={{ border: `2px solid ${colors.primary}50`, padding: '2px' }}
               >
                 <img
-                  src="/images/demo-couple.png"
+                  src={theme.defaultCouplePhoto || '/images/demo-couple.png'}
                   alt="صورة الزوجين"
                   className="w-full h-full rounded-full object-cover"
                 />

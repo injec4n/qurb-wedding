@@ -94,3 +94,34 @@ Stage Summary:
 - The WeddingPageClient already falls back to /audio/default-music.mp3 when no custom music is set
 - All 5 demo weddings + 1 custom wedding (mohamed-fatma) now use this default music
 - Custom music uploads for other weddings remain unaffected
+
+---
+Task ID: 5
+Agent: Main Agent
+Task: Add default cover images and couple photos per theme
+
+Work Log:
+- Added `defaultCover` and `defaultCouplePhoto` fields to ThemeConfig type
+- Updated themes.ts with theme-specific default images:
+  - royal-gold: luxury-gold-night.png / couple-golden.png
+  - luxury-dark: luxury-royal-velvet.png / couple-modern.png
+  - floral-romance: floral-rose-garden.png / couple-floral.png
+  - arabic-heritage: islamic-mosque-dome.png / couple-crescent.png
+  - minimal-modern: minimal-silver-mist.png / couple-minimal.png
+- Added `getEffectiveCoverImage()` and `getEffectiveCouplePhoto()` helper functions in wedding-utils.ts
+- Updated WeddingPageClient to use effective images (with theme defaults as fallback)
+- Updated Hero component to prioritize cover image over couple photo for background
+- Updated seed data to use theme-specific default cover and couple photo
+- Updated all existing demo weddings in database with correct images per theme
+- Fixed luxury-dark theme: changed from couple-golden to couple-modern to avoid duplicate
+- Updated landing page template cards to use theme-specific couple photos
+- Updated WeddingForm admin component to auto-set default cover and couple photo on theme change
+- Verified all 5 demo templates show distinct cover images and couple photos
+
+Stage Summary:
+- Each theme now has a unique default cover image and couple photo
+- Hero section shows the cover image as background (not just gradient)
+- Welcome screen and guest welcome show the couple photo
+- When creating new weddings, admin form auto-sets defaults based on selected theme
+- Landing page template cards show unique couple photos per theme
+- All 5 templates are visually distinct with their own image sets

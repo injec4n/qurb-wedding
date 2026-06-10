@@ -211,6 +211,13 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
       setValue('textColor', themeConfig.colors.text);
       setValue('buttonColor', themeConfig.colors.button);
       setValue('accentColor', themeConfig.colors.accent);
+      // Set default cover image and couple photo based on theme (only if not already set)
+      if (!coverImageValue && themeConfig.defaultCover) {
+        setValue('coverImage', themeConfig.defaultCover);
+      }
+      if (!couplePhotoValue && themeConfig.defaultCouplePhoto) {
+        setValue('couplePhoto', themeConfig.defaultCouplePhoto);
+      }
     }
   }, [selectedTheme, setValue]);
 
