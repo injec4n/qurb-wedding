@@ -61,17 +61,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // /api/seed - requires admin auth
-  if (pathname === '/api/seed') {
-    const adminAuth = request.cookies.get(ADMIN_COOKIE)?.value;
-    if (adminAuth !== 'authenticated') {
-      return NextResponse.json(
-        { success: false, error: 'غير مصرح' },
-        { status: 401 }
-      );
-    }
-  }
-
   return NextResponse.next();
 }
 
@@ -85,6 +74,5 @@ export const config = {
     '/api/weddings',
     '/api/weddings/:path*',
     '/api/upload',
-    '/api/seed',
   ],
 };
