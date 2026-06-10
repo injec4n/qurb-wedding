@@ -75,3 +75,22 @@ Stage Summary:
 - Landing page shows reviews carousel with playback for audio reviews, image viewer for screenshots
 - 3 demo text reviews seeded for immediate preview
 - All code compiles, lint passes, API tested and working
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Set uploaded MP3 as default/virtual music for all wedding invitations
+
+Work Log:
+- Copied uploaded file /upload/0610.MP3 to /public/audio/default-music.mp3 (replaced old default)
+- Updated seed API to set backgroundMusicUrl='/audio/default-music.mp3' instead of empty string
+- Updated all existing weddings in database: SET backgroundMusicUrl='/audio/default-music.mp3' WHERE empty/null
+- Verified all 5 demo weddings now have the default music URL
+- Verified existing custom music URLs (mahmoud-esraa-2, mahmoud-esraa-3) were preserved
+- Lint passes, dev server running correctly
+
+Stage Summary:
+- Uploaded MP3 file (0610.MP3) is now the default background music for all wedding invitations
+- The WeddingPageClient already falls back to /audio/default-music.mp3 when no custom music is set
+- All 5 demo weddings + 1 custom wedding (mohamed-fatma) now use this default music
+- Custom music uploads for other weddings remain unaffected

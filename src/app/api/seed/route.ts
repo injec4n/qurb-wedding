@@ -73,7 +73,7 @@ export async function GET() {
           contactPhone: '+201012345678',
           coverImage: '',
           galleryImages: JSON.stringify([]),
-          backgroundMusicUrl: '',
+          backgroundMusicUrl: '/audio/default-music.mp3',
           clientPassword: 'demo123',
           couplePhoto: '/images/demo-couple.png',
           theme: demo.theme,
