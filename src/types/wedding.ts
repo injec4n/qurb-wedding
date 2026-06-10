@@ -12,8 +12,6 @@ export interface Wedding {
   contactPhone: string;
   coverImage: string;
   coverCategory: string;
-  groomPhoto: string;
-  bridePhoto: string;
   couplePhoto: string;
   galleryImages: string[]; // JSON array stored as string in DB
   backgroundMusicUrl: string;
@@ -32,6 +30,20 @@ export interface Wedding {
   enableMusic: boolean;
   enableGuestPersonalization: boolean;
   isActive: boolean;
+  // Customizable text fields
+  bismallahText: string;
+  invitationTitle: string;
+  heroSubtitle: string;
+  heroSubSubtitle: string;
+  detailsTitle: string;
+  detailsSubtitle: string;
+  venueTitle: string;
+  rsvpTitle: string;
+  rsvpAttendingText: string;
+  rsvpNotAttendingText: string;
+  cardInvitationText: string;
+  guestWelcomeText: string;
+  guestSubWelcomeText: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -102,8 +114,6 @@ export interface WeddingFormData {
   contactPhone: string;
   coverImage: string;
   coverCategory: string;
-  groomPhoto: string;
-  bridePhoto: string;
   couplePhoto: string;
   galleryImages: string[];
   backgroundMusicUrl: string;
@@ -121,6 +131,20 @@ export interface WeddingFormData {
   enableCountdown: boolean;
   enableMusic: boolean;
   enableGuestPersonalization: boolean;
+  // Customizable text fields
+  bismallahText: string;
+  invitationTitle: string;
+  heroSubtitle: string;
+  heroSubSubtitle: string;
+  detailsTitle: string;
+  detailsSubtitle: string;
+  venueTitle: string;
+  rsvpTitle: string;
+  rsvpAttendingText: string;
+  rsvpNotAttendingText: string;
+  cardInvitationText: string;
+  guestWelcomeText: string;
+  guestSubWelcomeText: string;
 }
 
 export interface CreateWeddingRequest extends WeddingFormData {

@@ -11,9 +11,12 @@ interface RsvpSectionProps {
   guestName?: string;
   colors: ThemeColors;
   enabled: boolean;
+  rsvpTitle?: string;
+  rsvpAttendingText?: string;
+  rsvpNotAttendingText?: string;
 }
 
-export default function RsvpSection({ weddingId, guestName, colors, enabled }: RsvpSectionProps) {
+export default function RsvpSection({ weddingId, guestName, colors, enabled, rsvpTitle, rsvpAttendingText, rsvpNotAttendingText }: RsvpSectionProps) {
   const [status, setStatus] = useState<'idle' | 'attending' | 'not-attending'>('idle');
   const [message, setMessage] = useState('');
   const [nameInput, setNameInput] = useState('');
@@ -82,7 +85,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
           className="text-center text-2xl sm:text-3xl font-bold mb-5 font-serif"
           style={{ color: colors.text }}
         >
-          هنيتشرفوا بحضوركم ليلة العمر؟
+          {rsvpTitle || 'هنيتشرفوا بحضوركم ليلة العمر؟'}
         </motion.h2>
 
         <div
@@ -182,7 +185,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   ) : (
                     <Check className="w-5 h-5" />
                   )}
-                  يتشرفني الحضور بكل سرور 🌹
+                  {rsvpAttendingText || 'يتشرفني الحضور بكل سرور'} 🌹
                 </motion.button>
 
                 <motion.button
@@ -202,7 +205,7 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled }: R
                   ) : (
                     <X className="w-5 h-5" />
                   )}
-                  أعتذر، وأتمنى لكم أجمل ليلة 💐
+                  {rsvpNotAttendingText || 'أعتذر، وأتمنى لكم أجمل ليلة'} 💐
                 </motion.button>
               </div>
 

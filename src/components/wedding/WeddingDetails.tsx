@@ -40,7 +40,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-3 font-serif"
         style={{ color: colors.text }}
       >
-        تفاصيل ليلة العمر
+        {wedding.detailsTitle || 'تفاصيل ليلة العمر'}
       </motion.h2>
 
       {/* Emotional pre-message */}
@@ -52,7 +52,7 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
         className="text-center text-base sm:text-lg font-serif mb-5"
         style={{ color: colors.text + 'AA' }}
       >
-        بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر
+        {wedding.detailsSubtitle || 'بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر'}
       </motion.p>
 
       <div className="max-w-lg mx-auto space-y-3">

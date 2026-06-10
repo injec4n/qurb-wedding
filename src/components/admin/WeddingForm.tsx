@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check, Upload, Loader2, Eye, EyeOff, Lock, UserCircle2 } from 'lucide-react';
+import { Plus, Trash2, Save, X, Palette, Settings, Sparkles, ImageIcon, Music, Check, Upload, Loader2, Eye, EyeOff, Lock, BookOpen, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const weddingFormSchema = z.object({
@@ -30,8 +30,6 @@ const weddingFormSchema = z.object({
   coverCategory: z.string().optional().default(''),
   galleryImages: z.array(z.string()).optional().default([]),
   backgroundMusicUrl: z.string().optional().default(''),
-  groomPhoto: z.string().optional().default(''),
-  bridePhoto: z.string().optional().default(''),
   couplePhoto: z.string().optional().default(''),
   clientPassword: z.string().optional().default(''),
   theme: z.string().optional().default('royal-gold'),
@@ -47,6 +45,20 @@ const weddingFormSchema = z.object({
   enableCountdown: z.boolean().optional().default(true),
   enableMusic: z.boolean().optional().default(true),
   enableGuestPersonalization: z.boolean().optional().default(true),
+  // Customizable text fields
+  bismallahText: z.string().optional().default('بسم الله الرحمن الرحيم'),
+  invitationTitle: z.string().optional().default(''),
+  heroSubtitle: z.string().optional().default('بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر'),
+  heroSubSubtitle: z.string().optional().default('ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة'),
+  detailsTitle: z.string().optional().default('تفاصيل ليلة العمر'),
+  detailsSubtitle: z.string().optional().default('بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر'),
+  venueTitle: z.string().optional().default('حيث تُحتفل الفرحة'),
+  rsvpTitle: z.string().optional().default('هنيتشرفوا بحضوركم ليلة العمر؟'),
+  rsvpAttendingText: z.string().optional().default('يتشرفني الحضور بكل سرور'),
+  rsvpNotAttendingText: z.string().optional().default('أعتذر، وأتمنى لكم أجمل ليلة'),
+  cardInvitationText: z.string().optional().default('بيتشرفوا بدعوتكم لحضور حفل زفافهم'),
+  guestWelcomeText: z.string().optional().default('فرحتنا مش بتتكمل غير بوجودكم معانا'),
+  guestSubWelcomeText: z.string().optional().default('بوجودكم تزدان ليلتنا وتكتمل فرحتنا'),
 });
 
 type WeddingFormValues = z.infer<typeof weddingFormSchema>;
@@ -93,22 +105,20 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [musicUploading, setMusicUploading] = useState(false);
   const [couplePhotoUploading, setCouplePhotoUploading] = useState(false);
-  const [groomPhotoUploading, setGroomPhotoUploading] = useState(false);
-  const [bridePhotoUploading, setBridePhotoUploading] = useState(false);
+
   const [coverDragOver, setCoverDragOver] = useState(false);
   const [musicDragOver, setMusicDragOver] = useState(false);
   const [couplePhotoDragOver, setCouplePhotoDragOver] = useState(false);
-  const [groomPhotoDragOver, setGroomPhotoDragOver] = useState(false);
-  const [bridePhotoDragOver, setBridePhotoDragOver] = useState(false);
+
   const [showClientPassword, setShowClientPassword] = useState(false);
   const [selectedCoverCategory, setSelectedCoverCategory] = useState<CoverCategory>('luxury');
+  const [textsOpen, setTextsOpen] = useState(false);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const musicInputRef = useRef<HTMLInputElement>(null);
   const couplePhotoInputRef = useRef<HTMLInputElement>(null);
-  const groomPhotoInputRef = useRef<HTMLInputElement>(null);
-  const bridePhotoInputRef = useRef<HTMLInputElement>(null);
+
 
   const form = useForm<WeddingFormValues>({
     resolver: zodResolver(weddingFormSchema),
@@ -127,8 +137,6 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
       coverCategory: initialData?.coverCategory || '',
       galleryImages: parseGalleryImages(initialData?.galleryImages),
       backgroundMusicUrl: initialData?.backgroundMusicUrl || '',
-      groomPhoto: initialData?.groomPhoto || '',
-      bridePhoto: initialData?.bridePhoto || '',
       couplePhoto: initialData?.couplePhoto || '',
       clientPassword: initialData?.clientPassword || '',
       theme: initialData?.theme || 'royal-gold',
@@ -144,6 +152,19 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
       enableCountdown: initialData?.enableCountdown ?? true,
       enableMusic: initialData?.enableMusic ?? true,
       enableGuestPersonalization: initialData?.enableGuestPersonalization ?? true,
+      bismallahText: (initialData as Record<string, unknown>)?.bismallahText as string || 'بسم الله الرحمن الرحيم',
+      invitationTitle: (initialData as Record<string, unknown>)?.invitationTitle as string || '',
+      heroSubtitle: (initialData as Record<string, unknown>)?.heroSubtitle as string || 'بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر',
+      heroSubSubtitle: (initialData as Record<string, unknown>)?.heroSubSubtitle as string || 'ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة',
+      detailsTitle: (initialData as Record<string, unknown>)?.detailsTitle as string || 'تفاصيل ليلة العمر',
+      detailsSubtitle: (initialData as Record<string, unknown>)?.detailsSubtitle as string || 'بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر',
+      venueTitle: (initialData as Record<string, unknown>)?.venueTitle as string || 'حيث تُحتفل الفرحة',
+      rsvpTitle: (initialData as Record<string, unknown>)?.rsvpTitle as string || 'هنيتشرفوا بحضوركم ليلة العمر؟',
+      rsvpAttendingText: (initialData as Record<string, unknown>)?.rsvpAttendingText as string || 'يتشرفني الحضور بكل سرور',
+      rsvpNotAttendingText: (initialData as Record<string, unknown>)?.rsvpNotAttendingText as string || 'أعتذر، وأتمنى لكم أجمل ليلة',
+      cardInvitationText: (initialData as Record<string, unknown>)?.cardInvitationText as string || 'بيتشرفوا بدعوتكم لحضور حفل زفافهم',
+      guestWelcomeText: (initialData as Record<string, unknown>)?.guestWelcomeText as string || 'فرحتنا مش بتتكمل غير بوجودكم معانا',
+      guestSubWelcomeText: (initialData as Record<string, unknown>)?.guestSubWelcomeText as string || 'بوجودكم تزدان ليلتنا وتكتمل فرحتنا',
     },
   });
 
@@ -155,8 +176,7 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
   const coverImageValue = watch('coverImage');
   const musicUrlValue = watch('backgroundMusicUrl');
   const couplePhotoValue = watch('couplePhoto');
-  const groomPhotoValue = watch('groomPhoto');
-  const bridePhotoValue = watch('bridePhoto');
+
   const coverCategoryValue = watch('coverCategory');
 
   // Watch all form values for live preview using callback to avoid infinite loops
@@ -296,52 +316,6 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
     e.preventDefault(); setCouplePhotoDragOver(false);
     const file = e.dataTransfer.files[0];
     if (file && isImageFile(file)) handleCouplePhotoUpload(file);
-  };
-
-  // Groom photo upload handler
-  const handleGroomPhotoUpload = useCallback(async (file: File) => {
-    if (!isImageFile(file)) return;
-    try {
-      setGroomPhotoUploading(true);
-      const url = await uploadFile(file, 'image');
-      setValue('groomPhoto', url);
-    } catch (err) {
-      console.error('Groom photo upload error:', err);
-    } finally {
-      setGroomPhotoUploading(false);
-    }
-  }, [setValue]);
-
-  // Bride photo upload handler
-  const handleBridePhotoUpload = useCallback(async (file: File) => {
-    if (!isImageFile(file)) return;
-    try {
-      setBridePhotoUploading(true);
-      const url = await uploadFile(file, 'image');
-      setValue('bridePhoto', url);
-    } catch (err) {
-      console.error('Bride photo upload error:', err);
-    } finally {
-      setBridePhotoUploading(false);
-    }
-  }, [setValue]);
-
-  // Drag and drop handlers for groom photo
-  const handleGroomPhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setGroomPhotoDragOver(true); };
-  const handleGroomPhotoDragLeave = () => setGroomPhotoDragOver(false);
-  const handleGroomPhotoDrop = (e: React.DragEvent) => {
-    e.preventDefault(); setGroomPhotoDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file && isImageFile(file)) handleGroomPhotoUpload(file);
-  };
-
-  // Drag and drop handlers for bride photo
-  const handleBridePhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); setBridePhotoDragOver(true); };
-  const handleBridePhotoDragLeave = () => setBridePhotoDragOver(false);
-  const handleBridePhotoDrop = (e: React.DragEvent) => {
-    e.preventDefault(); setBridePhotoDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file && isImageFile(file)) handleBridePhotoUpload(file);
   };
 
   const addGalleryImage = () => {
@@ -673,6 +647,77 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Couple Photo Upload */}
+          <div className="space-y-3">
+            <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين</Label>
+            <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+              تُستخدم في بطاقة الدعوة، شاشة الترحيب، والقسم الرئيسي
+            </p>
+            <div
+              className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
+                couplePhotoDragOver ? 'ring-2 ring-offset-2' : ''
+              }`}
+              style={{
+                border: couplePhotoDragOver
+                  ? '2px dashed var(--wedding-gold)'
+                  : '2px dashed var(--admin-border)',
+                background: couplePhotoDragOver
+                  ? 'rgba(212,168,83,0.06)'
+                  : 'var(--admin-surface)',
+                ringColor: 'var(--wedding-gold)',
+              }}
+              onDragOver={handleCouplePhotoDragOver}
+              onDragLeave={handleCouplePhotoDragLeave}
+              onDrop={handleCouplePhotoDrop}
+              onClick={() => couplePhotoInputRef.current?.click()}
+            >
+              <input
+                ref={couplePhotoInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleCouplePhotoUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              {couplePhotoUploading ? (
+                <div className="flex flex-col items-center justify-center py-6 gap-2">
+                  <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
+                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
+                </div>
+              ) : couplePhotoValue ? (
+                <div className="relative group">
+                  <img
+                    src={couplePhotoValue}
+                    alt="صورة الزوجين"
+                    className="w-full h-48 object-cover rounded-xl"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                    <p className="text-sm text-white font-medium">اضغط لتغيير الصورة</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-6 gap-1.5">
+                  <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
+                  <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
+                    اسحب الصورة هنا أو اضغط للاختيار
+                  </p>
+                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                    JPG, PNG, WebP — حتى 10MB
+                  </p>
+                </div>
+              )}
+            </div>
+            <Input
+              {...register('couplePhoto')}
+              className="admin-input text-xs"
+              placeholder="أو رابط صورة الزوجين"
+              dir="ltr"
+            />
           </div>
 
           {/* Background Music Upload */}
@@ -1063,206 +1108,157 @@ export default function WeddingForm({ initialData, onSubmit, isLoading, onFormCh
         </div>
       </div>
 
-      {/* Photos Section */}
+
+
+      {/* Texts & Customization Section - Collapsible */}
       <div className="admin-card overflow-hidden" style={{ borderTop: '2px solid var(--wedding-gold)' }}>
-        <div className="p-6 pb-4">
+        <button
+          type="button"
+          onClick={() => setTextsOpen(!textsOpen)}
+          className="w-full p-6 pb-4 flex items-center justify-between cursor-pointer"
+        >
           <h2 className="flex items-center gap-3 text-xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
-              <UserCircle2 className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+              <BookOpen className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
             </div>
-            الصور الشخصية
+            النصوص والتخصيص
           </h2>
-        </div>
-        <div className="px-6 pb-6 space-y-5">
-          {/* Groom & Bride Photos - side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Groom Photo */}
-            <div className="space-y-2">
-              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العريس</Label>
-              <div
-                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
-                  groomPhotoDragOver ? 'ring-2 ring-offset-2' : ''
-                }`}
-                style={{
-                  border: groomPhotoDragOver
-                    ? '2px dashed var(--wedding-gold)'
-                    : '2px dashed var(--admin-border)',
-                  background: groomPhotoDragOver
-                    ? 'rgba(212,168,83,0.06)'
-                    : 'var(--admin-surface)',
-                  ringColor: 'var(--wedding-gold)',
-                }}
-                onDragOver={handleGroomPhotoDragOver}
-                onDragLeave={handleGroomPhotoDragLeave}
-                onDrop={handleGroomPhotoDrop}
-                onClick={() => groomPhotoInputRef.current?.click()}
-              >
-                <input
-                  ref={groomPhotoInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleGroomPhotoUpload(file);
-                    e.target.value = '';
-                  }}
+          <ChevronDown
+            className="h-5 w-5 transition-transform duration-300"
+            style={{ color: 'var(--admin-text-muted)', transform: textsOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          />
+        </button>
+        {textsOpen && (
+          <div className="px-6 pb-6 space-y-4">
+            <p className="text-xs mb-2" style={{ color: 'var(--admin-text-muted)' }}>
+              خصّص النصوص اللي بتظهر في الدعوة. سيب الحقل فاضي عشان يستخدم النص الافتراضي.
+            </p>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص البسملة</Label>
+                <Input
+                  {...register('bismallahText')}
+                  className="admin-input"
+                  placeholder="بسم الله الرحمن الرحيم"
                 />
-                {groomPhotoUploading ? (
-                  <div className="flex flex-col items-center justify-center py-6 gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
-                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
-                  </div>
-                ) : groomPhotoValue ? (
-                  <div className="relative group">
-                    <img src={groomPhotoValue} alt="صورة العريس" className="w-full h-36 object-cover rounded-xl" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-6 gap-1.5">
-                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
-                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>رفع صورة العريس</p>
-                  </div>
-                )}
               </div>
-              <Input
-                {...register('groomPhoto')}
-                className="admin-input text-xs"
-                placeholder="أو رابط صورة العريس"
-                dir="ltr"
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>عنوان الدعوة</Label>
+                <Input
+                  {...register('invitationTitle')}
+                  className="admin-input"
+                  placeholder="يظهر أسماء العروسين إذا فارغ"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>النص الرئيسي</Label>
+              <Textarea
+                {...register('heroSubtitle')}
+                className="admin-input"
+                placeholder="بقلوب يملؤها الشوق، بيتشرفوا بدعوتكم لمشاركتنا أجمل ليلة في العمر"
+                rows={2}
               />
             </div>
 
-            {/* Bride Photo */}
             <div className="space-y-2">
-              <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة العريسة</Label>
-              <div
-                className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
-                  bridePhotoDragOver ? 'ring-2 ring-offset-2' : ''
-                }`}
-                style={{
-                  border: bridePhotoDragOver
-                    ? '2px dashed var(--wedding-gold)'
-                    : '2px dashed var(--admin-border)',
-                  background: bridePhotoDragOver
-                    ? 'rgba(212,168,83,0.06)'
-                    : 'var(--admin-surface)',
-                  ringColor: 'var(--wedding-gold)',
-                }}
-                onDragOver={handleBridePhotoDragOver}
-                onDragLeave={handleBridePhotoDragLeave}
-                onDrop={handleBridePhotoDrop}
-                onClick={() => bridePhotoInputRef.current?.click()}
-              >
-                <input
-                  ref={bridePhotoInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleBridePhotoUpload(file);
-                    e.target.value = '';
-                  }}
-                />
-                {bridePhotoUploading ? (
-                  <div className="flex flex-col items-center justify-center py-6 gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
-                    <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
-                  </div>
-                ) : bridePhotoValue ? (
-                  <div className="relative group">
-                    <img src={bridePhotoValue} alt="صورة العريسة" className="w-full h-36 object-cover rounded-xl" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                      <p className="text-xs text-white font-medium">تغيير الصورة</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-6 gap-1.5">
-                    <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
-                    <p className="text-xs" style={{ color: 'var(--admin-text-secondary)' }}>رفع صورة العريسة</p>
-                  </div>
-                )}
-              </div>
-              <Input
-                {...register('bridePhoto')}
-                className="admin-input text-xs"
-                placeholder="أو رابط صورة العريسة"
-                dir="ltr"
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>النص الفرعي</Label>
+              <Textarea
+                {...register('heroSubSubtitle')}
+                className="admin-input"
+                placeholder="ليلة هنلتقي فيها على مائدة الحب، والله يجمعنا على خير وبركة"
+                rows={2}
               />
             </div>
-          </div>
 
-          {/* Couple Photo Upload */}
-          <div className="space-y-2">
-            <Label style={{ color: 'var(--admin-text-secondary)' }}>صورة الزوجين معاً</Label>
-            <div
-              className={`relative rounded-xl transition-all duration-300 cursor-pointer ${
-                couplePhotoDragOver ? 'ring-2 ring-offset-2' : ''
-              }`}
-              style={{
-                border: couplePhotoDragOver
-                  ? '2px dashed var(--wedding-gold)'
-                  : '2px dashed var(--admin-border)',
-                background: couplePhotoDragOver
-                  ? 'rgba(212,168,83,0.06)'
-                  : 'var(--admin-surface)',
-                ringColor: 'var(--wedding-gold)',
-              }}
-              onDragOver={handleCouplePhotoDragOver}
-              onDragLeave={handleCouplePhotoDragLeave}
-              onDrop={handleCouplePhotoDrop}
-              onClick={() => couplePhotoInputRef.current?.click()}
-            >
-              <input
-                ref={couplePhotoInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/jfif,image/bmp,image/svg+xml"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleCouplePhotoUpload(file);
-                  e.target.value = '';
-                }}
-              />
-              {couplePhotoUploading ? (
-                <div className="flex flex-col items-center justify-center py-6 gap-2">
-                  <Loader2 className="h-6 w-6 animate-spin" style={{ color: 'var(--wedding-gold)' }} />
-                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>جاري الرفع...</p>
-                </div>
-              ) : couplePhotoValue ? (
-                <div className="relative group">
-                  <img
-                    src={couplePhotoValue}
-                    alt="صورة الزوجين"
-                    className="w-full h-48 object-cover rounded-xl"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                    <p className="text-sm text-white font-medium">اضغط لتغيير الصورة</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-6 gap-1.5">
-                  <Upload className="h-6 w-6" style={{ color: 'var(--admin-text-muted)' }} />
-                  <p className="text-sm" style={{ color: 'var(--admin-text-secondary)' }}>
-                    اسحب الصورة هنا أو اضغط للاختيار
-                  </p>
-                  <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
-                    JPG, PNG, WebP — حتى 10MB
-                  </p>
-                </div>
-              )}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>عنوان التفاصيل</Label>
+                <Input
+                  {...register('detailsTitle')}
+                  className="admin-input"
+                  placeholder="تفاصيل ليلة العمر"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص التفاصيل</Label>
+                <Input
+                  {...register('detailsSubtitle')}
+                  className="admin-input"
+                  placeholder="بشوق ننتظر حضوركم لنشارك معاً فرحة ليلة العمر"
+                />
+              </div>
             </div>
-            <Input
-              {...register('couplePhoto')}
-              className="admin-input text-xs"
-              placeholder="أو رابط صورة الزوجين"
-              dir="ltr"
-            />
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>عنوان المكان</Label>
+                <Input
+                  {...register('venueTitle')}
+                  className="admin-input"
+                  placeholder="حيث تُحتفل الفرحة"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>عنوان الرد</Label>
+                <Input
+                  {...register('rsvpTitle')}
+                  className="admin-input"
+                  placeholder="هنيتشرفوا بحضوركم ليلة العمر؟"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص تأكيد الحضور</Label>
+                <Input
+                  {...register('rsvpAttendingText')}
+                  className="admin-input"
+                  placeholder="يتشرفني الحضور بكل سرور"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص الاعتذار</Label>
+                <Input
+                  {...register('rsvpNotAttendingText')}
+                  className="admin-input"
+                  placeholder="أعتذر، وأتمنى لكم أجمل ليلة"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label style={{ color: 'var(--admin-text-secondary)' }}>نص بطاقة الدعوة</Label>
+              <Input
+                {...register('cardInvitationText')}
+                className="admin-input"
+                placeholder="بيتشرفوا بدعوتكم لحضور حفل زفافهم"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص ترحيب الضيف</Label>
+                <Input
+                  {...register('guestWelcomeText')}
+                  className="admin-input"
+                  placeholder="فرحتنا مش بتتكمل غير بوجودكم معانا"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label style={{ color: 'var(--admin-text-secondary)' }}>نص ترحيب فرعي</Label>
+                <Input
+                  {...register('guestSubWelcomeText')}
+                  className="admin-input"
+                  placeholder="بوجودكم تزدان ليلتنا وتكتمل فرحتنا"
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Client Password */}

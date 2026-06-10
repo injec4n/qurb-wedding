@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { randomUUID } from 'crypto';
+import { verifyAdminAuth } from '@/lib/auth-helpers';
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_MUSIC_SIZE = 20 * 1024 * 1024; // 20MB
@@ -10,6 +11,12 @@ const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'imag
 const MUSIC_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
 
 export async function POST(request: NextRequest) {
+  // Admin auth check
+  const isAuth = await verifyAdminAuth();
+  if (!isAuth) {
+    return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;

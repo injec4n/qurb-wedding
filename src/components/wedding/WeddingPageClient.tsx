@@ -214,6 +214,8 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
             brideName={wedding.brideName}
             colors={colors}
             couplePhoto={wedding.couplePhoto}
+            guestWelcomeText={wedding.guestWelcomeText}
+            guestSubWelcomeText={wedding.guestSubWelcomeText}
           />
         </motion.section>
       )}
@@ -319,6 +321,9 @@ export default function WeddingPageClient({ wedding, guestName }: WeddingPageCli
               guestName={guestName}
               colors={colors}
               enabled={wedding.enableRsvp}
+              rsvpTitle={wedding.rsvpTitle}
+              rsvpAttendingText={wedding.rsvpAttendingText}
+              rsvpNotAttendingText={wedding.rsvpNotAttendingText}
             />
           </motion.section>
         </>

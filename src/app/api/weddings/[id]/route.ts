@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyAdminAuth } from '@/lib/auth-helpers';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -16,6 +17,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // Admin auth check
+  const isAuth = await verifyAdminAuth();
+  if (!isAuth) {
+    return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const body = await request.json();
@@ -25,11 +32,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       'groomName', 'brideName', 'slug', 'weddingDate', 'weddingTime',
       'venueName', 'venueAddress', 'googleMapsLink', 'welcomeMessage',
       'contactPhone', 'coverImage', 'coverCategory', 'backgroundMusicUrl',
-      'couplePhoto', 'groomPhoto', 'bridePhoto', 'clientPassword', 'theme',
+      'couplePhoto', 'clientPassword', 'theme',
       'colorPreset', 'primaryColor', 'secondaryColor', 'backgroundColor',
       'textColor', 'buttonColor', 'accentColor', 'enableRsvp',
       'enableGallery', 'enableCountdown', 'enableMusic',
       'enableGuestPersonalization', 'isActive',
+      // Customizable text fields
+      'bismallahText', 'invitationTitle', 'heroSubtitle', 'heroSubSubtitle',
+      'detailsTitle', 'detailsSubtitle', 'venueTitle',
+      'rsvpTitle', 'rsvpAttendingText', 'rsvpNotAttendingText',
+      'cardInvitationText', 'guestWelcomeText', 'guestSubWelcomeText',
     ];
 
     const data: Record<string, unknown> = {};
@@ -68,6 +80,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // Admin auth check
+  const isAuth = await verifyAdminAuth();
+  if (!isAuth) {
+    return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     await db.wedding.delete({ where: { id } });

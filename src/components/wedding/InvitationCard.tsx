@@ -197,7 +197,7 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
               </div>
 
               <p className="text-xs sm:text-sm mb-3 font-serif" style={{ color: colors.text + 'BB' }}>
-                بيتشرفوا بدعوتكم لحضور حفل زفافهم
+                {wedding.cardInvitationText || 'بيتشرفوا بدعوتكم لحضور حفل زفافهم'}
               </p>
 
               <p className="text-sm sm:text-base font-semibold mb-1" style={{ color: colors.primary + 'DD' }}>

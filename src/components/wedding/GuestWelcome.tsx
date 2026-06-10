@@ -9,9 +9,11 @@ interface GuestWelcomeProps {
   brideName: string;
   colors: ThemeColors;
   couplePhoto?: string;
+  guestWelcomeText?: string;
+  guestSubWelcomeText?: string;
 }
 
-export default function GuestWelcome({ guestName, groomName, brideName, colors, couplePhoto }: GuestWelcomeProps) {
+export default function GuestWelcome({ guestName, groomName, brideName, colors, couplePhoto, guestWelcomeText, guestSubWelcomeText }: GuestWelcomeProps) {
   const isPersonalized = !!guestName;
 
   return (
@@ -115,7 +117,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                 className="space-y-3"
               >
                 <p className="text-lg sm:text-xl" style={{ color: colors.text + 'CC' }}>
-                  فرحتنا مش بتتكمل غير بوجودكم معانا
+                  {guestWelcomeText || 'فرحتنا مش بتتكمل غير بوجودكم معانا'}
                 </p>
                 <div className="flex items-center justify-center gap-3 my-3">
                   <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
@@ -123,7 +125,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                   <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-xl sm:text-2xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  بوجودكم تزدان ليلتنا وتكتمل فرحتنا
+                  {guestSubWelcomeText || 'بوجودكم تزدان ليلتنا وتكتمل فرحتنا'}
                 </p>
                 <p className="text-sm sm:text-base" style={{ color: colors.text + '99' }}>
                   أنتم الزينة اللي بتكمل ليلتنا، والفرحة اللي بتملأ قلوبنا
@@ -159,7 +161,7 @@ export default function GuestWelcome({ guestName, groomName, brideName, colors, 
                   <div className="h-px w-10" style={{ backgroundColor: colors.primary + '40' }} />
                 </div>
                 <p className="text-xl sm:text-2xl font-serif font-semibold" style={{ color: colors.accent }}>
-                  بوجودكم تزدان ليلتنا وتكتمل فرحتنا
+                  {guestSubWelcomeText || 'بوجودكم تزدان ليلتنا وتكتمل فرحتنا'}
                 </p>
                 <p className="text-sm sm:text-base" style={{ color: colors.text + '99' }}>
                   بوجودكم بتتكمل الفرحة وبتزدان الليلة

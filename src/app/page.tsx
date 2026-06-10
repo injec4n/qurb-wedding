@@ -1,11 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Heart,
-  ChevronLeft,
   Sparkles,
   Palette,
   UserPlus,
@@ -13,7 +11,11 @@ import {
   PenTool,
   Layout,
   Send,
-  Eye,
+  MessageCircle,
+  Facebook,
+  Instagram,
+  ChevronUp,
+  ArrowDown,
 } from 'lucide-react';
 import { themes } from '@/lib/themes';
 import { useMemo } from 'react';
@@ -53,18 +55,24 @@ function OrnamentDivider({ className }: { className?: string }) {
   );
 }
 
-/* ─── Gold Particle System ─── */
+/* ─── Seeded random for hydration consistency ─── */
+function seededRandom(seed: number) {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+}
+
+/* ─── Gold Particle System (deterministic) ─── */
 function GoldParticles() {
   const particles = useMemo(
     () =>
       Array.from({ length: 30 }, (_, i) => ({
         id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 3 + 1,
-        duration: Math.random() * 8 + 6,
-        delay: Math.random() * 5,
-        opacity: Math.random() * 0.4 + 0.1,
+        x: seededRandom(i * 7 + 1) * 100,
+        y: seededRandom(i * 13 + 3) * 100,
+        size: seededRandom(i * 17 + 5) * 3 + 1,
+        duration: seededRandom(i * 23 + 7) * 8 + 6,
+        delay: seededRandom(i * 31 + 11) * 5,
+        opacity: seededRandom(i * 37 + 13) * 0.4 + 0.1,
       })),
     []
   );
@@ -142,12 +150,37 @@ const steps = [
   },
 ];
 
+/* ─── Social links data ─── */
+const socialLinks = [
+  {
+    icon: MessageCircle,
+    label: 'واتساب',
+    href: 'https://wa.me/201000000000',
+    color: '#25D366',
+    hoverBg: 'hover:bg-[#25D366]/10 hover:border-[#25D366]/30',
+  },
+  {
+    icon: Facebook,
+    label: 'فيسبوك',
+    href: 'https://facebook.com/qurb.wedding',
+    color: '#1877F2',
+    hoverBg: 'hover:bg-[#1877F2]/10 hover:border-[#1877F2]/30',
+  },
+  {
+    icon: Instagram,
+    label: 'انستقرام',
+    href: 'https://instagram.com/qurb.wedding',
+    color: '#E4405F',
+    hoverBg: 'hover:bg-[#E4405F]/10 hover:border-[#E4405F]/30',
+  },
+];
+
 /* ─── Template data from themes ─── */
 const templateList = Object.values(themes);
 
-/* ─── Template Preview Card ─── */
+/* ─── Template Preview Card (NO LINKS — static preview only) ─── */
 function TemplateCard({ theme, index }: { theme: (typeof templateList)[0]; index: number }) {
-  const { colors, previewGradient, labelAr, description, name } = theme;
+  const { colors, previewGradient, labelAr, description } = theme;
   const isLightBg = colors.background === '#FAFAFA' || colors.background === '#FFF5F5';
 
   return (
@@ -155,142 +188,139 @@ function TemplateCard({ theme, index }: { theme: (typeof templateList)[0]; index
       variants={scaleIn}
       custom={index}
       whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
-      className="group"
+      className="group cursor-default"
     >
-      <Link href={`/w/mohamed-fatma?theme=${name}`} className="block">
-        <div
-          className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-[#D4A853]/40 transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[#D4A853]/10"
-          style={{ background: previewGradient, aspectRatio: '3/4' }}
-        >
-          {/* Inner card content */}
-          <div className="relative h-full flex flex-col items-center justify-between p-5 sm:p-6">
-            {/* Corner ornaments */}
-            {[
-              'top-3 right-3',
-              'top-3 left-3 rotate-90',
-              'bottom-3 right-3 -rotate-90',
-              'bottom-3 left-3 rotate-180',
-            ].map((pos, ci) => (
-              <div key={ci} className={`absolute ${pos.split(' ').slice(0, 2).join(' ')} w-7 h-7 ${pos.includes('rotate-90') ? 'rotate-90' : ''} ${pos.includes('-rotate-90') ? '-rotate-90' : ''} ${pos.includes('rotate-180') ? 'rotate-180' : ''}`}>
-                <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
-                  <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
-                </svg>
-              </div>
-            ))}
+      <div
+        className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-[#D4A853]/40 transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[#D4A853]/10"
+        style={{ background: previewGradient, aspectRatio: '3/4' }}
+      >
+        {/* Inner card content */}
+        <div className="relative h-full flex flex-col items-center justify-between p-5 sm:p-6">
+          {/* Corner ornaments */}
+          {[
+            'top-3 right-3',
+            'top-3 left-3 rotate-90',
+            'bottom-3 right-3 -rotate-90',
+            'bottom-3 left-3 rotate-180',
+          ].map((pos, ci) => (
+            <div key={ci} className={`absolute ${pos.split(' ').slice(0, 2).join(' ')} w-7 h-7 ${pos.includes('rotate-90') ? 'rotate-90' : ''} ${pos.includes('-rotate-90') ? '-rotate-90' : ''} ${pos.includes('rotate-180') ? 'rotate-180' : ''}`}>
+              <svg viewBox="0 0 30 30" fill="none" className="w-full h-full opacity-25">
+                <path d="M0 0 L30 0 L30 8 L8 8 L8 30 L0 30 Z" fill={colors.primary} />
+              </svg>
+            </div>
+          ))}
 
-            {/* Inner border frame */}
+          {/* Inner border frame */}
+          <div
+            className="absolute inset-3 sm:inset-4 rounded-lg border"
+            style={{ borderColor: `${colors.primary}20` }}
+          />
+
+          {/* Bismallah */}
+          <div className="flex flex-col items-center gap-2 pt-2">
+            <p
+              className="text-xs sm:text-sm font-medium tracking-wider opacity-60"
+              style={{ color: colors.primary }}
+            >
+              بسم الله الرحمن الرحيم
+            </p>
+            <div className="flex items-center gap-2 w-full max-w-[100px]">
+              <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}40, transparent)` }} />
+              <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.5 }} />
+              <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}40, transparent)` }} />
+            </div>
+          </div>
+
+          {/* Couple names */}
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
+              محمد
+            </p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+              <Heart className="h-4 w-4" style={{ color: colors.primary, fill: colors.primary, opacity: 0.7 }} />
+              <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+            </div>
+            <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
+              فاطمة
+            </p>
+          </div>
+
+          {/* Date & venue */}
+          <div className="flex flex-col items-center gap-1 pb-2">
+            <div className="flex items-center gap-2 w-full max-w-[80px] mb-2">
+              <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}30, transparent)` }} />
+              <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.3 }} />
+              <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}30, transparent)` }} />
+            </div>
+            <p className="text-[10px] sm:text-xs font-light tracking-wider opacity-60" style={{ color: colors.text }}>
+              الجمعة ١٥ شعبان ١٤٤٧
+            </p>
+            <p className="text-[10px] sm:text-xs font-light tracking-wider opacity-50" style={{ color: colors.text }}>
+              فندق الريتز كارلتون — جدة
+            </p>
+          </div>
+
+          {/* Hover overlay — shows label instead of link */}
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2.5">
+              <Sparkles className="h-4 w-4 text-[#D4A853]" />
+              <span className="text-white text-sm font-medium">{labelAr}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Theme info below card */}
+      <div className="mt-3 flex items-center justify-between px-1">
+        <div>
+          <h3 className="font-bold text-sm sm:text-base text-white">{labelAr}</h3>
+          <p className="text-xs text-white/50 leading-relaxed">{description}</p>
+        </div>
+        <div className="flex gap-1.5">
+          {[colors.primary, colors.secondary, colors.accent].map((color, ci) => (
             <div
-              className="absolute inset-3 sm:inset-4 rounded-lg border"
-              style={{ borderColor: `${colors.primary}20` }}
+              key={ci}
+              className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border"
+              style={{
+                backgroundColor: color,
+                borderColor: isLightBg ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
+              }}
             />
-
-            {/* Bismallah */}
-            <div className="flex flex-col items-center gap-2 pt-2">
-              <p
-                className="text-xs sm:text-sm font-medium tracking-wider opacity-60"
-                style={{ color: colors.primary }}
-              >
-                بسم الله الرحمن الرحيم
-              </p>
-              <div className="flex items-center gap-2 w-full max-w-[100px]">
-                <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}40, transparent)` }} />
-                <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.5 }} />
-                <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}40, transparent)` }} />
-              </div>
-            </div>
-
-            {/* Couple names */}
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
-                محمد
-              </p>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
-                <Heart className="h-4 w-4" style={{ color: colors.primary, fill: colors.primary, opacity: 0.7 }} />
-                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
-              </div>
-              <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
-                فاطمة
-              </p>
-            </div>
-
-            {/* Date & venue */}
-            <div className="flex flex-col items-center gap-1 pb-2">
-              <div className="flex items-center gap-2 w-full max-w-[80px] mb-2">
-                <div className="flex-1 h-px" style={{ background: `linear-gradient(to left, ${colors.primary}30, transparent)` }} />
-                <div className="w-1 h-1 rotate-45" style={{ backgroundColor: colors.primary, opacity: 0.3 }} />
-                <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${colors.primary}30, transparent)` }} />
-              </div>
-              <p className="text-[10px] sm:text-xs font-light tracking-wider opacity-60" style={{ color: colors.text }}>
-                الجمعة ١٥ شعبان ١٤٤٧
-              </p>
-              <p className="text-[10px] sm:text-xs font-light tracking-wider opacity-50" style={{ color: colors.text }}>
-                فندق الريتز كارلتون — جدة
-              </p>
-            </div>
-
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2.5">
-                <Eye className="h-4 w-4 text-white" />
-                <span className="text-white text-sm font-medium">شاهد المثال</span>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-
-        {/* Theme info below card */}
-        <div className="mt-3 flex items-center justify-between px-1">
-          <div>
-            <h3 className="font-bold text-sm sm:text-base text-white">{labelAr}</h3>
-            <p className="text-xs text-white/50 leading-relaxed">{description}</p>
-          </div>
-          <div className="flex gap-1.5">
-            {[colors.primary, colors.secondary, colors.accent].map((color, ci) => (
-              <div
-                key={ci}
-                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border"
-                style={{
-                  backgroundColor: color,
-                  borderColor: isLightBg ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </Link>
+      </div>
     </motion.div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAIN PAGE
+   MAIN PAGE — MARKETING ONLY
    ═══════════════════════════════════════════════════════════════ */
 export default function LandingPage() {
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToTemplates = () => {
+    document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0D0D1A] text-white overflow-x-hidden" dir="rtl">
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0D0D1A]/60 backdrop-blur-xl border-b border-[#D4A853]/8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
+          <div className="flex items-center gap-2 group cursor-default">
             <Heart className="h-5 w-5 text-[#D4A853] fill-[#D4A853] group-hover:scale-110 transition-transform duration-300" />
             <span className="text-xl font-bold text-gold-gradient">قُرب</span>
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/w/mohamed-fatma">
-              <Button
-                variant="ghost"
-                className="text-white/60 hover:text-[#D4A853] hover:bg-[#D4A853]/8 transition-all duration-300 text-xs sm:text-sm font-light"
-              >
-                شاهد المثال
-              </Button>
-            </Link>
-            <Link href="/admin/create">
-              <Button className="btn-wedding text-xs sm:text-sm px-4 sm:px-5 py-2">
-                ابدأ الآن
-              </Button>
-            </Link>
           </div>
+          <Button
+            onClick={scrollToContact}
+            className="btn-wedding text-xs sm:text-sm px-4 sm:px-5 py-2"
+          >
+            تواصل معنا
+          </Button>
         </div>
       </nav>
 
@@ -389,25 +419,22 @@ export default function LandingPage() {
               custom={5}
               className="flex flex-col sm:flex-row items-center gap-4 mt-4"
             >
-              <Link href="/admin/create">
-                <Button
-                  size="lg"
-                  className="btn-wedding text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-6 rounded-xl"
-                >
-                  ابدأ الآن
-                  <ChevronLeft className="mr-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/w/mohamed-fatma">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-[#D4A853]/30 text-[#D4A853] hover:bg-[#D4A853]/8 hover:border-[#D4A853]/50 font-light text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-6 rounded-xl transition-all duration-400"
-                >
-                  شاهد المثال
-                  <Eye className="mr-2 h-5 w-5" />
-                </Button>
-              </Link>
+              <Button
+                onClick={scrollToContact}
+                size="lg"
+                className="btn-wedding text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-6 rounded-xl"
+              >
+                تواصل معنا
+              </Button>
+              <Button
+                onClick={scrollToTemplates}
+                variant="outline"
+                size="lg"
+                className="border-[#D4A853]/30 text-[#D4A853] hover:bg-[#D4A853]/8 hover:border-[#D4A853]/50 font-light text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-6 rounded-xl transition-all duration-400"
+              >
+                شاهد التصاميم
+                <ArrowDown className="mr-2 h-5 w-5" />
+              </Button>
             </motion.div>
           </motion.div>
         </div>
@@ -477,9 +504,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          TEMPLATE SHOWCASE — THE KEY SECTION
+          TEMPLATE SHOWCASE — STATIC PREVIEWS ONLY
           ═══════════════════════════════════════════════════════════ */}
-      <section className="relative py-16 sm:py-20">
+      <section id="templates" className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D1A] via-[#0A0A18] to-[#0D0D1A]" />
 
         {/* Center glow */}
@@ -525,7 +552,7 @@ export default function LandingPage() {
             ))}
           </motion.div>
 
-          {/* CTA under templates */}
+          {/* CTA under templates — scroll to contact */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -534,16 +561,15 @@ export default function LandingPage() {
             custom={0}
             className="text-center mt-10"
           >
-            <Link href="/w/mohamed-fatma">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-[#D4A853]/30 text-[#D4A853] hover:bg-[#D4A853]/8 hover:border-[#D4A853]/50 font-light text-sm sm:text-base px-8 py-5 rounded-xl transition-all duration-400"
-              >
-                شاهد مثال حي للقالب
-                <Eye className="mr-2 h-4 w-4" />
-              </Button>
-            </Link>
+            <Button
+              onClick={scrollToContact}
+              variant="outline"
+              size="lg"
+              className="border-[#D4A853]/30 text-[#D4A853] hover:bg-[#D4A853]/8 hover:border-[#D4A853]/50 font-light text-sm sm:text-base px-8 py-5 rounded-xl transition-all duration-400"
+            >
+              اطلب تصميمك الآن
+              <Sparkles className="mr-2 h-4 w-4" />
+            </Button>
           </motion.div>
         </div>
       </section>
@@ -615,9 +641,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          CTA SECTION — EMOTIONAL
+          CONTACT SECTION — SOCIAL MEDIA
           ═══════════════════════════════════════════════════════════ */}
-      <section className="relative py-16 sm:py-24">
+      <section id="contact" className="relative py-16 sm:py-24">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D1A] via-[#1A1A2E]/30 to-[#0D0D1A]" />
 
         {/* Glow */}
@@ -639,37 +665,74 @@ export default function LandingPage() {
             custom={1}
             className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mt-5 leading-[1.2]"
           >
-            <span className="text-gold-gradient">جاهز تبدأ؟</span>
+            <span className="text-gold-gradient">تواصل معنا</span>
           </motion.h2>
 
           <motion.p
             variants={fadeUp}
             custom={2}
-            className="text-base sm:text-lg text-white/40 font-light mb-8 max-w-xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/40 font-light mb-10 max-w-xl mx-auto leading-relaxed"
           >
-            أنشئ دعوة زفافك الرقمية في دقائق
+            ابحث عن تصميمك المثالي واحجز موعدك — فريقنا جاهز يساعدك
           </motion.p>
 
-          <motion.div variants={fadeUp} custom={3} className="flex flex-col items-center gap-4">
-            <Link href="/admin/create">
+          {/* Social media cards */}
+          <motion.div
+            variants={fadeUp}
+            custom={3}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          >
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex items-center gap-3 bg-[#1A1A2E]/60 border border-white/5 ${social.hoverBg} rounded-2xl px-6 py-4 sm:px-8 sm:py-5 transition-all duration-400 w-full sm:w-auto`}
+              >
+                <div
+                  className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300"
+                  style={{ backgroundColor: `${social.color}15` }}
+                >
+                  <social.icon className="h-6 w-6" style={{ color: social.color }} />
+                </div>
+                <div className="text-right">
+                  <p className="text-white font-bold text-sm sm:text-base">{social.label}</p>
+                  <p className="text-white/40 font-light text-xs">تابعنا على {social.label}</p>
+                </div>
+              </a>
+            ))}
+          </motion.div>
+
+          {/* Extra CTA */}
+          <motion.div
+            variants={fadeUp}
+            custom={4}
+            className="mt-10"
+          >
+            <a
+              href="https://wa.me/201000000000"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button
                 size="lg"
                 className="btn-wedding text-lg px-10 py-6 rounded-xl"
               >
-                ابدأ الآن
-                <ChevronLeft className="mr-2 h-5 w-5" />
+                ابدأ محادثة واتساب
+                <MessageCircle className="mr-2 h-5 w-5" />
               </Button>
-            </Link>
+            </a>
           </motion.div>
 
-          <motion.div variants={fadeUp} custom={4} className="mt-8">
+          <motion.div variants={fadeUp} custom={5} className="mt-8">
             <OrnamentDivider />
           </motion.div>
         </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          FOOTER
+          FOOTER — BRAND ONLY, NO ADMIN/CLIENT LINKS
           ═══════════════════════════════════════════════════════════ */}
       <footer className="relative mt-auto">
         {/* Top border */}
@@ -692,21 +755,20 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              {/* Links */}
-              <div className="flex items-center gap-6">
-                <Link
-                  href="/admin/create"
-                  className="text-white/40 hover:text-[#D4A853] text-xs sm:text-sm font-light transition-colors duration-300"
-                >
-                  إنشاء دعوة
-                </Link>
-                <div className="w-1 h-1 rounded-full bg-white/15" />
-                <Link
-                  href="/client/login"
-                  className="text-white/40 hover:text-[#D4A853] text-xs sm:text-sm font-light transition-colors duration-300"
-                >
-                  دخول العملاء
-                </Link>
+              {/* Social icons row */}
+              <div className="flex items-center gap-4">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:border-[#D4A853]/40 hover:bg-[#D4A853]/8 transition-all duration-300"
+                    aria-label={social.label}
+                  >
+                    <social.icon className="h-4 w-4 text-white/50 hover:text-[#D4A853]" style={{}} />
+                  </a>
+                ))}
               </div>
 
               {/* Bottom line */}

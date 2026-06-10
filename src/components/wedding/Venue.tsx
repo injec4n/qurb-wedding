@@ -29,7 +29,7 @@ export default function Venue({ wedding, colors }: VenueProps) {
           className="text-center text-3xl sm:text-4xl md:text-5xl font-bold mb-5 font-serif"
           style={{ color: colors.text }}
         >
-          حيث تُحتفل الفرحة
+          {wedding.venueTitle || 'حيث تُحتفل الفرحة'}
         </motion.h2>
 
         {/* Venue card */}

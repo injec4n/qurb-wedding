@@ -153,7 +153,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
       animate={isExiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#050510' }}
+      style={{ backgroundColor: colors.background }}
       dir="rtl"
     >
       {/* Deep cinematic background */}
@@ -162,7 +162,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
           radial-gradient(ellipse at 50% 20%, ${colors.primary}12 0%, transparent 60%),
           radial-gradient(ellipse at 30% 80%, ${colors.accent}08 0%, transparent 50%),
           radial-gradient(ellipse at 70% 70%, ${colors.primary}06 0%, transparent 50%),
-          linear-gradient(180deg, #050510 0%, #0a0a20 50%, #050510 100%)
+          linear-gradient(180deg, ${colors.background} 0%, ${colors.secondary} 50%, ${colors.background} 100%)
         `,
       }} />
 
@@ -227,7 +227,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
           <div
             className="relative rounded-2xl overflow-hidden"
             style={{
-              background: `linear-gradient(160deg, #12122a 0%, #1a1a3e 30%, #15153a 60%, #101030 100%)`,
+              background: `linear-gradient(160deg, ${colors.secondary}F0 0%, ${colors.secondary}CC 30%, ${colors.secondary}DD 60%, ${colors.secondary}E0 100%)`,
               border: `1.5px solid ${colors.primary}35`,
               boxShadow: `
                 0 30px 80px rgba(0,0,0,0.6),
@@ -497,7 +497,7 @@ export default function WelcomeScreen({ guestName, groomName, brideName, colors,
                 className="relative w-full max-w-md rounded-3xl p-6 sm:p-10 text-center"
                 style={{
                   background: `
-                    linear-gradient(160deg, #12122aF5 0%, #1a1a3eF5 40%, #12122aF5 100%)
+                    linear-gradient(160deg, ${colors.secondary}F5 0%, ${colors.secondary}E0 40%, ${colors.secondary}F5 100%)
                   `,
                   border: `1.5px solid ${colors.primary}30`,
                   boxShadow: `
