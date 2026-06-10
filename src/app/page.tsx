@@ -125,7 +125,7 @@ const socialLinks = [
   {
     icon: MessageCircle,
     label: 'واتساب',
-    href: 'https://wa.me/201000000000',
+    href: 'https://wa.me/201096422675',
     color: '#25D366',
     hoverBg: 'hover:bg-[#25D366]/10 hover:border-[#25D366]/30'
   },
