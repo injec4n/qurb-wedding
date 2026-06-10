@@ -7,12 +7,6 @@ export function isSupabaseConfigured(): boolean {
   return !!(supabaseUrl && supabaseServiceKey);
 }
 
-interface SupabaseStorageResponse {
-  id: string;
-  path: string;
-  fullPath: string;
-}
-
 export async function supabaseUpload(storagePath: string, buffer: Buffer, contentType: string): Promise<string> {
   if (!isSupabaseConfigured()) throw new Error('Supabase not configured');
 
@@ -30,11 +24,10 @@ export async function supabaseUpload(storagePath: string, buffer: Buffer, conten
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Supabase upload failed: ${error}`);
+    throw new Error('Supabase upload failed: ' + error);
   }
 
-  const data: SupabaseStorageResponse = await response.json();
-  return `${supabaseUrl}/storage/v1/object/public/${STORAGE_BUCKET}/${data.path}`;
+  return `${supabaseUrl}/storage/v1/object/public/${STORAGE_BUCKET}/${storagePath}`;
 }
 
 export async function supabaseListBuckets(): Promise<string[]> {
@@ -49,8 +42,8 @@ export async function supabaseListBuckets(): Promise<string[]> {
   });
 
   if (!response.ok) return [];
-  const buckets: Array<{ name: string }> = await response.json();
-  return buckets.map(b => b.name);
+  const buckets = await response.json();
+  return buckets.map((b: { name: string }) => b.name);
 }
 
 export async function supabaseCreateBucket(name: string, isPublic: boolean): Promise<boolean> {
