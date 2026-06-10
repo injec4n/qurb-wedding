@@ -283,24 +283,24 @@ function NameOrnament({ color, accentColor, ornamentStyle }: { color: string; ac
     >
       <div className={`h-px ${isBold ? 'w-12 sm:w-20' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '40' }} />
       <svg
-        viewBox="0 0 60 40"
-        className={`w-14 h-10 sm:w-20 sm:h-14 mx-2`}
+        viewBox="0 0 60 50"
+        className={`w-14 h-12 sm:w-20 sm:h-16 mx-2`}
         style={{ color: accentColor }}
       >
         <path
-          d="M30 5 C20 5, 10 12, 10 20 C10 28, 18 32, 25 28 L30 25 L35 28 C42 32, 50 28, 50 20 C50 12, 40 5, 30 5Z"
+          d="M30 6 C22 6, 12 12, 12 20 C12 28, 20 35, 30 40 C40 35, 48 28, 48 20 C48 12, 38 6, 30 6Z"
           fill="none"
           stroke="currentColor"
           strokeWidth={isBold ? '1.5' : '1'}
         />
-        <path d="M30 12 L30 28" stroke="currentColor" strokeWidth={isBold ? '1.2' : '0.8'} />
-        <circle cx="30" cy="8" r={isBold ? '3' : '2'} fill="currentColor" opacity="0.6" />
-        <circle cx="15" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
-        <circle cx="45" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
-        <path d="M5 20 L12 20" stroke="currentColor" strokeWidth="0.6" />
-        <path d="M48 20 L55 20" stroke="currentColor" strokeWidth="0.6" />
+        <path d="M30 14 L30 36" stroke="currentColor" strokeWidth={isBold ? '1' : '0.7'} />
+        <circle cx="30" cy="9" r={isBold ? '2.5' : '1.8'} fill="currentColor" opacity="0.6" />
+        <circle cx="16" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
+        <circle cx="44" cy="20" r="1.5" fill="currentColor" opacity="0.4" />
+        <path d="M4 20 L10 20" stroke="currentColor" strokeWidth="0.6" />
+        <path d="M50 20 L56 20" stroke="currentColor" strokeWidth="0.6" />
         <path d="M30 2 L32 5 L30 8 L28 5Z" fill="currentColor" opacity="0.5" />
-        <path d="M30 32 L32 35 L30 38 L28 35Z" fill="currentColor" opacity="0.5" />
+        <path d="M28 42 L30 46 L32 42" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.5" />
       </svg>
       <div className={`h-px ${isBold ? 'w-12 sm:w-20' : 'w-10 sm:w-16'}`} style={{ backgroundColor: color + '40' }} />
     </motion.div>
