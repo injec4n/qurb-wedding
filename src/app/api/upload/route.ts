@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { randomUUID } from 'crypto';
 import { verifyAdminAuth } from '@/lib/auth-helpers';
-import { supabase, STORAGE_BUCKET, isSupabaseConfigured } from '@/lib/supabase';
+import { supabaseUpload, isSupabaseConfigured } from '@/lib/supabase';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
@@ -41,17 +41,12 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     let url = '';
 
-    if (isSupabaseConfigured() && supabase) {
-      const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, buffer, {
-        contentType: file.type || (isImage ? 'image/jpeg' : 'audio/mpeg'),
-        upsert: false,
-      });
-      if (error) {
-        console.error('Supabase upload error:', error);
+    if (isSupabaseConfigured()) {
+      try {
+        url = await supabaseUpload(storagePath, buffer, file.type || (isImage ? 'image/jpeg' : 'audio/mpeg'));
+      } catch (uploadError) {
+        console.error('Supabase upload error:', uploadError);
         url = await uploadLocal(buffer, subdir, filename);
-      } else {
-        const { data: urlData } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(storagePath);
-        url = urlData.publicUrl;
       }
     } else {
       url = await uploadLocal(buffer, subdir, filename);
