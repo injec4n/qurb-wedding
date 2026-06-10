@@ -526,20 +526,20 @@ export default function ReviewManager() {
       {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent
-          className="max-w-lg"
+          className="max-w-lg max-h-[90vh] flex flex-col p-0 gap-0"
           style={{
             background: 'var(--admin-surface-raised)',
             border: '1px solid var(--admin-border)',
             color: 'var(--admin-text-primary)',
           }}
         >
-          <DialogHeader>
+          <DialogHeader className="p-6 pb-3 shrink-0">
             <DialogTitle className="text-gold-gradient text-lg">
               {editingId ? 'تعديل التقييم' : 'إضافة تقييم جديد'}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-5 mt-4" dir="rtl">
+          <div className="flex-1 overflow-y-auto px-6 pb-4 space-y-4" dir="rtl" style={{ scrollbarWidth: 'thin', scrollbarColor: '#D4A85340 transparent' }}>
             {/* Type selector */}
             <div>
               <label className="text-sm font-medium mb-2 block" style={{ color: 'var(--admin-text-secondary)' }}>
@@ -632,7 +632,7 @@ export default function ReviewManager() {
                     <img
                       src={form.imageUrl}
                       alt="صورة التقييم"
-                      className="w-full h-auto max-h-64 object-contain bg-black/20"
+                      className="w-full h-auto max-h-36 object-contain bg-black/20"
                     />
                     <button
                       type="button"
@@ -764,8 +764,10 @@ export default function ReviewManager() {
                 onCheckedChange={(checked) => setForm((prev) => ({ ...prev, isActive: checked }))}
               />
             </div>
+          </div>
 
-            {/* Submit button */}
+          {/* Submit button - always visible at bottom */}
+          <div className="p-6 pt-3 shrink-0 border-t border-white/5" dir="rtl">
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting || isUploading}
