@@ -17,6 +17,27 @@ import {
   ArrowDown,
   LogIn
 } from 'lucide-react';
+
+/* ─── Custom TikTok Icon ─── */
+function TikTokIcon({
+  className,
+  style
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.86a8.28 8.28 0 0 0 4.76 1.5V6.93a4.84 4.84 0 0 1-1-.24z" />
+    </svg>
+  );
+}
+
 import { themes, type ThemeName } from '@/lib/themes';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -123,18 +144,18 @@ const steps = [
 /* ─── Social links data ─── */
 const socialLinks = [
   {
-    icon: MessageCircle,
-    label: 'واتساب',
-    href: 'https://wa.me/201096422675',
-    color: '#25D366',
-    hoverBg: 'hover:bg-[#25D366]/10 hover:border-[#25D366]/30'
-  },
-  {
     icon: Facebook,
     label: 'فيسبوك',
-    href: 'https://facebook.com/qurb.wedding',
+    href: 'https://www.facebook.com/qurb.wedding',
     color: '#1877F2',
     hoverBg: 'hover:bg-[#1877F2]/10 hover:border-[#1877F2]/30'
+  },
+  {
+    icon: TikTokIcon,
+    label: 'تيك توك',
+    href: 'https://tiktok.com/@qurb.wedding',
+    color: '#00F2EA',
+    hoverBg: 'hover:bg-[#00F2EA]/10 hover:border-[#00F2EA]/30'
   },
   {
     icon: Instagram,
@@ -722,7 +743,7 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
             variants={staggerContainer}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl"
           >
             {templateList.map((theme, i) => (
               <TemplateCard key={theme.name} theme={theme} index={i} />
