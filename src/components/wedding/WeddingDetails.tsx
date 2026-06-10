@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, MapPin, Phone, MessageCircle } from 'lucide-react';
 import { Wedding, ThemeColors } from '@/types/wedding';
@@ -11,6 +12,8 @@ interface WeddingDetailsProps {
 }
 
 export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps) {
+  const [contactHovered, setContactHovered] = useState(false);
+  const [mapHovered, setMapHovered] = useState(false);
   const details = [
     {
       icon: Calendar,
@@ -99,10 +102,13 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.45 }}
+            onMouseEnter={() => setContactHovered(true)}
+            onMouseLeave={() => setContactHovered(false)}
             className="flex items-start gap-4 p-3 sm:p-4 rounded-2xl cursor-pointer hover:scale-[1.02] transition-transform card-glow"
             style={{
-              backgroundColor: colors.primary + '0A',
-              border: `1px solid ${colors.primary}18`,
+              backgroundColor: contactHovered ? colors.primary + '15' : colors.primary + '0A',
+              border: `1px solid ${contactHovered ? colors.primary + '30' : colors.primary + '18'}`,
+              boxShadow: contactHovered ? `0 0 16px ${colors.primary}15` : 'none',
             }}
           >
             <div
@@ -173,11 +179,14 @@ export default function WeddingDetails({ wedding, colors }: WeddingDetailsProps)
             href={wedding.googleMapsLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-7 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            onMouseEnter={() => setMapHovered(true)}
+            onMouseLeave={() => setMapHovered(false)}
+            className="inline-flex items-center gap-3 px-7 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105"
             style={{
               backgroundColor: colors.button,
               color: colors.background,
-              boxShadow: `0 4px 20px ${colors.button}30`,
+              boxShadow: mapHovered ? `0 4px 28px ${colors.button}45` : `0 4px 20px ${colors.button}30`,
+              outline: 'none',
             }}
           >
             <MapPin className="w-5 h-5" />

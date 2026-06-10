@@ -20,6 +20,7 @@ import {
 import { themes, type ThemeName } from '@/lib/themes';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 
 // Dynamic import GoldParticles to avoid SSR hydration mismatch with floating-point precision
 const GoldParticles = dynamic(() => import('@/components/landing/GoldParticles'), { ssr: false });
@@ -194,17 +195,27 @@ function TemplateCard({ theme, index }: { theme: (typeof templateList)[0]; index
               </div>
             </div>
 
-            {/* Couple names */}
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
+            {/* Couple photo + names */}
+            <div className="flex flex-col items-center gap-2">
+              <div
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden"
+                style={{ border: `2px solid ${colors.primary}50`, padding: '2px' }}
+              >
+                <img
+                  src="/images/default-couple.png"
+                  alt="صورة الزوجين"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <p className="text-lg sm:text-xl font-bold" style={{ color: colors.text }}>
                 محمد
               </p>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
-                <Heart className="h-4 w-4" style={{ color: colors.primary, fill: colors.primary, opacity: 0.7 }} />
-                <div className="w-8 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+                <div className="w-6 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
+                <Heart className="h-3 w-3" style={{ color: colors.primary, fill: colors.primary, opacity: 0.7 }} />
+                <div className="w-6 h-px" style={{ backgroundColor: colors.primary, opacity: 0.4 }} />
               </div>
-              <p className="text-xl sm:text-2xl font-bold" style={{ color: colors.text }}>
+              <p className="text-lg sm:text-xl font-bold" style={{ color: colors.text }}>
                 فاطمة
               </p>
             </div>
@@ -255,6 +266,64 @@ function TemplateCard({ theme, index }: { theme: (typeof templateList)[0]; index
         </div>
       </motion.div>
     </Link>
+  );
+}
+
+/* ─── Demo Name Input Component ─── */
+function DemoNameInput() {
+  const [name, setName] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState<ThemeName>('royal-gold');
+
+  const demoSlug = themeDemoSlugs[selectedTheme] || `demo-${selectedTheme}`;
+  const demoUrl = name.trim()
+    ? `/w/${demoSlug}?guest=${encodeURIComponent(name.trim())}`
+    : `/w/${demoSlug}`;
+
+  return (
+    <div className="space-y-4">
+      {/* Name input */}
+      <div className="relative">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="اكتب اسمك هنا..."
+          className="w-full rounded-xl px-5 py-3.5 text-base bg-[#0D0D1A]/60 border border-[#D4A853]/20 text-white placeholder:text-white/25 outline-none transition-all duration-300 focus:border-[#D4A853]/50 focus:ring-2 focus:ring-[#D4A853]/10"
+          dir="rtl"
+        />
+      </div>
+
+      {/* Template selector */}
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        {Object.values(themes).map((t) => (
+          <button
+            key={t.name}
+            onClick={() => setSelectedTheme(t.name)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+              selectedTheme === t.name
+                ? 'bg-[#D4A853] text-[#0D0D1A] shadow-lg shadow-[#D4A853]/25'
+                : 'bg-white/5 text-white/50 border border-white/10 hover:border-[#D4A853]/30 hover:text-[#D4A853]'
+            }`}
+          >
+            {t.labelAr}
+          </button>
+        ))}
+      </div>
+
+      {/* Preview button */}
+      <Link
+        href={demoUrl}
+        className="block w-full"
+      >
+        <Button
+          size="lg"
+          className="btn-wedding w-full text-base py-5 rounded-xl"
+        >
+          {name.trim() ? `شاهد الدعوة باسم "${name.trim()}"` : 'شاهد الدعوة التجريبية'}
+          <Sparkles className="mr-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </div>
   );
 }
 
@@ -547,6 +616,29 @@ export default function LandingPage() {
               اطلب تصميمك الآن
               <Sparkles className="mr-2 h-4 w-4" />
             </Button>
+          </motion.div>
+
+          {/* ═══════════════════════════════════════════════
+              DEMO PREVIEW — Enter your name to try
+              ═══════════════════════════════════════════════ */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={1}
+            className="mt-12 max-w-xl mx-auto"
+          >
+            <div className="rounded-2xl border border-[#D4A853]/15 bg-[#1A1A2E]/40 backdrop-blur-sm p-6 sm:p-8 text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <UserPlus className="h-5 w-5 text-[#D4A853]" />
+                <h3 className="text-lg sm:text-xl font-bold text-white">جرّب الدعوة باسمك</h3>
+              </div>
+              <p className="text-white/40 font-light text-sm mb-5">
+                ادخل اسمك وشوف الدعوة هتبقى شكلها إزاي كمدعو
+              </p>
+              <DemoNameInput />
+            </div>
           </motion.div>
         </div>
       </section>

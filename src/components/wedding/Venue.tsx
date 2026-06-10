@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Navigation } from 'lucide-react';
 import { Wedding, ThemeColors } from '@/types/wedding';
@@ -11,6 +12,7 @@ interface VenueProps {
 
 export default function Venue({ wedding, colors }: VenueProps) {
   const hasMap = !!wedding.googleMapsLink;
+  const [mapHovered, setMapHovered] = useState(false);
 
   return (
     <div className="py-4 sm:py-6 px-4" dir="rtl">
@@ -101,11 +103,14 @@ export default function Venue({ wedding, colors }: VenueProps) {
                 href={wedding.googleMapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                onMouseEnter={() => setMapHovered(true)}
+                onMouseLeave={() => setMapHovered(false)}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-105"
                 style={{
                   backgroundColor: colors.button,
                   color: colors.background,
-                  boxShadow: `0 4px 16px ${colors.button}25`,
+                  boxShadow: mapHovered ? `0 4px 24px ${colors.button}40` : `0 4px 16px ${colors.button}25`,
+                  outline: 'none',
                 }}
               >
                 <Navigation className="w-5 h-5" />

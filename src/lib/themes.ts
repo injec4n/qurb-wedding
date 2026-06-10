@@ -44,13 +44,13 @@ export const themes: Record<ThemeName, ThemeConfig> = {
     description: 'سينمائي أسود وذهبي — تصميم منقسم أنيق بدون زخارف',
     previewGradient: 'linear-gradient(135deg, #050505 0%, #111111 40%, #050505 100%)',
     layoutStyle: 'modern',
-    heroStyle: 'split',
+    heroStyle: 'cinematic',
     sectionSpacing: 'compact',
     showPattern: true,
     patternType: 'lines',
-    ornamentStyle: 'none',
-    cornerOrnaments: false,
-    fontScale: 0.9,
+    ornamentStyle: 'bold',
+    cornerOrnaments: true,
+    fontScale: 1.15,
   },
 
   'floral-romance': {

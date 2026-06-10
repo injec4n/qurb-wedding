@@ -22,6 +22,8 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled, rsv
   const [nameInput, setNameInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [attendingHovered, setAttendingHovered] = useState(false);
+  const [notAttendingHovered, setNotAttendingHovered] = useState(false);
 
   if (!enabled) return null;
 
@@ -173,11 +175,13 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled, rsv
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleSubmit('attending')}
                   disabled={loading}
+                  onMouseEnter={() => setAttendingHovered(true)}
+                  onMouseLeave={() => setAttendingHovered(false)}
                   className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 disabled:opacity-50"
                   style={{
                     backgroundColor: colors.button,
                     color: colors.background,
-                    boxShadow: `0 4px 16px ${colors.button}25`,
+                    boxShadow: attendingHovered ? `0 4px 24px ${colors.button}40` : `0 4px 16px ${colors.button}25`,
                   }}
                 >
                   {loading && status === 'attending' ? (
@@ -193,11 +197,14 @@ export default function RsvpSection({ weddingId, guestName, colors, enabled, rsv
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleSubmit('not-attending')}
                   disabled={loading}
+                  onMouseEnter={() => setNotAttendingHovered(true)}
+                  onMouseLeave={() => setNotAttendingHovered(false)}
                   className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold transition-all duration-300 disabled:opacity-50"
                   style={{
-                    backgroundColor: colors.button + '12',
+                    backgroundColor: notAttendingHovered ? colors.button + '25' : colors.button + '12',
                     color: colors.button,
-                    border: `1px solid ${colors.button}30`,
+                    border: `1px solid ${notAttendingHovered ? colors.button + '50' : colors.button + '30'}`,
+                    boxShadow: notAttendingHovered ? `0 0 20px ${colors.button}20` : 'none',
                   }}
                 >
                   {loading && status === 'not-attending' ? (

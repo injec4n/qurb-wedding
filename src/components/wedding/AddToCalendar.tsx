@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, ExternalLink, Download } from 'lucide-react';
 import { ThemeColors } from '@/types/wedding';
@@ -12,6 +13,46 @@ interface AddToCalendarProps {
   venueName: string;
   venueAddress: string;
   colors: ThemeColors;
+}
+
+type CalendarOption = {
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  action: () => void;
+  type: 'link' | 'download';
+};
+
+function CalendarButtons({ calendarOptions, colors }: { calendarOptions: CalendarOption[]; colors: ThemeColors }) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+      {calendarOptions.map((option, index) => (
+        <motion.button
+          key={option.name}
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          whileHover={{ scale: 1.03, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={option.action}
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer"
+          style={{
+            backgroundColor: hoveredIndex === index ? colors.primary + '30' : colors.primary + '15',
+            color: colors.primary,
+            border: `1px solid ${hoveredIndex === index ? colors.primary + '50' : colors.primary + '25'}`,
+            boxShadow: hoveredIndex === index ? `0 0 20px ${colors.primary}20` : 'none',
+          }}
+        >
+          <option.icon className="w-4 h-4" />
+          {option.name}
+        </motion.button>
+      ))}
+    </div>
+  );
 }
 
 export default function AddToCalendar({ groomName, brideName, weddingDate, weddingTime, venueName, venueAddress, colors }: AddToCalendarProps) {
@@ -103,29 +144,7 @@ export default function AddToCalendar({ groomName, brideName, weddingDate, weddi
           أضف الموعد للتقويم
         </motion.h3>
         
-        <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
-          {calendarOptions.map((option, index) => (
-            <motion.button
-              key={option.name}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={option.action}
-              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer"
-              style={{
-                backgroundColor: colors.primary + '15',
-                color: colors.primary,
-                border: `1px solid ${colors.primary}25`,
-              }}
-            >
-              <option.icon className="w-4 h-4" />
-              {option.name}
-            </motion.button>
-          ))}
-        </div>
+        <CalendarButtons calendarOptions={calendarOptions} colors={colors} />
       </motion.div>
     </div>
   );

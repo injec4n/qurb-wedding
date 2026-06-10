@@ -75,7 +75,7 @@ export async function GET() {
           galleryImages: JSON.stringify([]),
           backgroundMusicUrl: '',
           clientPassword: 'demo123',
-          couplePhoto: '',
+          couplePhoto: '/images/default-couple.png',
           theme: demo.theme,
           colorPreset: '',
           primaryColor: colors.primary,

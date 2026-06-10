@@ -20,6 +20,11 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
   const [isDownloading, setIsDownloading] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [downloadFailed, setDownloadFailed] = useState(false);
+  const [downloadHovered, setDownloadHovered] = useState(false);
+  const [shareHovered, setShareHovered] = useState(false);
+  const [whatsappHovered, setWhatsappHovered] = useState(false);
+  const [telegramHovered, setTelegramHovered] = useState(false);
+  const [copyHovered, setCopyHovered] = useState(false);
 
   const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/w/${slug}` : '';
   const shareText = `يدعوكم ${wedding.groomName} و ${wedding.brideName} لحضور حفل زفافهما - ${wedding.weddingDate}`;
@@ -235,11 +240,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
             whileTap={{ scale: 0.95 }}
             onClick={handleDownloadCard}
             disabled={isDownloading}
+            onMouseEnter={() => setDownloadHovered(true)}
+            onMouseLeave={() => setDownloadHovered(false)}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300"
             style={{
-              background: `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
+              background: `linear-gradient(135deg, ${colors.primary}${downloadHovered ? '40' : '20'}, ${colors.accent}${downloadHovered ? '40' : '20'})`,
               color: colors.primary,
-              border: `1px solid ${colors.primary}30`,
+              border: `1px solid ${colors.primary}${downloadHovered ? '55' : '30'}`,
+              boxShadow: downloadHovered ? `0 0 20px ${colors.primary}20` : 'none',
             }}
           >
             {isDownloading ? (
@@ -255,10 +263,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowShareOptions(!showShareOptions)}
+            onMouseEnter={() => setShareHovered(true)}
+            onMouseLeave={() => setShareHovered(false)}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-300"
             style={{
-              color: colors.text + '88',
-              border: `1px solid ${colors.primary}15`,
+              backgroundColor: shareHovered ? colors.primary + '15' : 'transparent',
+              color: shareHovered ? colors.primary : colors.text + '88',
+              border: `1px solid ${colors.primary}${shareHovered ? '35' : '15'}`,
+              boxShadow: shareHovered ? `0 0 16px ${colors.primary}15` : 'none',
             }}
           >
             <Share2 className="w-3.5 h-3.5" />
@@ -279,8 +291,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={handleWhatsAppShare}
+                  onMouseEnter={() => setWhatsappHovered(true)}
+                  onMouseLeave={() => setWhatsappHovered(false)}
                   className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                  style={{ backgroundColor: '#25D36618', border: '1px solid #25D36625' }}
+                  style={{
+                    backgroundColor: whatsappHovered ? '#25D36630' : '#25D36618',
+                    border: `1px solid ${whatsappHovered ? '#25D36650' : '#25D36625'}`,
+                    boxShadow: whatsappHovered ? '0 0 16px #25D36620' : 'none',
+                  }}
                   title="مشاركة عبر واتساب"
                 >
                   <MessageCircle className="w-4.5 h-4.5" style={{ color: '#25D366' }} />
@@ -290,8 +308,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={handleTelegramShare}
+                  onMouseEnter={() => setTelegramHovered(true)}
+                  onMouseLeave={() => setTelegramHovered(false)}
                   className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                  style={{ backgroundColor: '#0088cc18', border: '1px solid #0088cc25' }}
+                  style={{
+                    backgroundColor: telegramHovered ? '#0088cc30' : '#0088cc18',
+                    border: `1px solid ${telegramHovered ? '#0088cc50' : '#0088cc25'}`,
+                    boxShadow: telegramHovered ? '0 0 16px #0088cc20' : 'none',
+                  }}
                   title="مشاركة عبر تيليغرام"
                 >
                   <Send className="w-4.5 h-4.5" style={{ color: '#0088cc' }} />
@@ -301,8 +325,14 @@ export default function InvitationCard({ wedding, colors, slug, couplePhoto }: I
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={handleCopyLink}
+                  onMouseEnter={() => setCopyHovered(true)}
+                  onMouseLeave={() => setCopyHovered(false)}
                   className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                  style={{ backgroundColor: colors.primary + '10', border: `1px solid ${colors.primary}20` }}
+                  style={{
+                    backgroundColor: copyHovered ? colors.primary + '25' : colors.primary + '10',
+                    border: `1px solid ${copyHovered ? colors.primary + '40' : colors.primary + '20'}`,
+                    boxShadow: copyHovered ? `0 0 16px ${colors.primary}20` : 'none',
+                  }}
                   title="نسخ الرابط"
                 >
                   <Copy className="w-4.5 h-4.5" style={{ color: colors.primary }} />
