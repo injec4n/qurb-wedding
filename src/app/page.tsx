@@ -395,7 +395,7 @@ function DemoNameInput() {
 
   const demoSlug = themeDemoSlugs[selectedTheme] || `demo-${selectedTheme}`;
   const demoUrl = name.trim()
-    ? `/w/${demoSlug}?g=${encodeURIComponent(name.trim())}`
+    ? `/w/${demoSlug}?guest=${encodeURIComponent(name.trim())}`
     : `/w/${demoSlug}`;
 
   return (
