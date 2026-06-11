@@ -2,7 +2,19 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, CheckCircle, XCircle, Clock, Users, Copy, Download, ExternalLink, Heart, Link2, Loader2 } from 'lucide-react';
+import {
+  Eye,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Users,
+  Copy,
+  Download,
+  ExternalLink,
+  Heart,
+  Link2,
+  Loader2
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 interface WeddingDashboardProps {
@@ -25,13 +37,19 @@ interface Guest {
   name: string;
   phone: string;
   guestLink: string;
+  guestToken: string;
   rsvp?: {
     status: string;
     message: string;
   };
 }
 
-export default function WeddingDashboard({ weddingId, weddingSlug, groomName, brideName }: WeddingDashboardProps) {
+export default function WeddingDashboard({
+  weddingId,
+  weddingSlug,
+  groomName,
+  brideName
+}: WeddingDashboardProps) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,8 +95,8 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
     toast.success('تم نسخ رابط الدعوة ✨');
   };
 
-  const copyGuestLink = (guestLink: string) => {
-    const url = guestLink.startsWith('http') ? guestLink : `${window.location.origin}/w/${weddingSlug}?guest=${guestLink}`;
+  const copyGuestLink = (guestToken: string) => {
+    const url = `${window.location.origin}/w/${weddingSlug}?g=${guestToken}`;
     navigator.clipboard.writeText(url);
     toast.success('تم نسخ رابط الضيف ✨');
   };
@@ -96,7 +114,7 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
         const canvas = await html2canvas(card, {
           scale: 2,
           useCORS: true,
-          backgroundColor: '#0D0D1A',
+          backgroundColor: '#0D0D1A'
         });
         const link = document.createElement('a');
         link.download = `wedding-card-${weddingSlug}.png`;
@@ -121,7 +139,7 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
         const canvas = await html2canvas(story, {
           scale: 2,
           useCORS: true,
-          backgroundColor: '#0D0D1A',
+          backgroundColor: '#0D0D1A'
         });
         const link = document.createElement('a');
         link.download = `wedding-story-${weddingSlug}.png`;
@@ -141,18 +159,46 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
     return (
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }} />
-          <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>جاري تحميل لوحة التحكم...</p>
+          <span
+            className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
+            style={{
+              borderColor: 'var(--wedding-gold)',
+              borderTopColor: 'transparent'
+            }}
+          />
+          <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
+            جاري تحميل لوحة التحكم...
+          </p>
         </div>
       </div>
     );
   }
 
   const statCards = [
-    { label: 'إجمالي الزيارات', value: stats?.visitCount || 0, icon: Eye, color: '#D4A853' },
-    { label: 'تم التأكيد', value: stats?.attendingCount || 0, icon: CheckCircle, color: '#22C55E' },
-    { label: 'تم الاعتذار', value: stats?.notAttendingCount || 0, icon: XCircle, color: '#EF4444' },
-    { label: 'في الانتظار', value: stats?.pendingCount || 0, icon: Clock, color: '#F59E0B' },
+    {
+      label: 'إجمالي الزيارات',
+      value: stats?.visitCount || 0,
+      icon: Eye,
+      color: '#D4A853'
+    },
+    {
+      label: 'تم التأكيد',
+      value: stats?.attendingCount || 0,
+      icon: CheckCircle,
+      color: '#22C55E'
+    },
+    {
+      label: 'تم الاعتذار',
+      value: stats?.notAttendingCount || 0,
+      icon: XCircle,
+      color: '#EF4444'
+    },
+    {
+      label: 'في الانتظار',
+      value: stats?.pendingCount || 0,
+      icon: Clock,
+      color: '#F59E0B'
+    }
   ];
 
   return (
@@ -166,7 +212,10 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
       >
         <div className="flex items-center justify-center gap-3 mb-2">
           <Heart className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
-          <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold"
+            style={{ color: 'var(--admin-text-primary)' }}
+          >
             {groomName} و {brideName}
           </h2>
           <Heart className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
@@ -194,7 +243,10 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
                 <stat.icon className="h-6 w-6" style={{ color: stat.color }} />
               </div>
             </div>
-            <p className="text-3xl sm:text-4xl font-bold mb-1" style={{ color: 'var(--admin-text-primary)' }}>
+            <p
+              className="text-3xl sm:text-4xl font-bold mb-1"
+              style={{ color: 'var(--admin-text-primary)' }}
+            >
               {stat.value}
             </p>
             <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
@@ -213,9 +265,18 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
         style={{ borderTop: '2px solid var(--wedding-gold)' }}
       >
         <div className="p-6 pb-4">
-          <h3 className="flex items-center gap-3 text-lg font-bold" style={{ color: 'var(--admin-text-primary)' }}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
-              <Link2 className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+          <h3
+            className="flex items-center gap-3 text-lg font-bold"
+            style={{ color: 'var(--admin-text-primary)' }}
+          >
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ background: 'rgba(212,168,83,0.12)' }}
+            >
+              <Link2
+                className="h-4 w-4"
+                style={{ color: 'var(--wedding-gold)' }}
+              />
             </div>
             إجراءات سريعة
           </h3>
@@ -226,16 +287,40 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
             <button
               onClick={copyInvitationLink}
               className="flex items-center gap-3 p-4 rounded-xl transition-all duration-300"
-              style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--wedding-gold)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--admin-border)'; }}
+              style={{
+                background: 'var(--admin-surface)',
+                border: '1px solid var(--admin-border)'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--wedding-gold)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--admin-border)';
+              }}
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.1)' }}>
-                <Copy className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-lg"
+                style={{ background: 'rgba(212,168,83,0.1)' }}
+              >
+                <Copy
+                  className="h-5 w-5"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold" style={{ color: 'var(--admin-text-primary)' }}>نسخ رابط الدعوة</p>
-                <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }} dir="ltr">/w/{weddingSlug}</p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: 'var(--admin-text-primary)' }}
+                >
+                  نسخ رابط الدعوة
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: 'var(--admin-text-muted)' }}
+                  dir="ltr"
+                >
+                  /w/{weddingSlug}
+                </p>
               </div>
             </button>
 
@@ -243,16 +328,39 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
             <button
               onClick={openInvitation}
               className="flex items-center gap-3 p-4 rounded-xl transition-all duration-300"
-              style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--wedding-gold)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--admin-border)'; }}
+              style={{
+                background: 'var(--admin-surface)',
+                border: '1px solid var(--admin-border)'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--wedding-gold)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--admin-border)';
+              }}
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.1)' }}>
-                <ExternalLink className="h-5 w-5" style={{ color: 'var(--wedding-gold)' }} />
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-lg"
+                style={{ background: 'rgba(212,168,83,0.1)' }}
+              >
+                <ExternalLink
+                  className="h-5 w-5"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold" style={{ color: 'var(--admin-text-primary)' }}>فتح الدعوة</p>
-                <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>عرض الدعوة في تبويب جديد</p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: 'var(--admin-text-primary)' }}
+                >
+                  فتح الدعوة
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: 'var(--admin-text-muted)' }}
+                >
+                  عرض الدعوة في تبويب جديد
+                </p>
               </div>
             </button>
 
@@ -261,20 +369,44 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
               onClick={downloadWhatsAppCard}
               disabled={downloadingCard}
               className="flex items-center gap-3 p-4 rounded-xl transition-all duration-300 disabled:opacity-50"
-              style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
-              onMouseEnter={(e) => { if (!downloadingCard) e.currentTarget.style.borderColor = '#25D366'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--admin-border)'; }}
+              style={{
+                background: 'var(--admin-surface)',
+                border: '1px solid var(--admin-border)'
+              }}
+              onMouseEnter={e => {
+                if (!downloadingCard)
+                  e.currentTarget.style.borderColor = '#25D366';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--admin-border)';
+              }}
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: 'rgba(37,211,102,0.1)' }}>
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-lg"
+                style={{ background: 'rgba(37,211,102,0.1)' }}
+              >
                 {downloadingCard ? (
-                  <Loader2 className="h-5 w-5 animate-spin" style={{ color: '#25D366' }} />
+                  <Loader2
+                    className="h-5 w-5 animate-spin"
+                    style={{ color: '#25D366' }}
+                  />
                 ) : (
                   <Download className="h-5 w-5" style={{ color: '#25D366' }} />
                 )}
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold" style={{ color: 'var(--admin-text-primary)' }}>بطاقة واتساب</p>
-                <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>تحميل بطاقة للمشاركة</p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: 'var(--admin-text-primary)' }}
+                >
+                  بطاقة واتساب
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: 'var(--admin-text-muted)' }}
+                >
+                  تحميل بطاقة للمشاركة
+                </p>
               </div>
             </button>
 
@@ -283,20 +415,44 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
               onClick={downloadInstagramStory}
               disabled={downloadingStory}
               className="flex items-center gap-3 p-4 rounded-xl transition-all duration-300 disabled:opacity-50"
-              style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
-              onMouseEnter={(e) => { if (!downloadingStory) e.currentTarget.style.borderColor = '#E1306C'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--admin-border)'; }}
+              style={{
+                background: 'var(--admin-surface)',
+                border: '1px solid var(--admin-border)'
+              }}
+              onMouseEnter={e => {
+                if (!downloadingStory)
+                  e.currentTarget.style.borderColor = '#E1306C';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--admin-border)';
+              }}
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: 'rgba(225,48,108,0.1)' }}>
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-lg"
+                style={{ background: 'rgba(225,48,108,0.1)' }}
+              >
                 {downloadingStory ? (
-                  <Loader2 className="h-5 w-5 animate-spin" style={{ color: '#E1306C' }} />
+                  <Loader2
+                    className="h-5 w-5 animate-spin"
+                    style={{ color: '#E1306C' }}
+                  />
                 ) : (
                   <Download className="h-5 w-5" style={{ color: '#E1306C' }} />
                 )}
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold" style={{ color: 'var(--admin-text-primary)' }}>ستوري إنستاجرام</p>
-                <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>تحميل ستوري للمشاركة</p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: 'var(--admin-text-primary)' }}
+                >
+                  ستوري إنستاجرام
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: 'var(--admin-text-muted)' }}
+                >
+                  تحميل ستوري للمشاركة
+                </p>
               </div>
             </button>
           </div>
@@ -312,29 +468,63 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
         style={{ borderTop: '2px solid var(--wedding-gold)' }}
       >
         <div className="p-6 pb-4 flex items-center justify-between">
-          <h3 className="flex items-center gap-3 text-lg font-bold" style={{ color: 'var(--admin-text-primary)' }}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'rgba(212,168,83,0.12)' }}>
-              <Users className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+          <h3
+            className="flex items-center gap-3 text-lg font-bold"
+            style={{ color: 'var(--admin-text-primary)' }}
+          >
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ background: 'rgba(212,168,83,0.12)' }}
+            >
+              <Users
+                className="h-4 w-4"
+                style={{ color: 'var(--wedding-gold)' }}
+              />
             </div>
             قائمة الضيوف وروابط الدعوة
           </h3>
-          <span className="text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(212,168,83,0.1)', color: 'var(--wedding-gold)' }}>
+          <span
+            className="text-sm px-3 py-1 rounded-full"
+            style={{
+              background: 'rgba(212,168,83,0.1)',
+              color: 'var(--wedding-gold)'
+            }}
+          >
             {guests.length} ضيف
           </span>
         </div>
         <div className="px-6 pb-6">
           {guests.length === 0 ? (
             <div className="text-center py-12">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full mx-auto mb-4" style={{ background: 'rgba(212,168,83,0.08)' }}>
-                <Users className="h-8 w-8" style={{ color: 'var(--wedding-gold)' }} />
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-full mx-auto mb-4"
+                style={{ background: 'rgba(212,168,83,0.08)' }}
+              >
+                <Users
+                  className="h-8 w-8"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
-              <p className="text-base font-medium mb-2" style={{ color: 'var(--admin-text-primary)' }}>لا يوجد ضيوف بعد 🌹</p>
-              <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>أضف ضيوف من تبويب الضيوف لتوليد روابط الدعوة</p>
+              <p
+                className="text-base font-medium mb-2"
+                style={{ color: 'var(--admin-text-primary)' }}
+              >
+                لا يوجد ضيوف بعد 🌹
+              </p>
+              <p
+                className="text-sm"
+                style={{ color: 'var(--admin-text-muted)' }}
+              >
+                أضف ضيوف من تبويب الضيوف لتوليد روابط الدعوة
+              </p>
             </div>
           ) : (
-            <div className="space-y-2 max-h-96 overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+            <div
+              className="space-y-2 max-h-96 overflow-y-auto"
+              style={{ scrollbarWidth: 'thin' }}
+            >
               {guests.map((guest, index) => {
-                const guestUrl = `/w/${weddingSlug}?guest=${guest.guestLink}`;
+                const guestUrl = `/w/${weddingSlug}?g=${guest.guestToken}`;
                 return (
                   <motion.div
                     key={guest.id}
@@ -342,21 +532,47 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="flex items-center justify-between p-3 sm:p-4 rounded-xl transition-all duration-300"
-                    style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
+                    style={{
+                      background: 'var(--admin-surface)',
+                      border: '1px solid var(--admin-border)'
+                    }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold"
                         style={{
-                          background: guest.rsvp?.status === 'attending' ? 'rgba(34,197,94,0.12)' : guest.rsvp?.status === 'not-attending' ? 'rgba(239,68,68,0.12)' : 'rgba(212,168,83,0.1)',
-                          color: guest.rsvp?.status === 'attending' ? '#22C55E' : guest.rsvp?.status === 'not-attending' ? '#EF4444' : 'var(--wedding-gold)',
+                          background:
+                            guest.rsvp?.status === 'attending'
+                              ? 'rgba(34,197,94,0.12)'
+                              : guest.rsvp?.status === 'not-attending'
+                                ? 'rgba(239,68,68,0.12)'
+                                : 'rgba(212,168,83,0.1)',
+                          color:
+                            guest.rsvp?.status === 'attending'
+                              ? '#22C55E'
+                              : guest.rsvp?.status === 'not-attending'
+                                ? '#EF4444'
+                                : 'var(--wedding-gold)'
                         }}
                       >
-                        {guest.rsvp?.status === 'attending' ? '✓' : guest.rsvp?.status === 'not-attending' ? '✗' : (index + 1)}
+                        {guest.rsvp?.status === 'attending'
+                          ? '✓'
+                          : guest.rsvp?.status === 'not-attending'
+                            ? '✗'
+                            : index + 1}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--admin-text-primary)' }}>{guest.name}</p>
-                        <p className="text-xs truncate" style={{ color: 'var(--admin-text-muted)' }} dir="ltr">
+                        <p
+                          className="text-sm font-semibold truncate"
+                          style={{ color: 'var(--admin-text-primary)' }}
+                        >
+                          {guest.name}
+                        </p>
+                        <p
+                          className="text-xs truncate"
+                          style={{ color: 'var(--admin-text-muted)' }}
+                          dir="ltr"
+                        >
                           {guestUrl}
                         </p>
                       </div>
@@ -366,19 +582,42 @@ export default function WeddingDashboard({ weddingId, weddingSlug, groomName, br
                         <span
                           className="text-xs px-2 py-1 rounded-md font-medium"
                           style={{
-                            background: guest.rsvp.status === 'attending' ? 'rgba(34,197,94,0.1)' : guest.rsvp.status === 'not-attending' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
-                            color: guest.rsvp.status === 'attending' ? '#22C55E' : guest.rsvp.status === 'not-attending' ? '#EF4444' : '#F59E0B',
+                            background:
+                              guest.rsvp.status === 'attending'
+                                ? 'rgba(34,197,94,0.1)'
+                                : guest.rsvp.status === 'not-attending'
+                                  ? 'rgba(239,68,68,0.1)'
+                                  : 'rgba(245,158,11,0.1)',
+                            color:
+                              guest.rsvp.status === 'attending'
+                                ? '#22C55E'
+                                : guest.rsvp.status === 'not-attending'
+                                  ? '#EF4444'
+                                  : '#F59E0B'
                           }}
                         >
-                          {guest.rsvp.status === 'attending' ? 'مؤكد' : guest.rsvp.status === 'not-attending' ? 'معتذر' : 'معلق'}
+                          {guest.rsvp.status === 'attending'
+                            ? 'مؤكد'
+                            : guest.rsvp.status === 'not-attending'
+                              ? 'معتذر'
+                              : 'معلق'}
                         </span>
                       )}
                       <button
-                        onClick={() => copyGuestLink(guest.guestLink)}
+                        onClick={() => copyGuestLink(guest.guestToken)}
                         className="flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300"
-                        style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(212,168,83,0.15)'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(212,168,83,0.08)'; }}
+                        style={{
+                          color: 'var(--wedding-gold)',
+                          background: 'rgba(212,168,83,0.08)'
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.background =
+                            'rgba(212,168,83,0.15)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.background =
+                            'rgba(212,168,83,0.08)';
+                        }}
                         title="نسخ رابط الضيف"
                       >
                         <Copy className="h-3.5 w-3.5" />
