@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import {
   Heart,
@@ -37,6 +37,30 @@ const fadeUp = {
 };
 
 export default function OrderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          dir="rtl"
+          className="min-h-screen flex items-center justify-center"
+          style={{
+            background:
+              'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
+          }}
+        >
+          <Loader2
+            className="h-8 w-8 animate-spin"
+            style={{ color: '#D4A853' }}
+          />
+        </div>
+      }
+    >
+      <OrderPageContent />
+    </Suspense>
+  );
+}
+
+function OrderPageContent() {
   const searchParams = useSearchParams();
   const codeFromUrl = searchParams.get('code') || '';
 
@@ -68,6 +92,7 @@ export default function OrderPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Auto-validate code from URL
   useEffect(() => {
     if (codeFromUrl) {
       validateCode(codeFromUrl);
@@ -80,13 +105,16 @@ export default function OrderPage() {
       setCodeError('من فضلك ادخل الكود');
       return;
     }
+
     setIsValidating(true);
     setCodeError('');
+
     try {
       const res = await fetch(
         `/api/validate-code?code=${encodeURIComponent(codeToValidate.trim())}`
       );
       const data = await res.json();
+
       if (data.valid) {
         setIsCodeValid(true);
         setClientName(data.name || '');
@@ -122,6 +150,7 @@ export default function OrderPage() {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
+
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
@@ -129,6 +158,7 @@ export default function OrderPage() {
         body: JSON.stringify({ ...formData, accessCode })
       });
       const data = await res.json();
+
       if (data.success) {
         setIsSuccess(true);
       } else {
@@ -141,6 +171,7 @@ export default function OrderPage() {
     }
   };
 
+  // ─── Success Screen ───
   if (isSuccess) {
     return (
       <div
@@ -186,13 +217,15 @@ export default function OrderPage() {
               color: '#0D0D1A'
             }}
           >
-            <Heart className="h-4 w-4" /> ارجع للرئيسية
+            <Heart className="h-4 w-4" />
+            ارجع للرئيسية
           </Link>
         </motion.div>
       </div>
     );
   }
 
+  // ─── Code Entry Screen ───
   if (!isCodeValid) {
     return (
       <div
@@ -211,6 +244,7 @@ export default function OrderPage() {
             }}
           />
         </div>
+
         <motion.div
           initial="hidden"
           animate="visible"
@@ -234,6 +268,7 @@ export default function OrderPage() {
               ادخل كود الدخول اللي وصلك علشان تبدأ
             </p>
           </div>
+
           <div
             className="rounded-2xl p-6"
             style={{
@@ -246,7 +281,7 @@ export default function OrderPage() {
                 className="flex items-center gap-2 text-sm font-medium mb-3"
                 style={{ color: 'rgba(245,245,245,0.7)' }}
               >
-                <KeyRound className="h-4 w-4" style={{ color: '#D4A853' }} />{' '}
+                <KeyRound className="h-4 w-4" style={{ color: '#D4A853' }} />
                 كود الدخول
               </label>
               <input
@@ -265,15 +300,18 @@ export default function OrderPage() {
                 autoFocus
               />
             </div>
+
             {codeError && (
               <motion.div
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 rounded-lg p-3 mb-4"
               >
-                <XCircle className="h-4 w-4 shrink-0" /> {codeError}
+                <XCircle className="h-4 w-4 shrink-0" />
+                {codeError}
               </motion.div>
             )}
+
             <button
               onClick={() => validateCode()}
               disabled={isValidating || !accessCode.trim()}
@@ -285,21 +323,25 @@ export default function OrderPage() {
             >
               {isValidating ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" /> جاري التحقق...
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  جاري التحقق...
                 </>
               ) : (
                 <>
-                  <Lock className="h-4 w-4" /> دخول
+                  <Lock className="h-4 w-4" />
+                  دخول
                 </>
               )}
             </button>
           </div>
+
           <p
             className="text-center text-xs mt-6"
             style={{ color: 'rgba(245,245,245,0.3)' }}
           >
             لو معاكش كود، تواصل معانا على واتساب
           </p>
+
           <div className="text-center mt-8">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-px w-16 bg-gradient-to-l from-[#D4A853]/60 to-transparent" />
@@ -315,6 +357,7 @@ export default function OrderPage() {
     );
   }
 
+  // ─── Order Form Screen ───
   const toggles = [
     { key: 'enableRsvp', label: 'تأكيد الحضور (RSVP)', icon: '📋' },
     { key: 'enableCountdown', label: 'عداد تنازلي', icon: '⏳' },
@@ -332,6 +375,7 @@ export default function OrderPage() {
           'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
       }}
     >
+      {/* Decorative */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-[0.03]"
@@ -340,7 +384,9 @@ export default function OrderPage() {
           }}
         />
       </div>
+
       <div className="relative z-10 flex-1 w-full max-w-2xl mx-auto px-4 py-10 sm:py-16">
+        {/* Header */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -372,6 +418,7 @@ export default function OrderPage() {
           </div>
         </motion.div>
 
+        {/* Form */}
         <motion.form
           initial="hidden"
           animate="visible"
@@ -379,12 +426,14 @@ export default function OrderPage() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
+          {/* ─── Section: المعلومات الأساسية ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <User className="h-5 w-5" /> المعلومات الأساسية
+              <User className="h-5 w-5" />
+              المعلومات الأساسية
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -426,12 +475,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: تفاصيل الزفاف ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Calendar className="h-5 w-5" /> تفاصيل الزفاف
+              <Calendar className="h-5 w-5" />
+              تفاصيل الزفاف
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -459,7 +510,7 @@ export default function OrderPage() {
                   <Clock
                     className="inline h-4 w-4 ml-1"
                     style={{ color: '#D4A853' }}
-                  />{' '}
+                  />
                   وقت الزفاف *
                 </label>
                 <input
@@ -475,12 +526,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: مكان الحفل ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <MapPin className="h-5 w-5" /> مكان الحفل
+              <MapPin className="h-5 w-5" />
+              مكان الحفل
             </h2>
             <div className="space-y-4">
               <div>
@@ -538,12 +591,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: التواصل ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Phone className="h-5 w-5" /> بيانات التواصل
+              <Phone className="h-5 w-5" />
+              بيانات التواصل
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -584,12 +639,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: التصميم ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Palette className="h-5 w-5" /> التصميم
+              <Palette className="h-5 w-5" />
+              التصميم
             </h2>
             <div>
               <label
@@ -654,12 +711,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: المزايا ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Music className="h-5 w-5" /> المزايا
+              <Music className="h-5 w-5" />
+              المزايا
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {toggles.map(toggle => (
@@ -712,12 +771,14 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
+          {/* ─── Section: ملاحظات ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <MessageSquare className="h-5 w-5" /> ملاحظات إضافية
+              <MessageSquare className="h-5 w-5" />
+              ملاحظات إضافية
             </h2>
             <textarea
               name="notes"
@@ -730,6 +791,7 @@ export default function OrderPage() {
             />
           </motion.div>
 
+          {/* Error */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -740,6 +802,7 @@ export default function OrderPage() {
             </motion.div>
           )}
 
+          {/* Submit */}
           <motion.div variants={fadeUp} className="pt-2">
             <button
               type="submit"
@@ -752,17 +815,20 @@ export default function OrderPage() {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" /> جاري الإرسال...
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  جاري الإرسال...
                 </>
               ) : (
                 <>
-                  <Send className="h-5 w-5" /> أرسل الطلب
+                  <Send className="h-5 w-5" />
+                  أرسل الطلب
                 </>
               )}
             </button>
           </motion.div>
         </motion.form>
 
+        {/* Footer */}
         <div className="text-center mt-10">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-px w-16 bg-gradient-to-l from-[#D4A853]/60 to-transparent" />
