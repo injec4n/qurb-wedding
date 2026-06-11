@@ -623,7 +623,8 @@ function DashboardContent() {
                 style={{ scrollbarWidth: 'thin' }}
               >
                 {guests.map((guest, index) => {
-                  const guestUrl = `/w/${slug}?g=${guest.guestToken || guest.guestLink}`;
+                  const token = guest.guestToken || guest.guestLink;
+                  const guestUrl = `/w/${slug}?g=${token}`;
                   return (
                     <motion.div
                       key={guest.id}
@@ -676,7 +677,7 @@ function DashboardContent() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-1.5 shrink-0">
                         {guest.rsvp && (
                           <span
                             className="text-[10px] px-2 py-0.5 rounded-md font-medium"
@@ -702,31 +703,46 @@ function DashboardContent() {
                                 : 'معلق'}
                           </span>
                         )}
-                                                <button
-                          onClick={() => handleCopyGuestLink(guest.guestToken, guest.guestLink)}
+                        <button
+                          onClick={() =>
+                            handleCopyGuestLink(
+                              guest.guestToken,
+                              guest.guestLink
+                            )
+                          }
                           className="flex h-7 w-7 items-center justify-center rounded-lg"
-                          style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)' }}
+                          style={{
+                            color: 'var(--wedding-gold)',
+                            background: 'rgba(212,168,83,0.08)'
+                          }}
                           title="نسخ رابط الضيف"
                         >
                           <Copy className="h-3.5 w-3.5" />
                         </button>
                         <button
-                          onClick={() => handleDeleteGuest(guest.id, guest.name)}
+                          onClick={() =>
+                            handleDeleteGuest(guest.id, guest.name)
+                          }
                           className="flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-300"
-                          style={{ color: 'var(--admin-text-muted)', background: 'var(--admin-surface-overlay)' }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = '#EF4444';
-                            e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+                          style={{
+                            color: 'var(--admin-text-muted)',
+                            background: 'var(--admin-surface-overlay)'
                           }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = 'var(--admin-text-muted)';
-                            e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                          onMouseEnter={e => {
+                            e.currentTarget.style.color = '#EF4444';
+                            e.currentTarget.style.background =
+                              'rgba(239,68,68,0.08)';
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.color =
+                              'var(--admin-text-muted)';
+                            e.currentTarget.style.background =
+                              'var(--admin-surface-overlay)';
                           }}
                           title="حذف الضيف"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
-                      </div>
                       </div>
                     </motion.div>
                   );
