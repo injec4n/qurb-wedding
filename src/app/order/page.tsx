@@ -344,7 +344,7 @@ function OrderPageContent() {
             </p>
             <div className="flex items-center justify-center gap-4">
               <a
-                href="https://facebook.com/qurb.site"
+                href="https://facebook.com/qurb.wedding"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-all duration-300 hover:scale-110"
@@ -359,7 +359,7 @@ function OrderPageContent() {
                 </svg>
               </a>
               <a
-                href="https://instagram.com/qurb.site"
+                href="https://instagram.com/qurb.wedding"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-all duration-300 hover:scale-110"
@@ -374,7 +374,7 @@ function OrderPageContent() {
                 </svg>
               </a>
               <a
-                href="https://tiktok.com/@qurb.site"
+                href="https://tiktok.com/@qurb.wedding"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-all duration-300 hover:scale-110"
