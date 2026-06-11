@@ -944,7 +944,7 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Extra CTA */}
-          <motion.div variants={fadeUp} custom={4} className="mt-10">
+          {/* <motion.div variants={fadeUp} custom={4} className="mt-10">
             <a
               href="https://wa.me/201096422675"
               target="_blank"
@@ -958,7 +958,7 @@ export default function LandingPage() {
                 <MessageCircle className="mr-2 h-5 w-5" />
               </Button>
             </a>
-          </motion.div>
+          </motion.div> */}
 
           <motion.div variants={fadeUp} custom={5} className="mt-8">
             <OrnamentDivider />
