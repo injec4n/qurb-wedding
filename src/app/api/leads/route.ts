@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * POST /api/leads
+ *
+ * Receives lead data from the order form and appends it to Google Sheets.
+ * Uses a Google Apps Script web app URL stored in GOOGLE_SHEETS_URL env var.
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -14,6 +20,11 @@ export async function POST(request: NextRequest) {
       welcomeMessage,
       contactPhone,
       theme,
+      enableRsvp,
+      enableCountdown,
+      enableMusic,
+      enableGallery,
+      enableGuestPersonalization,
       notes
     } = body;
 
@@ -26,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
 
-    // البيانات بالترتيب زي الشيت: التاريخ | العريس | العروسة | ميعاد الزفاف | وقت الزفاف | القاعة | العنوان | الخريطة | الواتساب | القالب | رسالة ترحيب | ملاحظات
+    // ترتيب الأعمدة: التاريخ | العريس | العروسة | ميعاد الزفاف | وقت الزفاف | القاعة | العنوان | الخريطة | الواتساب | القالب | المزايا | رسالة ترحيب | ملاحظات
     const leadData = {
       timestamp: new Date().toLocaleString('ar-EG', {
         timeZone: 'Africa/Cairo'
@@ -40,15 +51,26 @@ export async function POST(request: NextRequest) {
       googleMapsLink: googleMapsLink || '',
       contactPhone,
       theme: theme || 'royal-gold',
+      features: [
+        enableRsvp ? 'تأكيد حضور' : '',
+        enableCountdown ? 'عداد تنازلي' : '',
+        enableMusic ? 'مزيكا' : '',
+        enableGallery ? 'معرض صور' : '',
+        enableGuestPersonalization ? 'ظرف باسم الضيف' : ''
+      ]
+        .filter(Boolean)
+        .join(' | '),
       welcomeMessage: welcomeMessage || '',
       notes: notes || ''
     };
 
     if (!sheetsUrl) {
+      // If no Google Sheets URL configured, log the lead
       console.log('📋 New Lead:', JSON.stringify(leadData, null, 2));
       return NextResponse.json({ success: true, message: 'تم استلام طلبكم' });
     }
 
+    // Send to Google Sheets
     try {
       const response = await fetch(sheetsUrl, {
         method: 'POST',
