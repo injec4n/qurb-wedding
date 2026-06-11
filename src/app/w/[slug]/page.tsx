@@ -8,10 +8,12 @@ import type { Wedding } from '@/types/wedding';
 
 interface WeddingPageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ guest?: string }>;
+  searchParams: Promise<{ guest?: string; g?: string }>;
 }
 
-export async function generateMetadata({ params }: WeddingPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: WeddingPageProps): Promise<Metadata> {
   const { slug } = await params;
 
   try {
@@ -29,17 +31,20 @@ export async function generateMetadata({ params }: WeddingPageProps): Promise<Me
         description: `يتشرفان بدعوتكم لحضور حفل زفافهما`,
         images: wedding.coverImage ? [wedding.coverImage] : undefined,
         type: 'website',
-        locale: 'ar_EG',
-      },
+        locale: 'ar_EG'
+      }
     };
   } catch {
     return { title: 'دعوة زفاف' };
   }
 }
 
-export default async function WeddingPage({ params, searchParams }: WeddingPageProps) {
+export default async function WeddingPage({
+  params,
+  searchParams
+}: WeddingPageProps) {
   const { slug } = await params;
-  const { guest } = await searchParams;
+  const { guest, g } = await searchParams;
 
   const weddingRow = await db.wedding.findUnique({ where: { slug } });
 
@@ -54,7 +59,7 @@ export default async function WeddingPage({ params, searchParams }: WeddingPageP
     weddingDate: weddingRow.weddingDate,
     weddingTime: weddingRow.weddingTime,
     createdAt: weddingRow.createdAt.toISOString(),
-    updatedAt: weddingRow.updatedAt.toISOString(),
+    updatedAt: weddingRow.updatedAt.toISOString()
   };
 
   // Increment visit count
@@ -62,8 +67,33 @@ export default async function WeddingPage({ params, searchParams }: WeddingPageP
     await incrementVisitCount(wedding.id);
   }
 
-  // Decode guest name from URL
-  const guestName = guest ? decodeURIComponent(guest) : undefined;
+  // Resolve guest name:
+  // Priority 1: ?g=TOKEN — look up guest by short token (clean links)
+  // Priority 2: ?guest=NAME — decode from URL (backward compatible)
+  let guestName: string | undefined;
+  let guestToken: string | undefined;
 
-  return <WeddingPageClient wedding={wedding} guestName={guestName} />;
+  if (g) {
+    const guestRecord = await db.guest.findFirst({
+      where: {
+        OR: [{ guestToken: g }, { guestLink: g }]
+      },
+      select: { name: true, guestToken: true }
+    });
+    if (guestRecord) {
+      guestName = guestRecord.name;
+      guestToken = guestRecord.guestToken;
+    }
+  } else if (guest) {
+    // Legacy name-based lookup (backward compatible)
+    guestName = decodeURIComponent(guest);
+  }
+
+  return (
+    <WeddingPageClient
+      wedding={wedding}
+      guestName={guestName}
+      guestToken={guestToken}
+    />
+  );
 }
