@@ -2,7 +2,20 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Send, CheckCircle, Loader2, Calendar, User, Phone, MessageSquare, MapPin, Clock, Music, Palette } from 'lucide-react';
+import {
+  Heart,
+  Send,
+  CheckCircle,
+  Loader2,
+  Calendar,
+  User,
+  Phone,
+  MessageSquare,
+  MapPin,
+  Clock,
+  Music,
+  Palette
+} from 'lucide-react';
 import Link from 'next/link';
 import { themeOptions, type ThemeName } from '@/lib/themes';
 
@@ -11,8 +24,12 @@ const fadeUp = {
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] },
-  }),
+    transition: {
+      duration: 0.6,
+      delay: i * 0.1,
+      ease: [0.25, 0.46, 0.45, 0.94]
+    }
+  })
 };
 
 export default function OrderPage() {
@@ -32,17 +49,22 @@ export default function OrderPage() {
     enableMusic: true,
     enableGallery: true,
     enableGuestPersonalization: true,
-    notes: '',
+    notes: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value, type } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
     });
   };
 
@@ -59,7 +81,7 @@ export default function OrderPage() {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
       const data = await res.json();
 
@@ -80,7 +102,10 @@ export default function OrderPage() {
       <div
         dir="rtl"
         className="min-h-screen flex items-center justify-center px-4"
-        style={{ background: 'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)' }}
+        style={{
+          background:
+            'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
+        }}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -94,13 +119,19 @@ export default function OrderPage() {
           >
             <CheckCircle className="h-10 w-10" style={{ color: '#22C55E' }} />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: '#F5F5F5' }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold mb-3"
+            style={{ color: '#F5F5F5' }}
+          >
             تم إرسال طلبكم بنجاح! ✨
           </h2>
           <p className="text-base mb-2" style={{ color: '#D4A853' }}>
             هنتواصل معاكم في أقرب وقت إن شاء الله
           </p>
-          <p className="text-sm mb-8" style={{ color: 'rgba(245,245,245,0.5)' }}>
+          <p
+            className="text-sm mb-8"
+            style={{ color: 'rgba(245,245,245,0.5)' }}
+          >
             هنجهز الدعوة بالمواصفات اللي طلبتوها وهنبعتلكم اللينك
           </p>
           <Link
@@ -108,7 +139,7 @@ export default function OrderPage() {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300"
             style={{
               background: 'linear-gradient(135deg, #D4A853, #B8902F)',
-              color: '#0D0D1A',
+              color: '#0D0D1A'
             }}
           >
             <Heart className="h-4 w-4" />
@@ -124,29 +155,42 @@ export default function OrderPage() {
     { key: 'enableCountdown', label: 'عداد تنازلي', icon: '⏳' },
     { key: 'enableMusic', label: 'مزيكا خلفية', icon: '🎵' },
     { key: 'enableGallery', label: 'معرض صور', icon: '📸' },
-    { key: 'enableGuestPersonalization', label: 'ظرف باسم الضيف', icon: '✉️' },
+    { key: 'enableGuestPersonalization', label: 'ظرف باسم الضيف', icon: '✉️' }
   ] as const;
 
   return (
     <div
       dir="rtl"
       className="min-h-screen flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)' }}
+      style={{
+        background:
+          'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
+      }}
     >
       {/* Decorative */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-[0.03]"
-          style={{ background: 'radial-gradient(circle, #D4A853, transparent 70%)' }}
+          style={{
+            background: 'radial-gradient(circle, #D4A853, transparent 70%)'
+          }}
         />
       </div>
 
       <div className="relative z-10 flex-1 w-full max-w-2xl mx-auto px-4 py-10 sm:py-16">
         {/* Header */}
-        <motion.div initial="hidden" animate="visible" variants={fadeUp} className="text-center mb-10">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="text-center mb-10"
+        >
           <div className="flex items-center justify-center gap-3 mb-4">
             <Heart className="h-6 w-6" style={{ color: '#D4A853' }} />
-            <h1 className="text-3xl sm:text-4xl font-bold" style={{ color: '#F5F5F5' }}>
+            <h1
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: '#F5F5F5' }}
+            >
               اطلب دعوتك
             </h1>
             <Heart className="h-6 w-6" style={{ color: '#D4A853' }} />
@@ -171,13 +215,19 @@ export default function OrderPage() {
         >
           {/* ─── Section: المعلومات الأساسية ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <User className="h-5 w-5" />
               المعلومات الأساسية
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   اسم العريس *
                 </label>
                 <input
@@ -192,7 +242,10 @@ export default function OrderPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   اسم العروسة *
                 </label>
                 <input
@@ -211,13 +264,19 @@ export default function OrderPage() {
 
           {/* ─── Section: تفاصيل الزفاف ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <Calendar className="h-5 w-5" />
               تفاصيل الزفاف
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   تاريخ الزفاف *
                 </label>
                 <input
@@ -231,8 +290,14 @@ export default function OrderPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
-                  <Clock className="inline h-4 w-4 ml-1" style={{ color: '#D4A853' }} />
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
+                  <Clock
+                    className="inline h-4 w-4 ml-1"
+                    style={{ color: '#D4A853' }}
+                  />
                   وقت الزفاف *
                 </label>
                 <input
@@ -250,13 +315,19 @@ export default function OrderPage() {
 
           {/* ─── Section: مكان الحفل ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <MapPin className="h-5 w-5" />
               مكان الحفل
             </h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   اسم القاعة / المكان *
                 </label>
                 <input
@@ -271,7 +342,10 @@ export default function OrderPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   العنوان بالتفصيل
                 </label>
                 <input
@@ -285,7 +359,10 @@ export default function OrderPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   لينك الموقع على الخريطة
                 </label>
                 <input
@@ -303,13 +380,19 @@ export default function OrderPage() {
 
           {/* ─── Section: التواصل ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <Phone className="h-5 w-5" />
               بيانات التواصل
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   رقم واتساب العريس *
                 </label>
                 <input
@@ -324,7 +407,10 @@ export default function OrderPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(245,245,245,0.7)' }}>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: 'rgba(245,245,245,0.7)' }}
+                >
                   رسالة ترحيب (اختياري)
                 </label>
                 <input
@@ -342,36 +428,68 @@ export default function OrderPage() {
 
           {/* ─── Section: التصميم ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <Palette className="h-5 w-5" />
               التصميم
             </h2>
             <div>
-              <label className="block text-sm font-medium mb-3" style={{ color: 'rgba(245,245,245,0.7)' }}>
+              <label
+                className="block text-sm font-medium mb-3"
+                style={{ color: 'rgba(245,245,245,0.7)' }}
+              >
                 اختاري قالب الدعوة
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {themeOptions.map((t) => (
+                {themeOptions.map(t => (
                   <button
-                    key={t.name}
+                    key={t.value}
                     type="button"
-                    onClick={() => setFormData({ ...formData, theme: t.name as ThemeName })}
+                    onClick={() =>
+                      setFormData({ ...formData, theme: t.value as ThemeName })
+                    }
                     className="relative rounded-xl p-3 text-center transition-all duration-300"
                     style={{
-                      background: formData.theme === t.name ? 'rgba(212,168,83,0.12)' : 'var(--admin-surface, rgba(13,13,26,0.6))',
-                      border: formData.theme === t.name ? '2px solid #D4A853' : '1px solid rgba(212,168,83,0.15)',
+                      background:
+                        formData.theme === t.value
+                          ? 'rgba(212,168,83,0.12)'
+                          : 'var(--admin-surface, rgba(13,13,26,0.6))',
+                      border:
+                        formData.theme === t.value
+                          ? '2px solid #D4A853'
+                          : '1px solid rgba(212,168,83,0.15)'
                     }}
                   >
                     <div
                       className="w-8 h-8 rounded-full mx-auto mb-2"
-                      style={{ background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})` }}
+                      style={{
+                        background: `linear-gradient(135deg, ${t.colors.primary}, ${t.colors.secondary})`
+                      }}
                     />
-                    <p className="text-xs font-medium" style={{ color: formData.theme === t.name ? '#D4A853' : 'rgba(245,245,245,0.7)' }}>
+                    <p
+                      className="text-xs font-medium"
+                      style={{
+                        color:
+                          formData.theme === t.value
+                            ? '#D4A853'
+                            : 'rgba(245,245,245,0.7)'
+                      }}
+                    >
                       {t.labelAr}
                     </p>
-                    {formData.theme === t.name && (
-                      <div className="absolute top-1 left-1 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: '#D4A853' }}>
-                        <span className="text-[8px]" style={{ color: '#0D0D1A' }}>✓</span>
+                    {formData.theme === t.value && (
+                      <div
+                        className="absolute top-1 left-1 w-4 h-4 rounded-full flex items-center justify-center"
+                        style={{ background: '#D4A853' }}
+                      >
+                        <span
+                          className="text-[8px]"
+                          style={{ color: '#0D0D1A' }}
+                        >
+                          ✓
+                        </span>
                       </div>
                     )}
                   </button>
@@ -382,37 +500,56 @@ export default function OrderPage() {
 
           {/* ─── Section: المزايا ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <Music className="h-5 w-5" />
               المزايا
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {toggles.map((toggle) => (
+              {toggles.map(toggle => (
                 <button
                   key={toggle.key}
                   type="button"
-                  onClick={() => handleToggle(toggle.key, !formData[toggle.key as keyof typeof formData])}
+                  onClick={() =>
+                    handleToggle(
+                      toggle.key,
+                      !formData[toggle.key as keyof typeof formData]
+                    )
+                  }
                   className="flex items-center justify-between p-3 rounded-xl transition-all duration-300"
                   style={{
-                    background: formData[toggle.key as keyof typeof formData] ? 'rgba(212,168,83,0.08)' : 'rgba(13,13,26,0.6)',
-                    border: formData[toggle.key as keyof typeof formData] ? '1px solid rgba(212,168,83,0.3)' : '1px solid rgba(212,168,83,0.1)',
+                    background: formData[toggle.key as keyof typeof formData]
+                      ? 'rgba(212,168,83,0.08)'
+                      : 'rgba(13,13,26,0.6)',
+                    border: formData[toggle.key as keyof typeof formData]
+                      ? '1px solid rgba(212,168,83,0.3)'
+                      : '1px solid rgba(212,168,83,0.1)'
                   }}
                 >
-                  <span className="flex items-center gap-2 text-sm" style={{ color: 'rgba(245,245,245,0.8)' }}>
+                  <span
+                    className="flex items-center gap-2 text-sm"
+                    style={{ color: 'rgba(245,245,245,0.8)' }}
+                  >
                     <span>{toggle.icon}</span>
                     {toggle.label}
                   </span>
                   <div
                     className="w-10 h-5 rounded-full transition-all duration-300 relative"
                     style={{
-                      background: formData[toggle.key as keyof typeof formData] ? '#D4A853' : 'rgba(245,245,245,0.15)',
+                      background: formData[toggle.key as keyof typeof formData]
+                        ? '#D4A853'
+                        : 'rgba(245,245,245,0.15)'
                     }}
                   >
                     <div
                       className="absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300"
                       style={{
-                        left: formData[toggle.key as keyof typeof formData] ? '22px' : '2px',
-                        background: '#fff',
+                        left: formData[toggle.key as keyof typeof formData]
+                          ? '22px'
+                          : '2px',
+                        background: '#fff'
                       }}
                     />
                   </div>
@@ -423,7 +560,10 @@ export default function OrderPage() {
 
           {/* ─── Section: ملاحظات ─── */}
           <motion.div variants={fadeUp}>
-            <h2 className="flex items-center gap-2 text-lg font-bold mb-4" style={{ color: '#D4A853' }}>
+            <h2
+              className="flex items-center gap-2 text-lg font-bold mb-4"
+              style={{ color: '#D4A853' }}
+            >
               <MessageSquare className="h-5 w-5" />
               ملاحظات إضافية
             </h2>
@@ -457,7 +597,7 @@ export default function OrderPage() {
               className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold transition-all duration-300 disabled:opacity-50"
               style={{
                 background: 'linear-gradient(135deg, #D4A853, #B8902F)',
-                color: '#0D0D1A',
+                color: '#0D0D1A'
               }}
             >
               {isSubmitting ? (
