@@ -20,7 +20,7 @@ import {
   LogOut,
   Plus,
   Users,
-  Loader2,
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -75,7 +75,9 @@ function DashboardContent() {
 
     const checkAuth = async () => {
       try {
-        const res = await fetch(`/api/client/auth?slug=${encodeURIComponent(slug)}`);
+        const res = await fetch(
+          `/api/client/auth?slug=${encodeURIComponent(slug)}`
+        );
         const data = await res.json();
         if (!data.authenticated) {
           router.push('/client/login');
@@ -152,9 +154,10 @@ function DashboardContent() {
     }
   }, [wedding?.id, fetchStats, fetchGuests]);
 
-  const invitationUrl = typeof window !== 'undefined' && slug
-    ? `${window.location.origin}/w/${slug}`
-    : '';
+  const invitationUrl =
+    typeof window !== 'undefined' && slug
+      ? `${window.location.origin}/w/${slug}`
+      : '';
 
   const shareText = wedding
     ? `يدعوكم ${wedding.groomName} و ${wedding.brideName} لحضور حفل زفافهما - ${wedding.weddingDate} - ${wedding.venueName}`
@@ -181,12 +184,12 @@ function DashboardContent() {
       const res = await fetch(`/api/weddings/${wedding.id}/guests`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: guestName.trim() }),
+        body: JSON.stringify({ name: guestName.trim() })
       });
       const data = await res.json();
 
       if (data.success) {
-        const link = `/w/${slug}?guest=${encodeURIComponent(guestName.trim())}`;
+        const link = `/w/${slug}?g=${encodeURIComponent(guestName.trim())}`;
         setGeneratedLink(`${window.location.origin}${link}`);
         setGuestName('');
         toast.success('تم إنشاء رابط الضيف ✨');
@@ -204,7 +207,7 @@ function DashboardContent() {
   const handleCopyGuestLink = (guestLink: string) => {
     const url = guestLink.startsWith('http')
       ? guestLink
-      : `${window.location.origin}/w/${slug}?guest=${guestLink}`;
+      : `${window.location.origin}/w/${slug}?g=${guestLink}`;
     navigator.clipboard.writeText(url);
     toast.success('تم نسخ رابط الضيف ✨');
   };
@@ -219,15 +222,24 @@ function DashboardContent() {
   };
 
   const handleWhatsAppShare = () => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + '\n' + invitationUrl)}`, '_blank');
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + invitationUrl)}`,
+      '_blank'
+    );
   };
 
   const handleFacebookShare = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(invitationUrl)}`, '_blank');
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(invitationUrl)}`,
+      '_blank'
+    );
   };
 
   const handleTelegramShare = () => {
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(invitationUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+    window.open(
+      `https://t.me/share/url?url=${encodeURIComponent(invitationUrl)}&text=${encodeURIComponent(shareText)}`,
+      '_blank'
+    );
   };
 
   const handleCopyShareLink = async () => {
@@ -241,7 +253,9 @@ function DashboardContent() {
 
   const handleLogout = async () => {
     try {
-      await fetch(`/api/client/auth?slug=${encodeURIComponent(slug || '')}`, { method: 'DELETE' });
+      await fetch(`/api/client/auth?slug=${encodeURIComponent(slug || '')}`, {
+        method: 'DELETE'
+      });
       router.push('/client/login');
     } catch {
       router.push('/client/login');
@@ -259,7 +273,10 @@ function DashboardContent() {
         <div className="flex flex-col items-center gap-4">
           <span
             className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
-            style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }}
+            style={{
+              borderColor: 'var(--wedding-gold)',
+              borderTopColor: 'transparent'
+            }}
           />
           <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
             جاري تحميل لوحة التحكم...
@@ -270,23 +287,48 @@ function DashboardContent() {
   }
 
   const statCards = [
-    { label: 'الزيارات', value: stats?.visitCount || 0, icon: Eye, color: '#D4A853' },
-    { label: 'تم التأكيد', value: stats?.attendingCount || 0, icon: CheckCircle, color: '#22C55E' },
-    { label: 'تم الاعتذار', value: stats?.notAttendingCount || 0, icon: XCircle, color: '#EF4444' },
-    { label: 'في الانتظار', value: stats?.pendingCount || 0, icon: Clock, color: '#F59E0B' },
+    {
+      label: 'الزيارات',
+      value: stats?.visitCount || 0,
+      icon: Eye,
+      color: '#D4A853'
+    },
+    {
+      label: 'تم التأكيد',
+      value: stats?.attendingCount || 0,
+      icon: CheckCircle,
+      color: '#22C55E'
+    },
+    {
+      label: 'تم الاعتذار',
+      value: stats?.notAttendingCount || 0,
+      icon: XCircle,
+      color: '#EF4444'
+    },
+    {
+      label: 'في الانتظار',
+      value: stats?.pendingCount || 0,
+      icon: Clock,
+      color: '#F59E0B'
+    }
   ];
 
   return (
     <div
       dir="rtl"
       className="min-h-screen flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 30%, #0D0D1A 100%)' }}
+      style={{
+        background:
+          'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 30%, #0D0D1A 100%)'
+      }}
     >
       {/* Decorative background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-[0.03]"
-          style={{ background: 'radial-gradient(circle, #D4A853, transparent 70%)' }}
+          style={{
+            background: 'radial-gradient(circle, #D4A853, transparent 70%)'
+          }}
         />
       </div>
 
@@ -299,11 +341,20 @@ function DashboardContent() {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Heart className="h-6 w-6" style={{ color: 'var(--wedding-gold)' }} />
-            <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--admin-text-primary)' }}>
+            <Heart
+              className="h-6 w-6"
+              style={{ color: 'var(--wedding-gold)' }}
+            />
+            <h1
+              className="text-2xl sm:text-3xl font-bold"
+              style={{ color: 'var(--admin-text-primary)' }}
+            >
               {wedding?.groomName} و {wedding?.brideName}
             </h1>
-            <Heart className="h-6 w-6" style={{ color: 'var(--wedding-gold)' }} />
+            <Heart
+              className="h-6 w-6"
+              style={{ color: 'var(--wedding-gold)' }}
+            />
           </div>
           <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
             لوحة تحكم الدعوة
@@ -330,13 +381,22 @@ function DashboardContent() {
                   className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl"
                   style={{ backgroundColor: stat.color + '15' }}
                 >
-                  <stat.icon className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: stat.color }} />
+                  <stat.icon
+                    className="h-5 w-5 sm:h-6 sm:w-6"
+                    style={{ color: stat.color }}
+                  />
                 </div>
               </div>
-              <p className="text-2xl sm:text-3xl font-bold mb-1" style={{ color: 'var(--admin-text-primary)' }}>
+              <p
+                className="text-2xl sm:text-3xl font-bold mb-1"
+                style={{ color: 'var(--admin-text-primary)' }}
+              >
                 {stat.value}
               </p>
-              <p className="text-xs sm:text-sm" style={{ color: 'var(--admin-text-muted)' }}>
+              <p
+                className="text-xs sm:text-sm"
+                style={{ color: 'var(--admin-text-muted)' }}
+              >
                 {stat.label}
               </p>
             </motion.div>
@@ -360,13 +420,19 @@ function DashboardContent() {
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{ background: 'rgba(212,168,83,0.12)' }}
               >
-                <Link2 className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+                <Link2
+                  className="h-4 w-4"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
               رابط الدعوة
             </h3>
             <div
               className="flex items-center gap-3 p-3 sm:p-4 rounded-xl"
-              style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
+              style={{
+                background: 'var(--admin-surface)',
+                border: '1px solid var(--admin-border)'
+              }}
             >
               <p
                 className="flex-1 text-sm truncate font-mono"
@@ -378,7 +444,10 @@ function DashboardContent() {
               <button
                 onClick={handleCopyInvitationLink}
                 className="flex items-center justify-center h-9 w-9 rounded-lg shrink-0 transition-all duration-300"
-                style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.1)' }}
+                style={{
+                  color: 'var(--wedding-gold)',
+                  background: 'rgba(212,168,83,0.1)'
+                }}
                 title="نسخ الرابط"
               >
                 <Copy className="h-4 w-4" />
@@ -386,7 +455,10 @@ function DashboardContent() {
               <button
                 onClick={handleOpenInvitation}
                 className="flex items-center justify-center h-9 w-9 rounded-lg shrink-0 transition-all duration-300"
-                style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.1)' }}
+                style={{
+                  color: 'var(--wedding-gold)',
+                  background: 'rgba(212,168,83,0.1)'
+                }}
                 title="فتح الدعوة"
               >
                 <ExternalLink className="h-4 w-4" />
@@ -412,7 +484,10 @@ function DashboardContent() {
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{ background: 'rgba(212,168,83,0.12)' }}
               >
-                <Plus className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+                <Plus
+                  className="h-4 w-4"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
               إنشاء رابط ضيف
             </h3>
@@ -422,10 +497,10 @@ function DashboardContent() {
               <Input
                 type="text"
                 value={guestName}
-                onChange={(e) => setGuestName(e.target.value)}
+                onChange={e => setGuestName(e.target.value)}
                 className="admin-input flex-1 h-11"
                 placeholder="اسم الضيف"
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                   if (e.key === 'Enter') handleGenerateGuestLink();
                 }}
               />
@@ -453,7 +528,7 @@ function DashboardContent() {
                   className="flex items-center gap-3 p-3 rounded-xl"
                   style={{
                     background: 'rgba(212,168,83,0.06)',
-                    border: '1px solid rgba(212,168,83,0.2)',
+                    border: '1px solid rgba(212,168,83,0.2)'
                   }}
                 >
                   <p
@@ -466,7 +541,10 @@ function DashboardContent() {
                   <button
                     onClick={handleCopyGeneratedLink}
                     className="flex items-center justify-center h-8 w-8 rounded-lg shrink-0"
-                    style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.1)' }}
+                    style={{
+                      color: 'var(--wedding-gold)',
+                      background: 'rgba(212,168,83,0.1)'
+                    }}
                     title="نسخ الرابط"
                   >
                     <Copy className="h-4 w-4" />
@@ -481,12 +559,18 @@ function DashboardContent() {
                 className="flex items-center gap-2 text-sm font-medium"
                 style={{ color: 'var(--admin-text-secondary)' }}
               >
-                <Users className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+                <Users
+                  className="h-4 w-4"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
                 قائمة الضيوف
               </span>
               <span
                 className="text-xs px-2.5 py-1 rounded-full"
-                style={{ background: 'rgba(212,168,83,0.1)', color: 'var(--wedding-gold)' }}
+                style={{
+                  background: 'rgba(212,168,83,0.1)',
+                  color: 'var(--wedding-gold)'
+                }}
               >
                 {guests.length} ضيف
               </span>
@@ -498,19 +582,31 @@ function DashboardContent() {
                   className="flex h-14 w-14 items-center justify-center rounded-full mx-auto mb-3"
                   style={{ background: 'rgba(212,168,83,0.08)' }}
                 >
-                  <Users className="h-7 w-7" style={{ color: 'var(--wedding-gold)' }} />
+                  <Users
+                    className="h-7 w-7"
+                    style={{ color: 'var(--wedding-gold)' }}
+                  />
                 </div>
-                <p className="text-sm font-medium mb-1" style={{ color: 'var(--admin-text-primary)' }}>
+                <p
+                  className="text-sm font-medium mb-1"
+                  style={{ color: 'var(--admin-text-primary)' }}
+                >
                   لا يوجد ضيوف بعد 🌹
                 </p>
-                <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
+                <p
+                  className="text-xs"
+                  style={{ color: 'var(--admin-text-muted)' }}
+                >
                   أضف ضيوف من الحقل أعلاه لتوليد روابط الدعوة
                 </p>
               </div>
             ) : (
-              <div className="space-y-2 max-h-64 overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+              <div
+                className="space-y-2 max-h-64 overflow-y-auto"
+                style={{ scrollbarWidth: 'thin' }}
+              >
                 {guests.map((guest, index) => {
-                  const guestUrl = `/w/${slug}?guest=${guest.guestLink}`;
+                  const guestUrl = `/w/${slug}?g=${guest.guestToken || guest.guestLink}`;
                   return (
                     <motion.div
                       key={guest.id}
@@ -518,35 +614,47 @@ function DashboardContent() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.03 }}
                       className="flex items-center justify-between p-3 rounded-xl"
-                      style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)' }}
+                      style={{
+                        background: 'var(--admin-surface)',
+                        border: '1px solid var(--admin-border)'
+                      }}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div
                           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
                           style={{
-                            background: guest.rsvp?.status === 'attending'
-                              ? 'rgba(34,197,94,0.12)'
-                              : guest.rsvp?.status === 'not-attending'
-                              ? 'rgba(239,68,68,0.12)'
-                              : 'rgba(212,168,83,0.1)',
-                            color: guest.rsvp?.status === 'attending'
-                              ? '#22C55E'
-                              : guest.rsvp?.status === 'not-attending'
-                              ? '#EF4444'
-                              : 'var(--wedding-gold)',
+                            background:
+                              guest.rsvp?.status === 'attending'
+                                ? 'rgba(34,197,94,0.12)'
+                                : guest.rsvp?.status === 'not-attending'
+                                  ? 'rgba(239,68,68,0.12)'
+                                  : 'rgba(212,168,83,0.1)',
+                            color:
+                              guest.rsvp?.status === 'attending'
+                                ? '#22C55E'
+                                : guest.rsvp?.status === 'not-attending'
+                                  ? '#EF4444'
+                                  : 'var(--wedding-gold)'
                           }}
                         >
                           {guest.rsvp?.status === 'attending'
                             ? '✓'
                             : guest.rsvp?.status === 'not-attending'
-                            ? '✗'
-                            : index + 1}
+                              ? '✗'
+                              : index + 1}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium truncate" style={{ color: 'var(--admin-text-primary)' }}>
+                          <p
+                            className="text-sm font-medium truncate"
+                            style={{ color: 'var(--admin-text-primary)' }}
+                          >
                             {guest.name}
                           </p>
-                          <p className="text-xs truncate" style={{ color: 'var(--admin-text-muted)' }} dir="ltr">
+                          <p
+                            className="text-xs truncate"
+                            style={{ color: 'var(--admin-text-muted)' }}
+                            dir="ltr"
+                          >
                             {guestUrl}
                           </p>
                         </div>
@@ -556,29 +664,38 @@ function DashboardContent() {
                           <span
                             className="text-[10px] px-2 py-0.5 rounded-md font-medium"
                             style={{
-                              background: guest.rsvp.status === 'attending'
-                                ? 'rgba(34,197,94,0.1)'
-                                : guest.rsvp.status === 'not-attending'
-                                ? 'rgba(239,68,68,0.1)'
-                                : 'rgba(245,158,11,0.1)',
-                              color: guest.rsvp.status === 'attending'
-                                ? '#22C55E'
-                                : guest.rsvp.status === 'not-attending'
-                                ? '#EF4444'
-                                : '#F59E0B',
+                              background:
+                                guest.rsvp.status === 'attending'
+                                  ? 'rgba(34,197,94,0.1)'
+                                  : guest.rsvp.status === 'not-attending'
+                                    ? 'rgba(239,68,68,0.1)'
+                                    : 'rgba(245,158,11,0.1)',
+                              color:
+                                guest.rsvp.status === 'attending'
+                                  ? '#22C55E'
+                                  : guest.rsvp.status === 'not-attending'
+                                    ? '#EF4444'
+                                    : '#F59E0B'
                             }}
                           >
                             {guest.rsvp.status === 'attending'
                               ? 'مؤكد'
                               : guest.rsvp.status === 'not-attending'
-                              ? 'معتذر'
-                              : 'معلق'}
+                                ? 'معتذر'
+                                : 'معلق'}
                           </span>
                         )}
                         <button
-                          onClick={() => handleCopyGuestLink(guest.guestLink)}
+                          onClick={() =>
+                            handleCopyGuestLink(
+                              guest.guestToken || guest.guestLink
+                            )
+                          }
                           className="flex h-7 w-7 items-center justify-center rounded-lg"
-                          style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)' }}
+                          style={{
+                            color: 'var(--wedding-gold)',
+                            background: 'rgba(212,168,83,0.08)'
+                          }}
                           title="نسخ رابط الضيف"
                         >
                           <Copy className="h-3.5 w-3.5" />
@@ -609,7 +726,10 @@ function DashboardContent() {
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{ background: 'rgba(212,168,83,0.12)' }}
               >
-                <Send className="h-4 w-4" style={{ color: 'var(--wedding-gold)' }} />
+                <Send
+                  className="h-4 w-4"
+                  style={{ color: 'var(--wedding-gold)' }}
+                />
               </div>
               مشاركة الدعوة
             </h3>
@@ -622,13 +742,24 @@ function DashboardContent() {
                 className="flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300"
                 style={{
                   backgroundColor: '#25D36615',
-                  border: '1px solid #25D36625',
+                  border: '1px solid #25D36625'
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ backgroundColor: '#25D36620' }}>
-                  <MessageCircle className="h-6 w-6" style={{ color: '#25D366' }} />
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: '#25D36620' }}
+                >
+                  <MessageCircle
+                    className="h-6 w-6"
+                    style={{ color: '#25D366' }}
+                  />
                 </div>
-                <span className="text-xs font-medium" style={{ color: '#25D366' }}>واتساب</span>
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: '#25D366' }}
+                >
+                  واتساب
+                </span>
               </motion.button>
 
               <motion.button
@@ -638,13 +769,21 @@ function DashboardContent() {
                 className="flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300"
                 style={{
                   backgroundColor: '#1877F215',
-                  border: '1px solid #1877F225',
+                  border: '1px solid #1877F225'
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ backgroundColor: '#1877F220' }}>
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: '#1877F220' }}
+                >
                   <Facebook className="h-6 w-6" style={{ color: '#1877F2' }} />
                 </div>
-                <span className="text-xs font-medium" style={{ color: '#1877F2' }}>فيسبوك</span>
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: '#1877F2' }}
+                >
+                  فيسبوك
+                </span>
               </motion.button>
 
               <motion.button
@@ -654,13 +793,21 @@ function DashboardContent() {
                 className="flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300"
                 style={{
                   backgroundColor: '#0088cc15',
-                  border: '1px solid #0088cc25',
+                  border: '1px solid #0088cc25'
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ backgroundColor: '#0088cc20' }}>
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: '#0088cc20' }}
+                >
                   <Send className="h-6 w-6" style={{ color: '#0088cc' }} />
                 </div>
-                <span className="text-xs font-medium" style={{ color: '#0088cc' }}>تيليغرام</span>
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: '#0088cc' }}
+                >
+                  تيليغرام
+                </span>
               </motion.button>
 
               <motion.button
@@ -670,13 +817,24 @@ function DashboardContent() {
                 className="flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300"
                 style={{
                   backgroundColor: 'rgba(212,168,83,0.08)',
-                  border: '1px solid rgba(212,168,83,0.15)',
+                  border: '1px solid rgba(212,168,83,0.15)'
                 }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ backgroundColor: 'rgba(212,168,83,0.12)' }}>
-                  <Link2 className="h-6 w-6" style={{ color: 'var(--wedding-gold)' }} />
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: 'rgba(212,168,83,0.12)' }}
+                >
+                  <Link2
+                    className="h-6 w-6"
+                    style={{ color: 'var(--wedding-gold)' }}
+                  />
                 </div>
-                <span className="text-xs font-medium" style={{ color: 'var(--wedding-gold)' }}>نسخ الرابط</span>
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: 'var(--wedding-gold)' }}
+                >
+                  نسخ الرابط
+                </span>
               </motion.button>
             </div>
           </div>
@@ -695,7 +853,7 @@ function DashboardContent() {
             style={{
               background: 'rgba(239,68,68,0.08)',
               color: '#EF4444',
-              border: '1px solid rgba(239,68,68,0.15)',
+              border: '1px solid rgba(239,68,68,0.15)'
             }}
           >
             <LogOut className="h-4 w-4" />
@@ -711,7 +869,10 @@ function DashboardContent() {
           className="text-center pb-6"
         >
           <div className="ornament-separator mb-4">
-            <div className="diamond" style={{ background: 'var(--wedding-gold)' }} />
+            <div
+              className="diamond"
+              style={{ background: 'var(--wedding-gold)' }}
+            />
           </div>
           <p className="text-xs" style={{ color: 'var(--admin-text-muted)' }}>
             قُرب © {new Date().getFullYear()} — منصة دعوات الزفاف
@@ -734,7 +895,10 @@ export default function ClientDashboardPage() {
           <div className="flex flex-col items-center gap-4">
             <span
               className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
-              style={{ borderColor: 'var(--wedding-gold)', borderTopColor: 'transparent' }}
+              style={{
+                borderColor: 'var(--wedding-gold)',
+                borderTopColor: 'transparent'
+              }}
             />
             <p className="text-sm" style={{ color: 'var(--admin-text-muted)' }}>
               جاري تحميل لوحة التحكم...
