@@ -7,13 +7,17 @@ export async function POST(request: NextRequest) {
       groomName,
       brideName,
       weddingDate,
+      weddingTime,
       venueName,
-      phone,
-      email,
+      venueAddress,
+      googleMapsLink,
+      welcomeMessage,
+      contactPhone,
+      theme,
       notes
     } = body;
 
-    if (!groomName || !brideName || !phone) {
+    if (!groomName || !brideName || !contactPhone) {
       return NextResponse.json(
         { success: false, error: 'اسم العريس والعروسة ورقم الواتساب مطلوبين' },
         { status: 400 }
@@ -22,44 +26,45 @@ export async function POST(request: NextRequest) {
 
     const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
 
-    if (!sheetsUrl) {
-      console.log(
-        '📋 New Lead:',
-        JSON.stringify({
-          timestamp: new Date().toISOString(),
-          groomName,
-          brideName,
-          weddingDate,
-          venueName,
-          phone,
-          email,
-          notes
-        })
-      );
+    // البيانات بالترتيب زي الشيت: التاريخ | العريس | العروسة | ميعاد الزفاف | وقت الزفاف | القاعة | العنوان | الخريطة | الواتساب | القالب | رسالة ترحيب | ملاحظات
+    const leadData = {
+      timestamp: new Date().toLocaleString('ar-EG', {
+        timeZone: 'Africa/Cairo'
+      }),
+      groomName,
+      brideName,
+      weddingDate: weddingDate || '',
+      weddingTime: weddingTime || '',
+      venueName: venueName || '',
+      venueAddress: venueAddress || '',
+      googleMapsLink: googleMapsLink || '',
+      contactPhone,
+      theme: theme || 'royal-gold',
+      welcomeMessage: welcomeMessage || '',
+      notes: notes || ''
+    };
 
+    if (!sheetsUrl) {
+      console.log('📋 New Lead:', JSON.stringify(leadData, null, 2));
       return NextResponse.json({ success: true, message: 'تم استلام طلبكم' });
     }
 
-    const response = await fetch(sheetsUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        groomName,
-        brideName,
-        weddingDate,
-        venueName,
-        phone,
-        email: email || '',
-        notes: notes || ''
-      })
-    });
+    try {
+      const response = await fetch(sheetsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadData)
+      });
 
-    if (!response.ok) {
-      console.error(
-        'Google Sheets error:',
-        response.status,
-        await response.text()
-      );
+      if (!response.ok) {
+        console.error(
+          'Google Sheets error:',
+          response.status,
+          await response.text()
+        );
+      }
+    } catch (sheetsError) {
+      console.error('Google Sheets connection error:', sheetsError);
     }
 
     return NextResponse.json({ success: true, message: 'تم استلام طلبكم' });
