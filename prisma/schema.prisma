@@ -66,15 +66,15 @@ model Wedding {
 }
 
 model Guest {
-  id        String   @id @default(cuid())
-  weddingId String
-  name      String
-  phone     String   @default("")
-  guestLink String   @default("")
-  createdAt DateTime @default(now())
-
-  wedding   Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
-  rsvp      RsvpResponse?
+  id         String   @id @default(cuid())
+  weddingId  String
+  name       String
+  phone      String   @default("")
+  guestLink  String   @default("")
+  guestToken String   @unique @default(cuid())
+  createdAt  DateTime @default(now())
+  wedding    Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  rsvp       RsvpResponse?
 }
 
 model RsvpResponse {
