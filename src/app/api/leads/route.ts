@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-/**
- * POST /api/leads
- *
- * Receives lead data from the order form and appends it to Google Sheets.
- * Uses a Google Apps Script web app URL stored in GOOGLE_SHEETS_URL env var.
- */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
+      accessCode,
       groomName,
       brideName,
       weddingDate,
@@ -28,6 +23,36 @@ export async function POST(request: NextRequest) {
       notes
     } = body;
 
+    if (!accessCode) {
+      return NextResponse.json(
+        { success: false, error: 'كود الدخول مطلوب' },
+        { status: 400 }
+      );
+    }
+
+    const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
+
+    if (sheetsUrl) {
+      try {
+        const validateUrl = `${sheetsUrl}?action=validate&code=${encodeURIComponent(accessCode)}`;
+        const validateRes = await fetch(validateUrl);
+        const validateData = await validateRes.json();
+
+        if (!validateData.valid) {
+          return NextResponse.json(
+            { success: false, error: 'الكود غير صالح أو متوقف' },
+            { status: 403 }
+          );
+        }
+      } catch (validateError) {
+        console.error('Code validation error:', validateError);
+        return NextResponse.json(
+          { success: false, error: 'حصل خطأ في التحقق من الكود' },
+          { status: 500 }
+        );
+      }
+    }
+
     if (!groomName || !brideName || !contactPhone) {
       return NextResponse.json(
         { success: false, error: 'اسم العريس والعروسة ورقم الواتساب مطلوبين' },
@@ -35,9 +60,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
-
-    // ترتيب الأعمدة: التاريخ | العريس | العروسة | ميعاد الزفاف | وقت الزفاف | القاعة | العنوان | الخريطة | الواتساب | القالب | المزايا | رسالة ترحيب | ملاحظات
     const leadData = {
       timestamp: new Date().toLocaleString('ar-EG', {
         timeZone: 'Africa/Cairo'
@@ -65,12 +87,10 @@ export async function POST(request: NextRequest) {
     };
 
     if (!sheetsUrl) {
-      // If no Google Sheets URL configured, log the lead
       console.log('📋 New Lead:', JSON.stringify(leadData, null, 2));
       return NextResponse.json({ success: true, message: 'تم استلام طلبكم' });
     }
 
-    // Send to Google Sheets
     try {
       const response = await fetch(sheetsUrl, {
         method: 'POST',

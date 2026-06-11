@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Heart,
@@ -14,9 +14,13 @@ import {
   MapPin,
   Clock,
   Music,
-  Palette
+  Palette,
+  Lock,
+  KeyRound,
+  XCircle
 } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { themeOptions, type ThemeName } from '@/lib/themes';
 
 const fadeUp = {
@@ -33,6 +37,15 @@ const fadeUp = {
 };
 
 export default function OrderPage() {
+  const searchParams = useSearchParams();
+  const codeFromUrl = searchParams.get('code') || '';
+
+  const [accessCode, setAccessCode] = useState(codeFromUrl);
+  const [isCodeValid, setIsCodeValid] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [codeError, setCodeError] = useState('');
+  const [clientName, setClientName] = useState('');
+
   const [formData, setFormData] = useState({
     groomName: '',
     brideName: '',
@@ -55,6 +68,39 @@ export default function OrderPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (codeFromUrl) {
+      validateCode(codeFromUrl);
+    }
+  }, [codeFromUrl]);
+
+  const validateCode = async (code?: string) => {
+    const codeToValidate = code || accessCode;
+    if (!codeToValidate.trim()) {
+      setCodeError('من فضلك ادخل الكود');
+      return;
+    }
+    setIsValidating(true);
+    setCodeError('');
+    try {
+      const res = await fetch(
+        `/api/validate-code?code=${encodeURIComponent(codeToValidate.trim())}`
+      );
+      const data = await res.json();
+      if (data.valid) {
+        setIsCodeValid(true);
+        setClientName(data.name || '');
+      } else {
+        setIsCodeValid(false);
+        setCodeError(data.error || 'الكود غير صالح أو متوقف');
+      }
+    } catch {
+      setCodeError('حصل خطأ في الاتصال، حاول تاني');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -76,15 +122,13 @@ export default function OrderPage() {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, accessCode })
       });
       const data = await res.json();
-
       if (data.success) {
         setIsSuccess(true);
       } else {
@@ -142,9 +186,130 @@ export default function OrderPage() {
               color: '#0D0D1A'
             }}
           >
-            <Heart className="h-4 w-4" />
-            ارجع للرئيسية
+            <Heart className="h-4 w-4" /> ارجع للرئيسية
           </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (!isCodeValid) {
+    return (
+      <div
+        dir="rtl"
+        className="min-h-screen flex items-center justify-center px-4"
+        style={{
+          background:
+            'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
+        }}
+      >
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-[0.03]"
+            style={{
+              background: 'radial-gradient(circle, #D4A853, transparent 70%)'
+            }}
+          />
+        </div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="relative z-10 w-full max-w-md mx-auto"
+        >
+          <div className="text-center mb-8">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-full mx-auto mb-4"
+              style={{ background: 'rgba(212,168,83,0.1)' }}
+            >
+              <Lock className="h-8 w-8" style={{ color: '#D4A853' }} />
+            </div>
+            <h1
+              className="text-2xl sm:text-3xl font-bold mb-2"
+              style={{ color: '#F5F5F5' }}
+            >
+              اطلب دعوتك
+            </h1>
+            <p className="text-sm" style={{ color: 'rgba(245,245,245,0.5)' }}>
+              ادخل كود الدخول اللي وصلك علشان تبدأ
+            </p>
+          </div>
+          <div
+            className="rounded-2xl p-6"
+            style={{
+              background: 'rgba(13,13,26,0.8)',
+              border: '1px solid rgba(212,168,83,0.15)'
+            }}
+          >
+            <div className="mb-4">
+              <label
+                className="flex items-center gap-2 text-sm font-medium mb-3"
+                style={{ color: 'rgba(245,245,245,0.7)' }}
+              >
+                <KeyRound className="h-4 w-4" style={{ color: '#D4A853' }} />{' '}
+                كود الدخول
+              </label>
+              <input
+                type="text"
+                value={accessCode}
+                onChange={e => {
+                  setAccessCode(e.target.value);
+                  setCodeError('');
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') validateCode();
+                }}
+                placeholder="مثال: QURB-XXXX"
+                className="w-full rounded-xl px-4 py-3.5 text-base text-center tracking-wider font-mono bg-[#0D0D1A]/60 border border-[#D4A853]/20 text-white placeholder:text-white/25 outline-none transition-all duration-300 focus:border-[#D4A853]/50 focus:ring-2 focus:ring-[#D4A853]/10"
+                dir="ltr"
+                autoFocus
+              />
+            </div>
+            {codeError && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 rounded-lg p-3 mb-4"
+              >
+                <XCircle className="h-4 w-4 shrink-0" /> {codeError}
+              </motion.div>
+            )}
+            <button
+              onClick={() => validateCode()}
+              disabled={isValidating || !accessCode.trim()}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 disabled:opacity-40"
+              style={{
+                background: 'linear-gradient(135deg, #D4A853, #B8902F)',
+                color: '#0D0D1A'
+              }}
+            >
+              {isValidating ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" /> جاري التحقق...
+                </>
+              ) : (
+                <>
+                  <Lock className="h-4 w-4" /> دخول
+                </>
+              )}
+            </button>
+          </div>
+          <p
+            className="text-center text-xs mt-6"
+            style={{ color: 'rgba(245,245,245,0.3)' }}
+          >
+            لو معاكش كود، تواصل معانا على واتساب
+          </p>
+          <div className="text-center mt-8">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="h-px w-16 bg-gradient-to-l from-[#D4A853]/60 to-transparent" />
+              <div className="w-2 h-2 rotate-45 bg-[#D4A853]/60" />
+              <div className="h-px w-16 bg-gradient-to-r from-[#D4A853]/60 to-transparent" />
+            </div>
+            <p className="text-xs" style={{ color: 'rgba(245,245,245,0.35)' }}>
+              قُرب © {new Date().getFullYear()} — منصة دعوات الزفاف
+            </p>
+          </div>
         </motion.div>
       </div>
     );
@@ -167,7 +332,6 @@ export default function OrderPage() {
           'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #0D0D1A 100%)'
       }}
     >
-      {/* Decorative */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-[0.03]"
@@ -176,9 +340,7 @@ export default function OrderPage() {
           }}
         />
       </div>
-
       <div className="relative z-10 flex-1 w-full max-w-2xl mx-auto px-4 py-10 sm:py-16">
-        {/* Header */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -195,6 +357,11 @@ export default function OrderPage() {
             </h1>
             <Heart className="h-6 w-6" style={{ color: '#D4A853' }} />
           </div>
+          {clientName && (
+            <p className="text-sm mb-2" style={{ color: '#D4A853' }}>
+              أهلاً {clientName}! 👋
+            </p>
+          )}
           <p className="text-base" style={{ color: 'rgba(245,245,245,0.6)' }}>
             عبّي البيانات وهنجهز الدعوة بالظبط زي ما عايزين
           </p>
@@ -205,7 +372,6 @@ export default function OrderPage() {
           </div>
         </motion.div>
 
-        {/* Form */}
         <motion.form
           initial="hidden"
           animate="visible"
@@ -213,14 +379,12 @@ export default function OrderPage() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          {/* ─── Section: المعلومات الأساسية ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <User className="h-5 w-5" />
-              المعلومات الأساسية
+              <User className="h-5 w-5" /> المعلومات الأساسية
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -262,14 +426,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: تفاصيل الزفاف ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Calendar className="h-5 w-5" />
-              تفاصيل الزفاف
+              <Calendar className="h-5 w-5" /> تفاصيل الزفاف
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -297,7 +459,7 @@ export default function OrderPage() {
                   <Clock
                     className="inline h-4 w-4 ml-1"
                     style={{ color: '#D4A853' }}
-                  />
+                  />{' '}
                   وقت الزفاف *
                 </label>
                 <input
@@ -313,14 +475,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: مكان الحفل ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <MapPin className="h-5 w-5" />
-              مكان الحفل
+              <MapPin className="h-5 w-5" /> مكان الحفل
             </h2>
             <div className="space-y-4">
               <div>
@@ -378,14 +538,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: التواصل ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Phone className="h-5 w-5" />
-              بيانات التواصل
+              <Phone className="h-5 w-5" /> بيانات التواصل
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -426,14 +584,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: التصميم ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Palette className="h-5 w-5" />
-              التصميم
+              <Palette className="h-5 w-5" /> التصميم
             </h2>
             <div>
               <label
@@ -498,14 +654,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: المزايا ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <Music className="h-5 w-5" />
-              المزايا
+              <Music className="h-5 w-5" /> المزايا
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {toggles.map(toggle => (
@@ -558,14 +712,12 @@ export default function OrderPage() {
             </div>
           </motion.div>
 
-          {/* ─── Section: ملاحظات ─── */}
           <motion.div variants={fadeUp}>
             <h2
               className="flex items-center gap-2 text-lg font-bold mb-4"
               style={{ color: '#D4A853' }}
             >
-              <MessageSquare className="h-5 w-5" />
-              ملاحظات إضافية
+              <MessageSquare className="h-5 w-5" /> ملاحظات إضافية
             </h2>
             <textarea
               name="notes"
@@ -578,7 +730,6 @@ export default function OrderPage() {
             />
           </motion.div>
 
-          {/* Error */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -589,7 +740,6 @@ export default function OrderPage() {
             </motion.div>
           )}
 
-          {/* Submit */}
           <motion.div variants={fadeUp} className="pt-2">
             <button
               type="submit"
@@ -602,20 +752,17 @@ export default function OrderPage() {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  جاري الإرسال...
+                  <Loader2 className="h-5 w-5 animate-spin" /> جاري الإرسال...
                 </>
               ) : (
                 <>
-                  <Send className="h-5 w-5" />
-                  أرسل الطلب
+                  <Send className="h-5 w-5" /> أرسل الطلب
                 </>
               )}
             </button>
           </motion.div>
         </motion.form>
 
-        {/* Footer */}
         <div className="text-center mt-10">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-px w-16 bg-gradient-to-l from-[#D4A853]/60 to-transparent" />
