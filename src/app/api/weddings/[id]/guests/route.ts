@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { generateGuestToken } from '@/lib/utils';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -21,7 +22,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { id } = await params;
     const body = await request.json();
 
-    // Handle bulk guest addition
     if (body.bulk && Array.isArray(body.names)) {
       const names: string[] = body.names
         .map((n: string) => (typeof n === 'string' ? n.trim() : ''))
@@ -33,13 +33,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       const createdGuests = [];
       for (const name of names) {
-        const guestLink = encodeURIComponent(name);
+        const guestToken = generateGuestToken();
         const guest = await db.guest.create({
           data: {
             weddingId: id,
             name,
             phone: '',
-            guestLink,
+            guestLink: guestToken,
+            guestToken,
           },
         });
         createdGuests.push(guest);
@@ -48,19 +49,19 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ success: true, data: createdGuests }, { status: 201 });
     }
 
-    // Handle single guest addition
     const { name, phone } = body;
     if (!name) {
       return NextResponse.json({ success: false, error: 'اسم الضيف مطلوب' }, { status: 400 });
     }
 
-    const guestLink = encodeURIComponent(name.trim());
+    const guestToken = generateGuestToken();
     const guest = await db.guest.create({
       data: {
         weddingId: id,
         name: name.trim(),
         phone: phone || '',
-        guestLink,
+        guestLink: guestToken,
+        guestToken,
       },
     });
     return NextResponse.json({ success: true, data: guest }, { status: 201 });
