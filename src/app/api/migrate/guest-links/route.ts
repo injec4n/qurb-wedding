@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { generateGuestToken } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,10 +16,7 @@ export async function POST(request: NextRequest) {
     });
 
     const guestsToMigrate = allGuests.filter(
-      g =>
-        g.guestLink.includes('%') ||
-        g.guestLink === '' ||
-        g.guestLink !== g.guestToken
+      g => g.guestLink.includes('%') || g.guestLink === ''
     );
 
     if (guestsToMigrate.length === 0) {
@@ -33,22 +29,10 @@ export async function POST(request: NextRequest) {
 
     let migrated = 0;
     for (const guest of guestsToMigrate) {
-      let token = generateGuestToken();
-      let existing = await db.guest.findUnique({
-        where: { guestToken: token }
-      });
-      let attempts = 0;
-      while (existing && attempts < 10) {
-        token = generateGuestToken();
-        existing = await db.guest.findUnique({ where: { guestToken: token } });
-        attempts++;
-      }
-
       await db.guest.update({
         where: { id: guest.id },
         data: {
-          guestLink: token,
-          guestToken: token
+          guestLink: guest.guestToken
         }
       });
       migrated++;

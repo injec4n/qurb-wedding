@@ -95,8 +95,10 @@ export default function WeddingDashboard({
     toast.success('تم نسخ رابط الدعوة ✨');
   };
 
-  const copyGuestLink = (guestToken: string) => {
-    const url = `${window.location.origin}/w/${weddingSlug}?g=${guestToken}`;
+  const copyGuestLink = (guest: Guest) => {
+    const token = guest.guestToken || guest.guestLink;
+    const url = `${window.location.origin}/w/${weddingSlug}?g=${token}`;
+
     navigator.clipboard.writeText(url);
     toast.success('تم نسخ رابط الضيف ✨');
   };
@@ -524,7 +526,7 @@ export default function WeddingDashboard({
               style={{ scrollbarWidth: 'thin' }}
             >
               {guests.map((guest, index) => {
-                const guestUrl = `/w/${weddingSlug}?g=${guest.guestToken}`;
+                const guestUrl = `/w/${weddingSlug}?g=${guest.guestToken || guest.guestLink}`;
                 return (
                   <motion.div
                     key={guest.id}
@@ -604,7 +606,7 @@ export default function WeddingDashboard({
                         </span>
                       )}
                       <button
-                        onClick={() => copyGuestLink(guest.guestToken)}
+                        onClick={() => copyGuestLink(guest)}
                         className="flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-300"
                         style={{
                           color: 'var(--wedding-gold)',
