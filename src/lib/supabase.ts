@@ -1,64 +1,37 @@
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-
-export const STORAGE_BUCKET = 'wedding-uploads';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 export function isSupabaseConfigured(): boolean {
-  return !!(supabaseUrl && supabaseServiceKey);
+  return !!(SUPABASE_URL && SUPABASE_SERVICE_KEY);
 }
 
-export async function supabaseUpload(storagePath: string, buffer: Buffer, contentType: string): Promise<string> {
-  if (!isSupabaseConfigured()) throw new Error('Supabase not configured');
+export const STORAGE_BUCKET = 'wedding-uploads';
+export const supabaseUrl = SUPABASE_URL;
+export const supabaseServiceKey = SUPABASE_SERVICE_KEY;
 
-  const url = `${supabaseUrl}/storage/v1/object/${STORAGE_BUCKET}/${storagePath}`;
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${supabaseServiceKey}`,
-      'apikey': supabaseServiceKey,
-      'Content-Type': contentType,
-    },
-    body: buffer,
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error('Supabase upload failed: ' + error);
-  }
-
-  return `${supabaseUrl}/storage/v1/object/public/${STORAGE_BUCKET}/${storagePath}`;
-}
-
-export async function supabaseListBuckets(): Promise<string[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  const url = `${supabaseUrl}/storage/v1/bucket`;
-  const response = await fetch(url, {
-    headers: {
-      'Authorization': `Bearer ${supabaseServiceKey}`,
-      'apikey': supabaseServiceKey,
-    },
-  });
-
-  if (!response.ok) return [];
-  const buckets = await response.json();
-  return buckets.map((b: { name: string }) => b.name);
-}
-
-export async function supabaseCreateBucket(name: string, isPublic: boolean): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
-
-  const url = `${supabaseUrl}/storage/v1/bucket`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${supabaseServiceKey}`,
-      'apikey': supabaseServiceKey,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name, public: isPublic, file_size_limit: '20000000' }),
-  });
-
-  return response.ok;
-}
+export const supabase = isSupabaseConfigured()
+  ? {
+      storage: {
+        listBuckets: async () => {
+          const res = await fetch(`${SUPABASE_URL}/storage/v1/bucket`, {
+            headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY },
+          });
+          const data = await res.json();
+          return { data, error: null };
+        },
+        createBucket: async (name: string, options: { public: boolean; fileSizeLimit: string }) => {
+          const res = await fetch(`${SUPABASE_URL}/storage/v1/bucket`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+              apikey: SUPABASE_SERVICE_KEY,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, public: options.public, file_size_limit: options.fileSizeLimit }),
+          });
+          const data = await res.json();
+          return { data, error: res.ok ? null : data };
+        },
+      },
+    }
+  : null;

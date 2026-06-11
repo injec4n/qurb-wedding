@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { randomUUID } from 'crypto';
+import { r2Upload, isR2Configured } from '@/lib/r2';
+import { supabaseUpload, isSupabaseConfigured } from '@/lib/supabase-upload';
 import { verifyAdminAuth } from '@/lib/auth-helpers';
-import { supabaseUpload, isSupabaseConfigured } from '@/lib/supabase';
-import { writeFile, mkdir } from 'fs/promises';
+import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import fs from 'fs';
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 const MAX_MUSIC_SIZE = 20 * 1024 * 1024;
-const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/svg+xml'];
-const MUSIC_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_MUSIC_TYPES = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac'];
 
 export async function POST(request: NextRequest) {
   const isAuth = await verifyAdminAuth();
@@ -19,50 +20,69 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
+
     if (!file) {
-      return NextResponse.json({ success: false, error: 'لا يوجد ملف' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'لم يتم اختيار ملف' }, { status: 400 });
     }
 
-    const isImage = IMAGE_TYPES.includes(file.type) || file.name.match(/\.(jpg|jpeg|png|webp|gif|jfif|bmp|svg)$/i);
-    const isMusic = MUSIC_TYPES.includes(file.type) || file.name.match(/\.(mp3|wav|ogg)$/i);
+    const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
+    const isMusic = ALLOWED_MUSIC_TYPES.includes(file.type);
+
     if (!isImage && !isMusic) {
-      return NextResponse.json({ success: false, error: 'نوع الملف غير مدعوم' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'نوع الملف غير مدعوم' },
+        { status: 400 }
+      );
     }
 
-    const maxSize = isImage ? MAX_IMAGE_SIZE : MAX_MUSIC_SIZE;
-    if (file.size > maxSize) {
-      return NextResponse.json({ success: false, error: 'حجم الملف كبير جداً' }, { status: 400 });
+    if (isImage && file.size > MAX_IMAGE_SIZE) {
+      return NextResponse.json({ success: false, error: 'حجم الصورة يجب أن يكون أقل من 10MB' }, { status: 400 });
+    }
+
+    if (isMusic && file.size > MAX_MUSIC_SIZE) {
+      return NextResponse.json({ success: false, error: 'حجم الملف الصوتي يجب أن يكون أقل من 20MB' }, { status: 400 });
     }
 
     const ext = path.extname(file.name) || (isImage ? '.jpg' : '.mp3');
-    const filename = `${randomUUID()}${ext}`;
-    const subdir = isImage ? 'images' : 'music';
-    const storagePath = `${subdir}/${filename}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const folder = isImage ? 'images' : 'music';
+    const filename = `${folder}/${uuidv4()}${ext}`;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     let url = '';
 
-    if (isSupabaseConfigured()) {
+    if (isR2Configured()) {
       try {
-        url = await supabaseUpload(storagePath, buffer, file.type || (isImage ? 'image/jpeg' : 'audio/mpeg'));
-      } catch (uploadError) {
-        console.error('Supabase upload error:', uploadError);
-        url = await uploadLocal(buffer, subdir, filename);
+        url = await r2Upload(buffer, filename, file.type);
+      } catch (r2Error) {
+        console.error('R2 upload failed, trying Supabase:', r2Error);
       }
-    } else {
-      url = await uploadLocal(buffer, subdir, filename);
     }
 
-    return NextResponse.json({ success: true, data: { url, filename, size: file.size } });
-  } catch (error) {
-    console.error('Upload error:', error);
+    if (!url && isSupabaseConfigured()) {
+      try {
+        url = await supabaseUpload(buffer, filename, file.type);
+      } catch (supabaseError) {
+        console.error('Supabase upload failed:', supabaseError);
+      }
+    }
+
+    if (!url) {
+      const uploadDir = path.join(process.cwd(), 'public', 'upload');
+      const filePath = path.join(uploadDir, filename);
+      const dir = path.dirname(filePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(filePath, buffer);
+      url = `/upload/${filename}`;
+    }
+
+    return NextResponse.json({ success: true, data: { url, filename } });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Upload error:', err);
     return NextResponse.json({ success: false, error: 'فشل في رفع الملف' }, { status: 500 });
   }
-}
-
-async function uploadLocal(buffer: Buffer, subdir: string, filename: string): Promise<string> {
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', subdir);
-  await mkdir(uploadDir, { recursive: true });
-  const filePath = path.join(uploadDir, filename);
-  await writeFile(filePath, buffer);
-  return `/uploads/${subdir}/${filename}`;
 }
