@@ -20,7 +20,8 @@ import {
   LogOut,
   Plus,
   Users,
-  Loader2
+  Loader2,
+  Trash2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -210,6 +211,22 @@ function DashboardContent() {
       : `${window.location.origin}/w/${slug}?g=${guestLink}`;
     navigator.clipboard.writeText(url);
     toast.success('تم نسخ رابط الضيف ✨');
+  };
+
+  const handleDeleteGuest = async (guestId: string, guestName: string) => {
+    if (!confirm(`هل أنت متأكد من حذف الضيف ${guestName}؟`)) return;
+    try {
+      const res = await fetch(`/api/guests/${guestId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(`تم حذف ${guestName} بنجاح`);
+        fetchGuests();
+      } else {
+        toast.error('فشل في حذف الضيف');
+      }
+    } catch {
+      toast.error('فشل في حذف الضيف');
+    }
   };
 
   const handleCopyGeneratedLink = async () => {
@@ -685,21 +702,31 @@ function DashboardContent() {
                                 : 'معلق'}
                           </span>
                         )}
-                        <button
-                          onClick={() =>
-                            handleCopyGuestLink(
-                              guest.guestToken || guest.guestLink
-                            )
-                          }
+                                                <button
+                          onClick={() => handleCopyGuestLink(guest.guestToken, guest.guestLink)}
                           className="flex h-7 w-7 items-center justify-center rounded-lg"
-                          style={{
-                            color: 'var(--wedding-gold)',
-                            background: 'rgba(212,168,83,0.08)'
-                          }}
+                          style={{ color: 'var(--wedding-gold)', background: 'rgba(212,168,83,0.08)' }}
                           title="نسخ رابط الضيف"
                         >
                           <Copy className="h-3.5 w-3.5" />
                         </button>
+                        <button
+                          onClick={() => handleDeleteGuest(guest.id, guest.name)}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-300"
+                          style={{ color: 'var(--admin-text-muted)', background: 'var(--admin-surface-overlay)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#EF4444';
+                            e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--admin-text-muted)';
+                            e.currentTarget.style.background = 'var(--admin-surface-overlay)';
+                          }}
+                          title="حذف الضيف"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                       </div>
                     </motion.div>
                   );
